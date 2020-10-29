@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes } from '../../components';
+import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes, Graph } from '../../components';
 
 import './Stake.scss'
 
@@ -9,6 +9,7 @@ const StakePage = () => {
         <div className="stake">
             <div className="row row--md">
                 <StakeForm />
+                <Graph />
                 <ReferrerLink />
             </div>
             <div className="row row--lg">

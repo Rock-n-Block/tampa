@@ -1,5 +1,5 @@
 const initialState = {
-    isLightTheme: true
+    isDarkTheme: false
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -7,7 +7,7 @@ export default (state = initialState, { type, payload }) => {
         case 'THEME:TOGGLE':
             return {
                 ...state,
-                isLightTheme: payload
+                isDarkTheme: payload
             };
         default:
             return state

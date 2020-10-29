@@ -17,11 +17,11 @@ const Header = () => {
     const [timeUntil, setTimeUntil] = React.useState('00:00:00')
     const [isHeaderActive, setIsHeaderActive] = React.useState(false)
 
-    const isLightTheme = useSelector(({ theme }) => theme.isLightTheme)
+    const isDarkTheme = useSelector(({ theme }) => theme.isDarkTheme)
 
 
     const handleThemeChange = (value) => {
-        dispatch(themeActions.toggleTheme(value))
+        dispatch(themeActions.toggleTheme(!value))
     }
 
     const timeCounter = (date) => {
@@ -68,7 +68,7 @@ const Header = () => {
                             Day ends in: <span>{timeUntil}</span>
                         </div>
                         <div className={classNames('header__theme', {
-                            active: isLightTheme
+                            active: !isDarkTheme
                         })}>
                             <span>night</span>
                             <Switch defaultChecked size="big" onChange={handleThemeChange} />

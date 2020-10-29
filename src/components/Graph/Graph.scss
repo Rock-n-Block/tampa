@@ -1,0 +1,62 @@
+@import '../../styles/vars';
+
+.s-graph {
+  margin-top: 40px;
+  padding: 30px 40px;
+  text-transform: uppercase;
+  &__tooltip {
+    display: flex;
+    align-items: center;
+    padding: 5px 18px 5px 8px;
+    background: linear-gradient(
+      99.84deg,
+      #fbfbff 6.9%,
+      rgba(255, 255, 255, 0.83) 84.24%
+    );
+    // box-shadow: 0px 15.4696px 31.8492px rgba(255, 57, 223, 0.15);
+    border-radius: 14px;
+    &-circle {
+      width: 7px;
+      height: 7px;
+      background: $red2;
+      border-radius: 50%;
+      margin-right: 2px;
+    }
+  }
+  &__text {
+    font-size: 18px;
+    line-height: 22px;
+    color: $red;
+    display: flex;
+    align-items: center;
+    font-family: BR;
+    width: max-content;
+    img {
+      margin-left: 3px;
+    }
+    &--black {
+      font-size: 13px;
+      line-height: 15px;
+      margin-top: 3px;
+      color: $black;
+    }
+  }
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  &__btn {
+    padding: 9px 0 8px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 35px !important;
+    margin-left: 15px;
+  }
+}

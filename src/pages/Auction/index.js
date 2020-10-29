@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SummaryBets, AuctionLobby } from '../../components';
+import { SummaryBets, AuctionLobby, Graph } from '../../components';
 
 import './Auction.scss'
 
@@ -9,6 +9,7 @@ const AuctionPage = () => {
         <div className="auction">
             <div className="row row--lg">
                 <h1 className="auction__title">Auction</h1>
+                <Graph />
                 <SummaryBets />
                 <AuctionLobby />
             </div>
