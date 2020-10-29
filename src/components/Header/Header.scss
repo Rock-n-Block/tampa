@@ -1,0 +1,111 @@
+@import '../../styles/vars';
+.header {
+  position: sticky;
+  padding: 30px 0 0;
+  z-index: 100;
+  transition: 0.3s;
+  top: -22px;
+  left: 0;
+  font-size: 15px;
+  line-height: 18px;
+  width: 100%;
+  &.active {
+    background: linear-gradient(
+        190.57deg,
+        rgba(255, 255, 255, 0.56) 19.25%,
+        rgba(248, 248, 255, 0.71) 54.39%,
+        rgba(255, 255, 255, 0.59) 90.02%
+      ),
+      #ffffff;
+    box-shadow: 20px 30px 85px rgba(119, 116, 159, 0.15),
+      inset 0px 12px 20px rgba(255, 255, 255, 0.5);
+    border-radius: 0px 0px 12px 12px;
+    padding: 30px 0 8px;
+  }
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+  &__nav {
+    display: flex;
+    margin-left: 80px;
+    align-items: center;
+    &-item {
+      font-family: BR;
+      transition: 0.3s;
+      padding: 14px 7.5px;
+      display: block;
+      text-transform: uppercase;
+      color: $black;
+      border-bottom: 3px solid transparent;
+      & + & {
+        margin-left: 18px;
+      }
+      &--active {
+        font-family: BB;
+        color: $red-light;
+        border-color: $red-light;
+        &:hover {
+          color: $red-light;
+        }
+      }
+    }
+  }
+  &__time {
+    color: $red;
+    font-family: BR;
+    text-transform: uppercase;
+    span {
+      width: 68px;
+      display: inline-block;
+    }
+  }
+  &__theme {
+    margin: 0 33px;
+    display: flex;
+    align-items: center;
+    font-family: BR;
+    span {
+      text-transform: uppercase;
+      color: rgba(0, 0, 0, 0.3);
+      margin: 0 7px;
+    }
+    span:first-child {
+      color: $red;
+    }
+    &.active {
+      span:last-child {
+        color: $red;
+      }
+      span:first-child {
+        color: rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+  .ant-switch {
+    background: linear-gradient(
+      232.34deg,
+      rgba(255, 20, 20, 0.0001) -20.17%,
+      rgba(198, 14, 14, 0.2) 99.8%
+    );
+    &-checked:focus {
+      box-shadow: none;
+    }
+    &-handle {
+      &::before {
+        background: linear-gradient(
+          232.34deg,
+          rgba(255, 20, 20, 0.0001) -20.17%,
+          #c60e0e 99.8%
+        );
+        box-shadow: none;
+      }
+    }
+  }
+}

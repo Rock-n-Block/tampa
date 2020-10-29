@@ -1,0 +1,34 @@
+@import '../../styles/vars';
+
+.l-history {
+  padding: 45px 30px 30px;
+  text-transform: uppercase;
+  &__title {
+    color: $red;
+    font-size: 18px;
+    line-height: 22px;
+    margin-bottom: 10px;
+  }
+  &__row {
+    padding: 13px 30px 11px;
+    color: $black;
+    display: grid;
+    grid-template-columns: 70px 150px 250px;
+    justify-content: space-between;
+    font-family: BR;
+    font-size: 15px;
+    line-height: 28px;
+    &-item {
+      text-align: center;
+    }
+    &-head {
+      font-size: 13px;
+      font-family: BM;
+      line-height: 15px;
+      margin-bottom: -5px;
+    }
+    & + & {
+      margin-top: 5px;
+    }
+  }
+}

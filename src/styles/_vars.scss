@@ -1,0 +1,20 @@
+$red: rgba(219, 72, 72, 0.9);
+$red-light: #f35959;
+$red2: #e16b6c;
+
+$black: #4c4c66;
+$red-grad: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 100%
+  ),
+  #e66565;
+$box-bg: linear-gradient(
+    190.57deg,
+    rgba(255, 255, 255, 0.56) 19.25%,
+    rgba(248, 248, 255, 0.71) 54.39%,
+    rgba(255, 255, 255, 0.59) 90.02%
+  ),
+  #ffffff;
+$box-shadow: 20px 30px 85px rgba(119, 116, 159, 0.15),
+  inset 0px 12px 20px rgba(255, 255, 255, 0.5);

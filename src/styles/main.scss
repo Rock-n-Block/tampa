@@ -1,0 +1,101 @@
+@import '~antd/dist/antd.css';
+@import './fonts';
+@import './reset';
+@import './vars';
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: fit-content;
+  font-family: BM;
+  color: $black;
+  padding-bottom: 100px;
+}
+
+.row {
+  max-width: 1320px;
+  padding: 0 10px;
+  width: 100%;
+  margin: 0 auto;
+  &--md {
+    max-width: 630px;
+  }
+  &--lg {
+    max-width: 920px;
+  }
+}
+
+.container {
+  border-radius: 12px;
+  background: $box-bg;
+  box-shadow: $box-shadow;
+}
+h1 {
+  font-size: 30px;
+  line-height: 36px;
+  color: $red;
+  font-family: BR;
+}
+.ant-input-number-handler-wrap {
+  display: none !important;
+}
+input {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.ant-input-number {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.btn {
+  box-shadow: 4px 12px 20px rgba(219, 72, 72, 0.15);
+  border-radius: 12px;
+  padding: 19px 0 17px;
+  background: $red;
+  width: 100%;
+  max-width: 245px;
+  text-align: center;
+  border: none;
+  outline: none !important;
+  color: white;
+  text-transform: uppercase;
+  font-family: BB;
+  &--md {
+    padding: 12px 0;
+    max-width: 110px;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      #e66565;
+    border-radius: 10px;
+  }
+}
+
+.t-row {
+  display: grid;
+  grid-template-columns: 70px 70px 70px 50px 50px 62px 62px 60px 65px;
+  grid-column-gap: 30px;
+  align-items: flex-end;
+  text-align: center;
+  padding: 13px 20px 11px;
+  text-transform: uppercase;
+  &__head {
+    font-size: 13px;
+    line-height: 15px;
+  }
+  &__content {
+    font-family: BR;
+    font-size: 15px;
+    line-height: 28px;
+    align-items: center;
+    & + & {
+      margin-top: 5px;
+    }
+  }
+}

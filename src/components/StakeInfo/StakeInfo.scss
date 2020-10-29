@@ -1,0 +1,47 @@
+@import '../../styles/vars';
+.s-info {
+  padding: 30px 10px 10px;
+  margin: 40px 0;
+  &__title {
+    font-size: 18px;
+    line-height: 22px;
+    color: $red;
+    font-family: BR;
+    padding-left: 30px;
+    margin-bottom: 17px;
+    text-transform: uppercase;
+  }
+  &__content {
+    padding: 25px 20px 20px;
+    display: grid;
+    grid-template-columns: 110px 110px 1fr 130px 120px 150px;
+    grid-column-gap: 20px;
+  }
+  &__item {
+    &-head {
+      color: $red;
+      font-size: 24px;
+      line-height: 29px;
+      margin-bottom: 8px;
+    }
+    &-subhead {
+      font-size: 13px;
+      line-height: 15px;
+      text-transform: uppercase;
+    }
+    & + & {
+      padding-left: 20px;
+      position: relative;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 1px;
+        height: 57px;
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
