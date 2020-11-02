@@ -1,0 +1,16 @@
+.l-wheel {
+  margin: 100px auto;
+  max-width: 610px;
+  overflow: hidden;
+  &__wrapper {
+    height: 280px !important;
+    transition: 5s;
+    transform: translateY(-1000px);
+  }
+  &__item {
+    text-align: center;
+    font-size: 24px;
+    line-height: 43px;
+    height: 43px;
+  }
+}

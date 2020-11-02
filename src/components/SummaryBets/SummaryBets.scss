@@ -54,3 +54,24 @@
     color: $red2 !important;
   }
 }
+.darktheme {
+  .s-bets {
+    .ant-progress-text {
+      color: $blue !important;
+    }
+    &__title {
+      color: $blue;
+    }
+    &__item {
+      &-progress {
+        color: $purple;
+      }
+      &-head {
+        color: white;
+      }
+      &-content {
+        color: $purple;
+      }
+    }
+  }
+}

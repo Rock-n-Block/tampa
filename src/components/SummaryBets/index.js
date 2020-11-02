@@ -3,7 +3,7 @@ import { Progress } from 'antd';
 
 import './SummaryBets.scss'
 
-const SummaryBets = () => {
+const SummaryBets = ({ isDarkTheme }) => {
     const [participation, setParticipation] = React.useState(8)
 
     return (
@@ -11,7 +11,7 @@ const SummaryBets = () => {
             <div className="s-bets__title">My summary bets</div>
             <div className="container s-bets__content">
                 <div className="s-bets__item s-bets__item-progress">
-                    <Progress strokeColor={{ from: '#E16B6C', to: '#E16B6C' }} type="circle" percent={participation / 13 * 100} format={() => `${participation}/13`} width={57} />
+                    <Progress strokeColor={{ from: isDarkTheme ? '#53B9EA' : '#E16B6C', to: isDarkTheme ? '#53B9EA' : '#E16B6C' }} type="circle" percent={participation / 13 * 100} format={() => `${participation}/13`} width={57} />
                     <span>participation in auctions</span>
                 </div>
                 <div className="s-bets__item">

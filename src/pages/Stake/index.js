@@ -4,17 +4,17 @@ import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes, Graph } from '../../c
 
 import './Stake.scss'
 
-const StakePage = () => {
+const StakePage = ({ isDarkTheme }) => {
     return (
         <div className="stake">
             <div className="row row--md">
-                <StakeForm />
+                <StakeForm isDarkTheme={isDarkTheme} />
                 <Graph />
                 <ReferrerLink />
             </div>
             <div className="row row--lg">
                 <StakeInfo />
-                <ActiveStakes />
+                <ActiveStakes isDarkTheme={isDarkTheme} />
             </div>
         </div>
     );

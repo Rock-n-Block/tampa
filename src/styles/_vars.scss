@@ -1,8 +1,11 @@
 $red: rgba(219, 72, 72, 0.9);
 $red-light: #f35959;
 $red2: #e16b6c;
-
+$blue: #53b9ea;
+$purple: #9796cf;
+$gray: #6968a6;
 $black: #4c4c66;
+
 $red-grad: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.2) 0%,
@@ -18,3 +21,11 @@ $box-bg: linear-gradient(
   #ffffff;
 $box-shadow: 20px 30px 85px rgba(119, 116, 159, 0.15),
   inset 0px 12px 20px rgba(255, 255, 255, 0.5);
+
+$box-bg-dark: linear-gradient(
+  210.96deg,
+  rgba(40, 36, 88, 0.61) 0.01%,
+  rgba(38, 35, 83, 0.7) 42.05%,
+  rgba(62, 59, 115, 0) 104.81%
+);
+$box-shadow-dark: inset 5px 5px 85px rgba(82, 157, 202, 0.1);

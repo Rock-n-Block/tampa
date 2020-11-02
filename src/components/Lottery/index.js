@@ -5,8 +5,9 @@ import { LotteryProgress } from '../../components';
 import './Lottery.scss'
 
 import tampaImg from '../../assets/img/tampa.svg';
+import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 
-const Lottery = () => {
+const Lottery = ({ isDarkTheme }) => {
     return (
         <div className="container lottery">
             <h1 className="lottery__title">lottery</h1>
@@ -20,7 +21,7 @@ const Lottery = () => {
                         <div className="lottery__info-head">Amount of the draw</div>
                         <div className="lottery__info-content">100.000</div>
                         <div className="lottery__info-wrapper">
-                            <img src={tampaImg} alt="" />
+                            {isDarkTheme ? <img src={tampaDarkImg} alt="" /> : <img src={tampaImg} alt="" />}
                             <span>Tampa</span>
                         </div>
                     </div>

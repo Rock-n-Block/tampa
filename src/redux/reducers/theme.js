@@ -1,5 +1,5 @@
 const initialState = {
-    isDarkTheme: false
+    isDarkTheme: true
 }
 
 export default (state = initialState, { type, payload }) => {

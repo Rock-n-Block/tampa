@@ -4,8 +4,9 @@ import classNames from 'classnames';
 import './ActiveStakes.scss'
 
 import refreshImg from '../../assets/img/refresh.svg';
+import refreshDarkImg from '../../assets/img/refresh-dark.svg';
 
-const ActiveStakes = () => {
+const ActiveStakes = ({ isDarkTheme }) => {
     const navItems = ['My Active Stakes', 'My Ended Stakes']
 
     const [activeTab, setActiveTab] = React.useState(0)
@@ -37,7 +38,7 @@ const ActiveStakes = () => {
 
     return (
         <div className="container stakes">
-            <img src={refreshImg} alt="" className="stakes__refresh" />
+            {isDarkTheme ? <img src={refreshDarkImg} alt="" className="stakes__refresh" /> : <img src={refreshImg} alt="" className="stakes__refresh" />}
             <div className="stakes__nav">
                 {
                     navItems.map((item, index) => {

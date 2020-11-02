@@ -53,3 +53,15 @@
     }
   }
 }
+.darktheme {
+  .lottery {
+    &__info {
+      &-head {
+        color: $purple;
+      }
+      &-content {
+        color: $blue;
+      }
+    }
+  }
+}

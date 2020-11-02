@@ -32,3 +32,16 @@
     }
   }
 }
+.darktheme {
+  .l-history {
+    &__title {
+      color: $blue;
+    }
+    &__row {
+      color: white;
+      &-head {
+        color: $purple;
+      }
+    }
+  }
+}

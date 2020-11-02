@@ -52,3 +52,20 @@
     }
   }
 }
+.darktheme {
+  .l-progress {
+    &__title {
+      color: $blue;
+    }
+    &__item {
+      &-percent {
+        color: $purple;
+      }
+    }
+    &__colors {
+      &-item {
+        color: $purple;
+      }
+    }
+  }
+}

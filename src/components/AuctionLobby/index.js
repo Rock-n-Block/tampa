@@ -42,7 +42,7 @@ const AuctionLobby = () => {
     }
 
     return (
-        <div className="container a-lobby">
+        <div className="container a-lobby" id="a-lobby">
             <div className="a-lobby__title">Auction lobby</div>
             <div className="a-lobby__row t-row t-row__head">
                 <div className="a-lobby__row-head-item">Day</div>
@@ -69,6 +69,7 @@ const AuctionLobby = () => {
                         <div className="a-lobby__row-item a-lobby__red">{item.status}</div>
                         <div className="a-lobby__row-item">
                             <Popover
+                                getPopupContainer={() => document.getElementById(`a-lobby`)}
                                 onVisibleChange={(value) => handlePopoverVisibleChange(value, index)}
                                 placement="bottom"
                                 trigger="click"

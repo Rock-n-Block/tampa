@@ -4,9 +4,10 @@ import { InputNumber } from 'antd';
 import './StakeForm.scss'
 
 import tampaImg from '../../assets/img/tampa.svg';
+import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 import questionImg from '../../assets/img/question.svg';
 
-const StakeForm = () => {
+const StakeForm = ({ isDarkTheme }) => {
     const [amount, setAmount] = React.useState(1000)
     const [days, setDays] = React.useState(90)
 
@@ -27,7 +28,7 @@ const StakeForm = () => {
                         <div className="s-form__input-head">Amount to Stake:</div>
                         <InputNumber value={amount} onChange={(value) => setAmount(value)} className="s-form__input" placeholder="1000,00" />
                         <div className="s-form__img">
-                            <img src={tampaImg} alt="" />
+                            {isDarkTheme ? <img src={tampaDarkImg} alt="" /> : <img src={tampaImg} alt="" />}
                             <span>Tampa</span>
                         </div>
                     </div>

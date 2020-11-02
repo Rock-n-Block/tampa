@@ -28,6 +28,7 @@
     span {
       display: inline-block;
       margin-left: 10px;
+      cursor: pointer;
       color: $red;
     }
   }
@@ -171,6 +172,63 @@
   &__quest {
     &-img {
       margin-bottom: -4px;
+    }
+  }
+}
+.darktheme {
+  .s-form {
+    &__balance {
+      color: $gray;
+      span {
+        color: $blue;
+      }
+    }
+    &__content {
+      border: none;
+    }
+    &__input {
+      &-head {
+        color: $purple;
+      }
+      input {
+        color: $blue !important;
+        &::placeholder {
+          color: $blue !important;
+        }
+      }
+    }
+    &__img {
+      color: $gray;
+    }
+    &__days {
+      border: none;
+      &-head {
+        color: $purple;
+      }
+    }
+    &__info {
+      &-item {
+        span {
+          color: $purple;
+        }
+        span:first-child {
+          color: white;
+        }
+      }
+    }
+    &__bonus {
+      &-title {
+        color: $blue;
+      }
+      &-box {
+        &::before {
+          background: $gray;
+          opacity: 1;
+        }
+      }
+      &-item {
+        border-color: $gray;
+      }
     }
   }
 }

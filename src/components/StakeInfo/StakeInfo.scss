@@ -45,3 +45,18 @@
     }
   }
 }
+.darktheme {
+  .s-info {
+    &__title {
+      color: $blue;
+    }
+    &__item {
+      &-head {
+        color: white;
+      }
+      &-subhead {
+        color: $purple;
+      }
+    }
+  }
+}

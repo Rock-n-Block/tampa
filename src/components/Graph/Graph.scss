@@ -60,3 +60,13 @@
     margin-left: 15px;
   }
 }
+.darktheme {
+  .s-graph {
+    &__text {
+      color: $blue;
+      &--black {
+        color: $gray;
+      }
+    }
+  }
+}

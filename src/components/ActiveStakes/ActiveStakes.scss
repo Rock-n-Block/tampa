@@ -36,3 +36,17 @@
     color: $red;
   }
 }
+.darktheme {
+  .stakes {
+    &__row {
+      &-item {
+        color: white;
+      }
+      &-head {
+        &-item {
+          color: $purple;
+        }
+      }
+    }
+  }
+}

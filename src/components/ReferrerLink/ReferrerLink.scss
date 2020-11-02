@@ -30,3 +30,13 @@
     margin-top: 10px;
   }
 }
+.darktheme {
+  .r-link {
+    &__title {
+      color: $blue;
+    }
+    &__link {
+      color: $purple;
+    }
+  }
+}

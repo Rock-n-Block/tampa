@@ -108,3 +108,48 @@
     }
   }
 }
+.darktheme {
+  .header {
+    &__nav {
+      &-item {
+        color: rgba(255, 255, 255, 0.8);
+        &--active {
+          color: $blue;
+          border-color: $blue;
+        }
+      }
+    }
+    &__theme {
+      span {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      span {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      span:first-child {
+        color: $blue;
+      }
+      &.active {
+        span:last-child {
+          color: $blue;
+        }
+        span:first-child {
+          color: rgba(255, 255, 255, 0.8);
+        }
+      }
+    }
+    &__time {
+      color: $blue;
+    }
+    .ant-switch {
+      background: linear-gradient(
+        232.34deg,
+        rgba(32, 183, 255, 0.0001) -20.17%,
+        #53b9ea 99.8%
+      );
+      &-handle::before {
+        background: white;
+      }
+    }
+  }
+}
