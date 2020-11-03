@@ -5,7 +5,7 @@ import { LotteryWheel } from '../../components';
 const testPage = () => {
     return (
         <div>
-            <LotteryWheel />
+            {/* <LotteryWheel /> */}
         </div>
     );
 }

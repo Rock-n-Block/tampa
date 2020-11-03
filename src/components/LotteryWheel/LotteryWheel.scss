@@ -1,7 +1,15 @@
+@import '../../styles/vars';
 .l-wheel {
-  margin: 100px auto;
+  margin: 20px auto;
   max-width: 610px;
   overflow: hidden;
+  &__btn {
+    margin: 20px auto 30px;
+    display: block;
+  }
+  &__content {
+    cursor: default;
+  }
   &__wrapper {
     height: 280px !important;
     transition: 5s;
@@ -12,5 +20,60 @@
     font-size: 24px;
     line-height: 43px;
     height: 43px;
+  }
+  .lottery-container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    color: #a8a7af;
+    font-family: sans-serif;
+    position: relative;
+  }
+  .lottery-container:after {
+    content: 'Winner';
+    position: absolute;
+    color: $red;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    height: 80px;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-end;
+    font-family: BM;
+    font-size: 20px;
+    line-height: 24px;
+    align-items: center;
+    transform: translateY(-54%);
+    background: linear-gradient(
+        190.57deg,
+        rgba(255, 255, 255, 0.56) 19.25%,
+        rgba(248, 248, 255, 0.71) 54.39%,
+        rgba(255, 255, 255, 0.59) 90.02%
+      ),
+      #ffffff;
+    /* Style 1 */
+
+    box-shadow: 20px 30px 85px rgba(119, 116, 159, 0.15),
+      inset 0px 12px 20px rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+  }
+  .lottery-item {
+    line-height: 80px;
+    font-size: 45px;
+    text-align: center;
+    will-change: line-height;
+    &.winner {
+      color: $red;
+    }
+    &_text {
+      will-change: transform;
+    }
+  }
+  .lottery-list {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
   }
 }

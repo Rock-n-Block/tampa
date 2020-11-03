@@ -1,46 +1,51 @@
-import React, { useRef } from 'react';
-import SwiperCore, { Autoplay } from 'swiper';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import lotteryWheel from '../../utils/lotteryWheel';
+
+import { lotteryActions } from '../../redux/actions';
 
 import './LotteryWheel.scss'
 
 const LotteryWheel = () => {
-    const [elements, setElements] = React.useState(['0x45945945945', '0x5045905043', '0x4105059205', '0x325252525', '0x5324536436', '0x450395035', '0x5095039503', '0x459405930345', '0x350350250205025'])
+    const dispatch = useDispatch();
+    const container = React.useRef()
 
-    const box = useRef()
+    const isLotteryStarted = useSelector(({ lottery }) => lottery.isLotteryStarted)
 
-    const start = Date.now()
-    let counter = 0;
+    const handleStartLottery = () => {
+        dispatch(lotteryActions.startLottery())
+        window.localStorage.isLotteryStarted = true
+    }
 
-    const animate = () => {
-        let timePassed = Date.now() - start;
 
-        if (timePassed >= 1000) {
-            return;
+    const iniLottery = (params) => {
+
+        const data = [];
+        for (let k = 0; k < 10000; k++) {
+            data.push('0x' + ('00000000000' + k.toString(16)).slice(-8));
         }
-        counter++
-        let div = document.createElement('div');
-        div.className = 'l-wheel__item'
-        div.innerHTML = elements[0]
-
-        box.current.style.transform = `translateY(-${counter * 43})`
-
-        box.current.appendChild(div)
-        requestAnimationFrame(animate)
+        params.data = data;
+        const lottery = new lotteryWheel(params);
+        lottery.start();
     }
 
     React.useEffect(() => {
-        animate()
-    }, [])
+        if (isLotteryStarted) {
+            iniLottery({
+                element: container.current,
+                data: [],
+                visibleElementsCount: 20,
+                winner: '0x00000020',
+                speed: 1
+            });
+        }
+    }, [isLotteryStarted])
 
     return (
         <div className="l-wheel">
-            <div className="l-wheel__wrapper" ref={box}>
-                {
-                    elements.map((item, index) => {
-                        return <div key={item} className="l-wheel__item">{item}</div>
-                    })
-                }
-            </div>
+            {!isLotteryStarted && <button onClick={handleStartLottery} className="l-wheel__btn btn">START</button>}
+            <div className="l-wheel__content" ref={container}></div>
         </div>
     );
 }

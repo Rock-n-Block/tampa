@@ -1,13 +1,13 @@
 const initialState = {
-    isDarkTheme: false
+    isLotteryStarted: window.localStorage.isLotteryStarted
 }
 
 export default (state = initialState, { type, payload }) => {
     switch (type) {
-        case 'THEME:TOGGLE':
+        case 'LOTTERY:START':
             return {
                 ...state,
-                isDarkTheme: payload
+                isLotteryStarted: true
             };
         default:
             return state

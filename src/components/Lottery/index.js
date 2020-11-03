@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LotteryProgress } from '../../components';
+import { LotteryProgress, LotteryWheel } from '../../components';
 
 import './Lottery.scss'
 
@@ -11,6 +11,7 @@ const Lottery = ({ isDarkTheme }) => {
     return (
         <div className="container lottery">
             <h1 className="lottery__title">lottery</h1>
+            <LotteryWheel />
             <div className="container lottery__content">
                 <div className="lottery__info">
                     <div className="container lottery__info-item">
