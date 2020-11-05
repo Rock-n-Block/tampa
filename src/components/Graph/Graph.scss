@@ -66,6 +66,7 @@
       color: $blue;
       &--black {
         color: $gray;
+        width: max-content;
       }
     }
   }

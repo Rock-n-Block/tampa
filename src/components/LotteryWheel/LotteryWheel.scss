@@ -29,6 +29,11 @@
     color: #a8a7af;
     font-family: sans-serif;
     position: relative;
+    &.lottery-end {
+      &::after {
+        display: flex;
+      }
+    }
   }
   .lottery-container:after {
     content: 'Winner';
@@ -39,7 +44,7 @@
     right: 20px;
     height: 80px;
     padding: 20px;
-    display: flex;
+    display: none;
     justify-content: flex-end;
     font-family: BM;
     font-size: 20px;

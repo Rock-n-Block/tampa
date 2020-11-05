@@ -7,15 +7,15 @@ import BigNumber from "bignumber.js"
 const IS_PRODUCTION = false;
 
 const WEB3_CONSTANTS = {
-    ropsten: {
-        WEB3_PROVIDER: 'https://ropsten.infura.io/v3/e65462856a9b46fbbec5d0fde337f2b0'
+    kovan: {
+        WEB3_PROVIDER: 'https://kovan.infura.io/v3/8f717d58972049639df06bbbabf5bbc5'
     }
 };
 
 
 const networks = {
     production: 'mainnet',
-    testnet: 'ropsten'
+    testnet: 'kovan'
 };
 
 class MetamaskService {
@@ -52,10 +52,10 @@ class MetamaskService {
                 this.Web3Provider.setProvider(this.providers.infura);
                 reject(errorParams)
             };
-            const usedNetworkVersion = IS_PRODUCTION ? 1 : 3;
-            const net = usedNetworkVersion === 1 ? 'mainnet' : 'ropsten';
+            const usedNetworkVersion = IS_PRODUCTION ? 1 : 42;
+            const net = usedNetworkVersion === 1 ? 'mainnet' : 'kovan';
             const isValidMetaMaskNetwork = () => {
-                const networkVersion = Number((this.metaMaskWeb3.chainId).slice(-1));
+                const networkVersion = Number((this.metaMaskWeb3.networkVersion));
                 if (usedNetworkVersion !== networkVersion) {
                     onError({
                         errorCode: 2,
@@ -135,7 +135,7 @@ class MetamaskService {
 
     getContributeTransaction({ data, tokenAddress, walletAddress, method, contractName, withdraw, stake, callback }) {
 
-        const transactionData = withdraw ? data : new BigNumber(data)
+        const transactionData = withdraw ? data : new BigNumber(data.amount)
             .times(Math.pow(10, tokensDecimal[contractName]))
             .toString(10);
 
@@ -146,9 +146,8 @@ class MetamaskService {
 
         const depositSignature = this.encodeFunctionCall(
             depositMethod,
-            stake ? [transactionData, stake] : [transactionData]
+            stake ? [transactionData, data.days] : [transactionData]
         );
-
 
         const contributeTransaction = () => {
             return this.sendTransaction(
@@ -198,7 +197,7 @@ class MetamaskService {
         this.createTransactionObj(transaction, walletAddress)
     }
 
-    approveToken = (walletAddress, tokenAddress, callback, contractName, decemals = 9) => {
+    approveToken = (walletAddress, tokenAddress, callback, contractName, decemals) => {
         const approveMethod = this.getMethodInterface('approve', ContractDetails[contractName].ABI);
 
         const approveSignature = this.encodeFunctionCall(
@@ -303,7 +302,6 @@ class MetamaskService {
                 })
                 .then(
                     (result) => {
-                        console.log(result);
                         if (callback) {
                             setTimeout(() => {
                                 callback(true)

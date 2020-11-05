@@ -7,6 +7,9 @@ export default class Lottery {
         params.element.appendChild(this.container);
         this.winner = params.winner
         this.speed = params.speed;
+        this.audioEnd = params.audioEnd
+        this.playingAudio = params.playingAudio
+        this.callback = params.callback
 
         this.Boxheight = 0;
         for (let k = 0; k < params.visibleElementsCount; k++) {
@@ -47,6 +50,7 @@ export default class Lottery {
 
 
     start() {
+        this.playingAudio.play()
         let firstItem;
         const getFirstItemProperties = () => {
             firstItem = this.listItems.children[0];
@@ -80,9 +84,12 @@ export default class Lottery {
                     this.speed += 0.05
                     clearInterval(this.interval)
                     this.interval = setInterval(animate, this.speed);
-                    console.log(el.offsetTop === this.Boxheight - el.offsetTop, el.offsetTop,)
                     if (el.offsetTop - +(this.Boxheight - el.offsetTop - el.offsetHeight).toFixed(0) < 5) {
+                        this.playingAudio.pause()
                         el.classList.add('winner')
+                        this.audioEnd.play()
+                        this.container.classList.add('lottery-end')
+                        this.callback()
                         clearInterval(this.interval)
                     }
                 }

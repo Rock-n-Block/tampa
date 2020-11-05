@@ -107,6 +107,21 @@
       }
     }
   }
+  &__metamask {
+    display: flex;
+    align-items: center;
+    span {
+      max-width: 150px;
+      font-family: BR;
+      font-size: 15px;
+      margin-left: 7px;
+      line-height: 26px;
+      color: $red;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: block;
+    }
+  }
 }
 .darktheme {
   .header {

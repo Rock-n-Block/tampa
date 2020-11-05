@@ -2,14 +2,19 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import lotteryWheel from '../../utils/lotteryWheel';
-
 import { lotteryActions } from '../../redux/actions';
 
 import './LotteryWheel.scss'
 
+import lotteryEndAudio from '../../assets/mp3/click_wheel.mp3';
+import lotteryPlayingAudio from '../../assets/mp3/test.mp3';
+
 const LotteryWheel = () => {
     const dispatch = useDispatch();
+
     const container = React.useRef()
+    const audioEnd = React.useRef()
+    const playingAudio = React.useRef()
 
     const isLotteryStarted = useSelector(({ lottery }) => lottery.isLotteryStarted)
 
@@ -37,7 +42,12 @@ const LotteryWheel = () => {
                 data: [],
                 visibleElementsCount: 20,
                 winner: '0x00000020',
-                speed: 1
+                speed: 1,
+                audioEnd: audioEnd.current,
+                playingAudio: playingAudio.current,
+                callback: () => {
+                    delete window.localStorage.isLotteryStarted
+                }
             });
         }
     }, [isLotteryStarted])
@@ -46,6 +56,8 @@ const LotteryWheel = () => {
         <div className="l-wheel">
             {!isLotteryStarted && <button onClick={handleStartLottery} className="l-wheel__btn btn">START</button>}
             <div className="l-wheel__content" ref={container}></div>
+            <audio ref={audioEnd} src={lotteryEndAudio}></audio>
+            <audio ref={playingAudio} src={lotteryPlayingAudio} loop></audio>
         </div>
     );
 }

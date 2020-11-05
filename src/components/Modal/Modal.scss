@@ -1,0 +1,32 @@
+@import '../../styles/vars';
+.ant-modal {
+  &-content {
+    background-color: white !important;
+    color: $black;
+    img {
+      width: 70px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 14px;
+      line-height: 17px;
+    }
+  }
+  &-body {
+    text-align: center;
+    padding: 50px 25px !important;
+  }
+  &-close-x {
+    cursor: pointer;
+    path {
+      fill: white !important;
+    }
+  }
+  a {
+    color: $red !important;
+  }
+  .btn {
+    display: block;
+    margin: 0 auto;
+  }
+}

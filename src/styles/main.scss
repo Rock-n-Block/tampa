@@ -65,6 +65,9 @@ input {
   color: white;
   text-transform: uppercase;
   font-family: BB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &--md {
     padding: 12px 0;
     max-width: 110px;
@@ -75,6 +78,10 @@ input {
       ),
       #e66565;
     border-radius: 10px;
+  }
+  img {
+    width: 18px;
+    margin-right: 10px;
   }
 }
 

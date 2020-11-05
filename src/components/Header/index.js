@@ -3,22 +3,20 @@ import { NavLink } from 'react-router-dom';
 import { intervalToDuration } from 'date-fns'
 import { Switch } from 'antd';
 import classNames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { themeActions } from '../../redux/actions';
 
 import './Header.scss'
 
 import logoImg from '../../assets/img/logo.svg';
+import MetamaskImg from '../../assets/img/metamask.svg';
 
-const Header = () => {
+const Header = ({ isDarkTheme, userAddress }) => {
     const dispatch = useDispatch()
 
     const [timeUntil, setTimeUntil] = React.useState('00:00:00')
     const [isHeaderActive, setIsHeaderActive] = React.useState(false)
-
-    const isDarkTheme = useSelector(({ theme }) => theme.isDarkTheme)
-
 
     const handleThemeChange = (value) => {
         dispatch(themeActions.toggleTheme(!value))
@@ -74,6 +72,11 @@ const Header = () => {
                             <Switch defaultChecked size="big" onChange={handleThemeChange} />
                             <span>Light</span>
                         </div>
+                        {userAddress && <div className="header__metamask">
+                            <img src={MetamaskImg} alt="" />
+                            <span>{userAddress}</span>
+                        </div>
+                        }
                     </div>
                 </div>
             </div>

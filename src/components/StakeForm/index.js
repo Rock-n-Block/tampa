@@ -6,10 +6,15 @@ import './StakeForm.scss'
 import tampaImg from '../../assets/img/tampa.svg';
 import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 import questionImg from '../../assets/img/question.svg';
+import Spiner from '../../assets/img/oval.svg';
 
-const StakeForm = ({ isDarkTheme }) => {
-    const [amount, setAmount] = React.useState(1000)
+const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTokenApproving, handleApproveToken, handleStake }) => {
+    const [amount, setAmount] = React.useState(10)
     const [days, setDays] = React.useState(90)
+
+    const handleSendMax = () => {
+        setAmount(walletBalance)
+    }
 
     return (
         <div className="s-form">
@@ -20,7 +25,7 @@ const StakeForm = ({ isDarkTheme }) => {
                         <img className="s-form__quest-img" src={questionImg} alt="" />
                     </div>
                     <div className="s-form__balance">
-                        Your balance: 495829589458 <span>MAX</span>
+                        Your balance: {walletBalance} <span onClick={handleSendMax}>MAX</span>
                     </div>
                 </div>
                 <div className="container s-form__content">
@@ -40,10 +45,16 @@ const StakeForm = ({ isDarkTheme }) => {
                     </div>
                 </div>
                 <div className="s-form__box">
-                    <button className="s-form__btn btn">STAKE</button>
+                    {isTokenApproved ?
+                        <button className="s-form__btn btn" onClick={() => handleStake(amount, days)}>STAKE</button> :
+                        <button className="s-form__btn btn" onClick={handleApproveToken} disabled={isTokenApproving}>
+                            {isTokenApproving && <img src={Spiner} alt="" />}
+                            <span>{isTokenApproving ? 'Waiting' : 'Approve'}</span>
+                        </button>
+                    }
                     <div className="s-form__info">
                         <div className="s-form__info-item">
-                            <span>4</span>
+                            <span>{startDay}</span>
                             <span>Start day</span>
                         </div>
                         <div className="s-form__info-item">

@@ -10,7 +10,7 @@ import './Graph.scss'
 import arrowImg from '../../assets/img/arrow.svg';
 import ethImg from '../../assets/img/eth-r.svg';
 
-const Graph = () => {
+const Graph = ({ dividentsPool }) => {
     const data = [
         { day: 0, value: 0 },
         { day: 10, value: 1000 },
@@ -27,8 +27,8 @@ const Graph = () => {
                 </div>
                 <div className="">
                     <div className="s-graph__text">
-                        35,253461157378...55
-                    <img src={ethImg} alt="" />
+                        {dividentsPool}
+                        <img src={ethImg} alt="" />
                     </div>
                     <div className="s-graph__text--black">Current Dividends Pool </div>
                 </div>
