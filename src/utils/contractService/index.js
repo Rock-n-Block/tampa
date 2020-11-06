@@ -12,6 +12,24 @@ class ContractService {
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
 
+    calcPayoutDividendsReward = (stakeShares, lockedDay, stakedDays, currentDay) => {
+        const sum = BigNumber.sum(stakedDays, lockedDay).toString()
+
+        return new Promise((resolve, reject) => {
+            if (lockedDay >= currentDay) {
+                resolve(0)
+            } else {
+                this.tampaContract.methods.calcPayoutDividendsReward(stakeShares, lockedDay, BigNumber.min(currentDay, sum)).call()
+                    .then(res => {
+                        resolve(res)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            }
+        })
+    }
+
     stakeLists = (address, stake) => {
         return this.tampaContract.methods.stakeLists(address, stake).call()
     }
