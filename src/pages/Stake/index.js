@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { BigNumber } from 'bignumber.js';
 
 import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes, Graph } from '../../components';
 import ContractService from '../../utils/contractService';
+import decimals from '../../utils/web3/decimals';
 
 import './Stake.scss'
-import { BigNumber } from 'bignumber.js';
-import decimals from '../../utils/web3/decimals';
 
 const StakePage = ({ isDarkTheme, userAddress }) => {
     const [contractService] = useState(new ContractService())
@@ -19,6 +19,10 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
     const [totalDividents, setTotalDividents] = useState(0)
     const [totalTimeBonus, setTotalTimeBonus] = useState(0)
     const [totalValueBonus, setTotalValueBonus] = useState(0)
+    const [bonusDay, setBonusDay] = useState(0)
+
+    const [activeStakes, setActiveStakes] = useState([])
+    const [activeStakesRefreshing, setActiveStakesRefreshing] = useState([])
 
     const [isTokenApproved, setIsTokenApproved] = useState(false)
     const [isTokenApproving, setIsTokenApproving] = useState(false)
@@ -40,6 +44,60 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
         // amountToStake * (min{7 * 10^24; amountToStake} / 7 * 10^25)
     }
 
+    const getStakes = (currentDay = startDay) => {
+        setActiveStakesRefreshing(true)
+        return new Promise((resolve, reject) => {
+            contractService.stakeCount(userAddress)
+                .then(res => {
+                    const promises = []
+                    for (let stakeIndex = 0; stakeIndex < res; stakeIndex++) {
+                        promises.push(contractService.stakeLists(userAddress, stakeIndex))
+                    }
+                    return Promise.all([...promises])
+                })
+                .then(async result => {
+                    const activeStakesArray = []
+                    for (let i = 0; i < result.length; i++) {
+                        const stake = result[i]
+                        const activeStakesItem = {
+                            index: i,
+                            stakeId: stake.stakeId,
+                            start: '',
+                            end: '',
+                            progress: '20.10.2020',
+                            staked: '1,000',
+                            shares: '1000',
+                            bonusday: '1,000',
+                            dividents: '1,000',
+                            interest: '1,000',
+                            currentValue: '1,000'
+                        }
+
+                        activeStakesItem.start = await contractService.getDayUnixTime(stake.lockedDay)
+
+                        activeStakesItem.end = await contractService.getDayUnixTime(stake.lockedDay + stake.stakedDays)
+
+                        activeStakesItem.bonusday = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewardsBonusDays')
+
+                        activeStakesItem.dividents = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutDividendsReward')
+
+                        activeStakesItem.interest = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewards')
+
+                        activeStakesItem.currentValue = BigNumber.sum(activeStakesItem.interest, activeStakesItem.shares).toString()
+
+                        activeStakesArray.push(activeStakesItem)
+                    }
+                    setActiveStakesRefreshing(false)
+                    setActiveStakes(activeStakesArray.reverse())
+                    resolve(result)
+
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
+
     const getData = () => {
         contractService.balanceOf(userAddress)
             .then(res => setWalletBalance(res))
@@ -51,61 +109,52 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
 
         contractService.currentDay()
             .then(res => {
-                setStartDay(+res + 1)
+                setStartDay(+res)
                 return +res
             })
             .then(currentDay => {
 
+
                 contractService.xfLobby(currentDay)
                     .then(resXfLobby => {
-                        const result = BigNumber(resXfLobby * 0.9).toFixed()
+                        const result = BigNumber(resXfLobby * 0.9).toString()
                         setDividentsPool(result)
                     })
                     .catch(err => console.log(err))
 
-                contractService.stakeCount(userAddress)
-                    .then(res => {
-                        const promises = []
-                        for (let stakeIndex = 0; stakeIndex < res; stakeIndex++) {
-                            promises.push(contractService.stakeLists(userAddress, stakeIndex))
-                        }
+                getStakes(currentDay)
+                    .then(result => {
+                        let newTotalStaked = 0;
+                        let newTotalShares = 0;
+                        let newTotalTimeBonus = new BigNumber(0);
+                        let newTotalValueBonus = new BigNumber(0);
 
-                        Promise.all([...promises])
-                            .then(result => {
-                                // const activeStakesObj = {}
-                                let newTotalStaked = 0;
-                                let newTotalShares = 0;
-                                let newTotalTimeBonus = new BigNumber(0);
-                                let newTotalValueBonus = new BigNumber(0);
+                        const totalDividentsPromises = result.map(item => {
+                            newTotalStaked = +newTotalStaked + +item.stakedSuns
+                            newTotalShares = +newTotalShares + +item.stakeShares
 
-                                const totalDividentsPromises = result.map(item => {
-                                    newTotalStaked = +newTotalStaked + +item.stakedSuns
-                                    newTotalShares = +newTotalShares + +item.stakeShares
+                            newTotalTimeBonus = newTotalTimeBonus.plus(calcLBP(item.stakedSuns, item.stakedDays))
+                            newTotalValueBonus = newTotalValueBonus.plus(calcBPB(item.stakedSuns))
 
-                                    newTotalTimeBonus = newTotalTimeBonus.plus(calcLBP(item.stakedSuns, item.stakedDays))
-                                    newTotalValueBonus = newTotalValueBonus.plus(calcBPB(item.stakedSuns))
+                            return contractService.calcPayoutReward(item.stakeShares, item.lockedDay, item.stakedDays, currentDay, 'calcPayoutDividendsReward')
+                        })
 
-                                    return contractService.calcPayoutDividendsReward(item.stakeShares, item.lockedDay, item.stakedDays, currentDay)
-                                })
+                        newTotalStaked = BigNumber((newTotalStaked) / Math.pow(10, decimals.TAMPA)).toString()
 
-                                newTotalStaked = BigNumber((newTotalStaked) / Math.pow(10, decimals.TAMPA)).toFixed()
+                        setTotalStaked(newTotalStaked)
+                        setTotalShares(newTotalShares)
+                        setTotalTimeBonus(newTotalTimeBonus.toString())
+                        setTotalValueBonus(newTotalValueBonus.toString())
 
-                                setTotalStaked(newTotalStaked)
-                                setTotalShares(newTotalShares)
-                                setTotalTimeBonus(newTotalTimeBonus.toString())
-                                setTotalValueBonus(newTotalValueBonus.toString())
+                        return Promise.all([...totalDividentsPromises])
 
-                                return Promise.all([...totalDividentsPromises])
+                    })
+                    .then(result => {
+                        let newTotalDividents = 0
 
-                            })
-                            .then(result => {
-                                const newTotalDividents = 0
+                        result.map(item => newTotalDividents = +newTotalDividents + item)
 
-                                result.map(item => newTotalDividents = +newTotalDividents + item)
-
-                                setTotalDividents(newTotalDividents)
-                            })
-                            .catch(err => console.log(err))
+                        setTotalDividents(newTotalDividents)
                     })
                     .catch(err => console.log(err))
             })
@@ -115,6 +164,22 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
             .then(res => setFromReferrs(res))
             .catch(err => console.log(err))
 
+    }
+
+    const handleCalcBonusDay = (amount, days) => {
+        contractService.dailyData(startDay)
+            .then(res => {
+
+                const { dayPayoutTotal, dayStakeSharesTotal } = res
+                const formAmount = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(decimals.TAMPA))
+
+                const calcBonusDay = +dayStakeSharesTotal === 0 ? 0 : formAmount.multipliedBy(dayPayoutTotal).multipliedBy(new BigNumber(days).dividedBy(5)).dividedBy(dayStakeSharesTotal)
+
+                setBonusDay(calcBonusDay.toString())
+
+                // dayPayoutTotal * amountToStake * (daysToStake / 5) / dayStakeSharesTotal
+            })
+            .catch(err => console.log(err))
     }
 
     const handleApproveToken = () => {
@@ -139,6 +204,20 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
         })
     }
 
+    const handleWithdraw = (index, stakeId) => {
+        contractService.createTokenTransaction({
+            data: [
+                index,
+                stakeId
+            ],
+            address: userAddress,
+            swapMethod: 'stakeEnd',
+            contractName: 'TAMPA',
+            withdraw: true,
+            callback: () => getData()
+        })
+    }
+
     useEffect(() => {
         if (userAddress) {
             getData()
@@ -151,11 +230,13 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                 <StakeForm
                     isDarkTheme={isDarkTheme}
                     walletBalance={walletBalance}
-                    startDay={startDay}
+                    startDay={+startDay + 1}
                     isTokenApproved={isTokenApproved}
                     isTokenApproving={isTokenApproving}
                     handleApproveToken={handleApproveToken}
                     handleStake={handleStake}
+                    bonusDay={bonusDay}
+                    handleCalcBonusDay={handleCalcBonusDay}
                 />
                 <Graph dividentsPool={dividentsPool} />
                 <ReferrerLink />
@@ -169,7 +250,13 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     totalTimeBonus={totalTimeBonus}
                     totalValueBonus={totalValueBonus}
                 />
-                <ActiveStakes isDarkTheme={isDarkTheme} />
+                <ActiveStakes
+                    isDarkTheme={isDarkTheme}
+                    activeStakes={activeStakes}
+                    handleRefreshActiveStakes={getStakes}
+                    isRefreshingStates={activeStakesRefreshing}
+                    handleWithdraw={handleWithdraw}
+                />
             </div>
         </div>
     );

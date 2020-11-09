@@ -1,9 +1,7 @@
 import MetamaskService from '../web3';
 import ContractDetails from '..//web3/contract-details';
-import tokensDecimal from '..//web3/decimals';
 import decimals from '..//web3/decimals';
 import BigNumber from "bignumber.js"
-import contractDetails from '..//web3/contract-details';
 
 class ContractService {
 
@@ -12,14 +10,22 @@ class ContractService {
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
 
-    calcPayoutDividendsReward = (stakeShares, lockedDay, stakedDays, currentDay) => {
+    dailyData = (currentDay) => {
+        return this.tampaContract.methods.dailyData(currentDay - 1).call()
+    }
+
+    getDayUnixTime = (lockedDay) => {
+        return this.tampaContract.methods.getDayUnixTime(lockedDay).call()
+    }
+
+    calcPayoutReward = (stakeShares, lockedDay, stakedDays, currentDay, method) => {
         const sum = BigNumber.sum(stakedDays, lockedDay).toString()
 
         return new Promise((resolve, reject) => {
             if (lockedDay >= currentDay) {
                 resolve(0)
             } else {
-                this.tampaContract.methods.calcPayoutDividendsReward(stakeShares, lockedDay, BigNumber.min(currentDay, sum)).call()
+                this.tampaContract.methods[method](stakeShares, lockedDay, BigNumber.min(currentDay, sum).toString()).call()
                     .then(res => {
                         resolve(res)
                     })

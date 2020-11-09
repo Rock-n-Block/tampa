@@ -8,12 +8,24 @@ import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 import questionImg from '../../assets/img/question.svg';
 import Spiner from '../../assets/img/oval.svg';
 
-const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTokenApproving, handleApproveToken, handleStake }) => {
+const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonusDay, isTokenApproving, handleApproveToken, handleStake, handleCalcBonusDay }) => {
     const [amount, setAmount] = React.useState(10)
     const [days, setDays] = React.useState(90)
 
     const handleSendMax = () => {
         setAmount(walletBalance)
+    }
+
+    const handleChangeTokenAmount = (value) => {
+        setAmount(value)
+
+        handleCalcBonusDay(value, days)
+    }
+
+    const handleChangeDays = (days) => {
+        setDays(days)
+
+        handleCalcBonusDay(amount, days)
     }
 
     return (
@@ -31,7 +43,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                 <div className="container s-form__content">
                     <div className="s-form__input-box">
                         <div className="s-form__input-head">Amount to Stake:</div>
-                        <InputNumber value={amount} onChange={(value) => setAmount(value)} className="s-form__input" placeholder="1000,00" />
+                        <InputNumber value={amount} onChange={handleChangeTokenAmount} className="s-form__input" placeholder="1000,00" />
                         <div className="s-form__img">
                             {isDarkTheme ? <img src={tampaDarkImg} alt="" /> : <img src={tampaImg} alt="" />}
                             <span>Tampa</span>
@@ -40,7 +52,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                     <div className="container s-form__days">
                         <div className="s-form__days-head">Days to Stake:</div>
                         <div className="s-form__days-input-box">
-                            <InputNumber value={days} onChange={(value) => setDays(value)} className="s-form__input s-form__days-input" placeholder="90" />
+                            <InputNumber value={days} onChange={handleChangeDays} className="s-form__input s-form__days-input" placeholder="90" />
                         </div>
                     </div>
                 </div>
@@ -101,6 +113,12 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                                 <span>Effective Tampa</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div className="s-form__bonus-day">
+                    <div className="s-form__info-item">
+                        <span>{bonusDay}</span>
+                        <span>bonus day</span>
                     </div>
                 </div>
             </div>

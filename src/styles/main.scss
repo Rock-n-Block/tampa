@@ -79,6 +79,15 @@ input {
       #e66565;
     border-radius: 10px;
   }
+  &--withdraw {
+    padding: 7px 0;
+    width: 100%;
+    font-family: BR;
+    font-size: 13px;
+    line-height: 16px;
+    background: $red;
+    border-radius: 10;
+  }
   img {
     width: 18px;
     margin-right: 10px;

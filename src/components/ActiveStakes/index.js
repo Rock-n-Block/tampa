@@ -1,44 +1,33 @@
 import React from 'react';
 import classNames from 'classnames';
+import { format, parseISO } from 'date-fns';
 
 import './ActiveStakes.scss'
 
 import refreshImg from '../../assets/img/refresh.svg';
 import refreshDarkImg from '../../assets/img/refresh-dark.svg';
 
-const ActiveStakes = ({ isDarkTheme }) => {
+const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isRefreshingStates, handleWithdraw }) => {
     const navItems = ['My Active Stakes', 'My Ended Stakes']
 
     const [activeTab, setActiveTab] = React.useState(0)
 
-    const data = [
-        {
-            start: '20.10.2020',
-            end: '20.10.2020',
-            progress: '20.10.2020',
-            staked: '1,000',
-            shares: '1,000',
-            bonusday: '1,000',
-            dividents: '1,000',
-            interest: '1,000',
-            currentValue: '1,000'
-        },
-        {
-            start: '20.10.2020',
-            end: '20.10.2020',
-            progress: '20.10.2020',
-            staked: '1,000',
-            shares: '1,000',
-            bonusday: '1,000',
-            dividents: '1,000',
-            interest: '1,000',
-            currentValue: '1,000'
-        }
-    ]
+
+    const dateFormat = (date) => {
+        return format(new Date(date * 1000), 'dd.MM.Y')
+    }
+
+    const handleRefresh = () => {
+        if (!isRefreshingStates) handleRefreshActiveStakes().then().catch()
+    }
 
     return (
         <div className="container stakes">
-            {isDarkTheme ? <img src={refreshDarkImg} alt="" className="stakes__refresh" /> : <img src={refreshImg} alt="" className="stakes__refresh" />}
+            <div className={classNames('stakes__refresh', {
+                'refreshing': isRefreshingStates
+            })} onClick={handleRefresh}>
+                {isDarkTheme ? <img src={refreshDarkImg} alt="" /> : <img src={refreshImg} alt="" />}
+            </div>
             <div className="stakes__nav">
                 {
                     navItems.map((item, index) => {
@@ -59,11 +48,11 @@ const ActiveStakes = ({ isDarkTheme }) => {
                 <div className="stakes__row-head-item stakes__red">Interest</div>
                 <div className="stakes__row-head-item">Current Value</div>
             </div>
-            {
-                data.map((item, index) => {
+            {activeStakes &&
+                activeStakes.map((item, index) => {
                     return <div key={index} className="container stakes__row t-row t-row__content">
-                        <div className="stakes__row-item">{item.start}</div>
-                        <div className="stakes__row-item">{item.end}</div>
+                        <div className="stakes__row-item">{dateFormat(+item.start)}</div>
+                        <div className="stakes__row-item">{dateFormat(+item.end)}</div>
                         <div className="stakes__row-item">{item.progress}</div>
                         <div className="stakes__row-item">{item.staked}</div>
                         <div className="stakes__row-item">{item.shares}</div>
@@ -71,6 +60,7 @@ const ActiveStakes = ({ isDarkTheme }) => {
                         <div className="stakes__row-item">{item.dividents}</div>
                         <div className="stakes__row-item stakes__red">{item.interest}</div>
                         <div className="stakes__row-item">{item.currentValue}</div>
+                        <button onClick={() => handleWithdraw(+item.index, +item.stakeId)} className="stakes__btn btn btn--withdraw">withdraw</button>
                     </div>
                 })
             }

@@ -138,17 +138,14 @@ class MetamaskService {
         const transactionData = withdraw ? data : new BigNumber(data.amount)
             .times(Math.pow(10, tokensDecimal[contractName]))
             .toString(10);
-
         const depositMethod = this.getMethodInterface(
             method,
             ContractDetails[contractName].ABI
         );
-
         const depositSignature = this.encodeFunctionCall(
             depositMethod,
-            stake ? [transactionData, data.days] : [transactionData]
+            stake ? [transactionData, data.days] : [...transactionData]
         );
-
         const contributeTransaction = () => {
             return this.sendTransaction(
                 {

@@ -7,6 +7,19 @@
     top: 14px;
     right: 15px;
     cursor: pointer;
+    transform: rotate(0);
+    transition: 1s;
+    &.refreshing {
+      animation: rotate 1s linear infinite;
+    }
+  }
+  &__row {
+    grid-template-columns: 75px 75px 75px 50px 50px 50px 55px 55px 55px 1fr !important;
+    grid-column-gap: 20px !important;
+    &-item {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   &__nav {
     padding: 3px;
@@ -34,6 +47,14 @@
   }
   &__red {
     color: $red;
+  }
+  @keyframes rotate {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
   }
 }
 .darktheme {
