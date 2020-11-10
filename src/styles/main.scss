@@ -91,15 +91,19 @@ input {
   img {
     width: 18px;
     margin-right: 10px;
+    &:only-child {
+      margin: 0;
+    }
   }
 }
 
 .t-row {
   display: grid;
-  grid-template-columns: 70px 70px 70px 50px 50px 62px 62px 60px 65px;
-  grid-column-gap: 30px;
+  grid-template-columns: 75px 70px 70px 50px 50px 62px 75px 70px 65px;
+  grid-column-gap: 25px;
   align-items: flex-end;
   text-align: center;
+  justify-content: space-between;
   padding: 13px 20px 11px;
   text-transform: uppercase;
   &__head {

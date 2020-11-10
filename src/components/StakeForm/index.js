@@ -7,10 +7,14 @@ import tampaImg from '../../assets/img/tampa.svg';
 import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 import questionImg from '../../assets/img/question.svg';
 import Spiner from '../../assets/img/oval.svg';
+import BigNumber from 'bignumber.js';
 
-const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonusDay, isTokenApproving, handleApproveToken, handleStake, handleCalcBonusDay }) => {
+const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonusDay, isTokenApproving, handleApproveToken, handleStake, handleCalcBonusDay, calcLBP, calcBPB }) => {
     const [amount, setAmount] = React.useState(10)
     const [days, setDays] = React.useState(90)
+
+    const [valueBonus, setValueBonus] = React.useState(0)
+    const [timeBonus, setTimeBonus] = React.useState(0)
 
     const handleSendMax = () => {
         setAmount(walletBalance)
@@ -27,6 +31,11 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
 
         handleCalcBonusDay(amount, days)
     }
+
+    React.useEffect(() => {
+        setTimeBonus(calcLBP(amount, days).toString())
+        setValueBonus(calcBPB(amount).toString())
+    }, [amount, days])
 
     return (
         <div className="s-form">
@@ -70,11 +79,11 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                             <span>Start day</span>
                         </div>
                         <div className="s-form__info-item">
-                            <span>200</span>
+                            <span>{startDay + days - 1}</span>
                             <span>Last full day</span>
                         </div>
                         <div className="s-form__info-item">
-                            <span>855</span>
+                            <span>{startDay + days}</span>
                             <span>End Day</span>
                         </div>
                     </div>
@@ -89,13 +98,13 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                     <div className="s-form__bonus-box">
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
-                                <span>+4.6</span>
+                                <span>+{timeBonus}</span>
                                 <span>Time Bonus</span>
                             </div>
                         </div>
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
-                                <span>250</span>
+                                <span>{new BigNumber(timeBonus).plus(valueBonus).toString()}</span>
                                 <span>Total</span>
                             </div>
                         </div>
@@ -103,13 +112,13 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                     <div className="s-form__bonus-box">
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
-                                <span>5959...595</span>
+                                <span>{valueBonus}</span>
                                 <span>Value Bonus</span>
                             </div>
                         </div>
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
-                                <span>546</span>
+                                <span>{new BigNumber(timeBonus).plus(valueBonus).plus(amount).toString()}</span>
                                 <span>Effective Tampa</span>
                             </div>
                         </div>

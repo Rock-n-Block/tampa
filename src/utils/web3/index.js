@@ -8,7 +8,7 @@ const IS_PRODUCTION = false;
 
 const WEB3_CONSTANTS = {
     kovan: {
-        WEB3_PROVIDER: 'https://kovan.infura.io/v3/8f717d58972049639df06bbbabf5bbc5'
+        WEB3_PROVIDER: 'https://kovan.infura.io/v3/d53dc6a18ce94162ac4821a9c5ff06f2'
     }
 };
 

@@ -1,6 +1,6 @@
 export default {
     TAMPA: {
-        ADDRESS: '0x0ab3734bFCBDb78dF68cA8235D6018f70C56EB28',
+        ADDRESS: '0x5924a5b84923D053BC48F94ff3caedb297295768',
         ABI: [
             {
                 "inputs": [
@@ -823,23 +823,6 @@ export default {
                 "inputs": [
 
                 ],
-                "name": "firstAuction",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-
-                ],
                 "name": "flushAddr",
                 "outputs": [
                     {
@@ -892,6 +875,28 @@ export default {
                 ],
                 "payable": false,
                 "stateMutability": "pure",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+
+                ],
+                "name": "getFirstAuction",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
                 "type": "function"
             },
             {

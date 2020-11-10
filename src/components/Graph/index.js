@@ -40,7 +40,6 @@ const Graph = ({ dividentsPool }) => {
                         <XAxis
                             type="number"
                             dataKey="day"
-                            // ticks={[5, 10, 15]}
                             axisLine={false}
                             tickLine={false}
                         >

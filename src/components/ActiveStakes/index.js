@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 
 import './ActiveStakes.scss'
 

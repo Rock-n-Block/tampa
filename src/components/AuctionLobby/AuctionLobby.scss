@@ -24,6 +24,10 @@
         ),
         #ffe6e6;
     }
+    &-item {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   &__popover {
     padding: 30px 40px;

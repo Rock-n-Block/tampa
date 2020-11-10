@@ -1,12 +1,13 @@
 import React from 'react';
 import { Popover, InputNumber } from 'antd';
 import classNames from 'classnames';
+import { format } from 'date-fns';
 
 import './AuctionLobby.scss'
 
 import ethImg from '../../assets/img/eth.svg';
 
-const AuctionLobby = () => {
+const AuctionLobby = ({rows}) => {
     const [activeRow, setActiveRow] = React.useState(null);
     const [auctionValue, setAuctionValue] = React.useState('');
 
@@ -41,6 +42,10 @@ const AuctionLobby = () => {
         }
     }
 
+    const dateFormat = (date) => {
+        return format(new Date(date * 1000), 'dd.MM.Y')
+    }
+
     return (
         <div className="container a-lobby" id="a-lobby">
             <div className="a-lobby__title">Auction lobby</div>
@@ -54,19 +59,19 @@ const AuctionLobby = () => {
                 <div className="a-lobby__row-head-item">Daily Entry</div>
                 <div className="a-lobby__row-head-item a-lobby__red">Status</div>
             </div>
-            {
-                data.map((item, index) => {
+            {rows &&
+                rows.map((item, index) => {
                     return <div key={index} className={classNames('container a-lobby__row t-row t-row__content', {
                         'active': index === activeRow
                     })}>
-                        <div className="a-lobby__row-item">{item.day}</div>
+                        <div className="a-lobby__row-item">{dateFormat(+item.day)}</div>
                         <div className="a-lobby__row-item">{item.pool}</div>
                         <div className="a-lobby__row-item">{item.eth}</div>
-                        <div className="a-lobby__row-item">{item.state}</div>
+                        <div className="a-lobby__row-item">{item.state ? 'Open' : 'Close'}</div>
                         <div className="a-lobby__row-item">{item.received}</div>
                         <div className="a-lobby__row-item">{item.yourEntry}</div>
                         <div className="a-lobby__row-item">{item.dailyEntry}</div>
-                        <div className="a-lobby__row-item a-lobby__red">{item.status}</div>
+                        <div className="a-lobby__row-item a-lobby__red">{item.status ? 'Active' : 'Closed'}</div>
                         <div className="a-lobby__row-item">
                             <Popover
                                 getPopupContainer={() => document.getElementById(`a-lobby`)}

@@ -10,6 +10,34 @@ class ContractService {
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
 
+    xfLobby = (day) => {
+        return this.tampaContract.methods.xfLobby(day).call()
+    }
+    
+    tampaReceivedAuction = (day, address) => {
+        return this.tampaContract.methods.tampaReceivedAuction(day, address).call()
+    }
+
+    getDayUnixTime = (day) => {
+        return this.tampaContract.methods.getDayUnixTime(day).call()
+    }
+
+    xfLobbyEntry = (address, day, index) => {
+        return this.tampaContract.methods.xfLobbyEntry(address, day, index).call()
+    }
+
+    getFirstAuction = () => {
+        return this.tampaContract.methods.getFirstAuction().call()
+    }
+
+    tampaReceivedAuction = (day, address) => {
+        return this.tampaContract.methods.tampaReceivedAuction(day, address).call()
+    }
+
+    xfLobbyMembers = (day, address) => {
+        return this.tampaContract.methods.xfLobbyMembers(day, address).call()
+    }
+
     dailyData = (currentDay) => {
         return this.tampaContract.methods.dailyData(currentDay - 1).call()
     }
