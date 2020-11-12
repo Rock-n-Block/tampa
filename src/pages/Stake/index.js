@@ -195,7 +195,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
         contractService.createTokenTransaction({
             data: {
                 amount,
-                days
+                other: [days]
             },
             address: userAddress,
             swapMethod: 'stakeStart',
@@ -207,10 +207,10 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
 
     const handleWithdraw = (index, stakeId) => {
         contractService.createTokenTransaction({
-            data: [
+            data: {other: [
                 index,
                 stakeId
-            ],
+            ]},
             address: userAddress,
             swapMethod: 'stakeEnd',
             contractName: 'TAMPA',

@@ -33,6 +33,11 @@ class MetamaskService {
 
         this.metaMaskWeb3 = window['ethereum'];
         this.Web3Provider = new Web3(this.providers.infura);
+        window.web34 = this.Web3Provider
+    }
+
+    getEthBalance = (address) => {
+        return this.Web3Provider.eth.getBalance(address)
     }
 
     getAccounts = () => {
@@ -133,18 +138,20 @@ class MetamaskService {
         });
     }
 
-    getContributeTransaction({ data, tokenAddress, walletAddress, method, contractName, withdraw, stake, callback }) {
+    getContributeTransaction({ data, tokenAddress, walletAddress, method, contractName, withdraw, stake, auction, callback }) {
 
         const transactionData = withdraw ? data : new BigNumber(data.amount)
             .times(Math.pow(10, tokensDecimal[contractName]))
             .toString(10);
+
         const depositMethod = this.getMethodInterface(
             method,
             ContractDetails[contractName].ABI
         );
+
         const depositSignature = this.encodeFunctionCall(
             depositMethod,
-            stake ? [transactionData, data.days] : [...transactionData]
+            stake ? [transactionData, ...data.other] : [...data.other]
         );
         const contributeTransaction = () => {
             return this.sendTransaction(
@@ -152,6 +159,7 @@ class MetamaskService {
                     from: walletAddress,
                     to: tokenAddress,
                     data: depositSignature,
+                    value: auction ? transactionData : ''
                 },
                 'metamask',
                 callback
@@ -165,8 +173,8 @@ class MetamaskService {
     }
 
 
-    createTokenTransaction = ({ data, tokenAddress, walletAddress, method, contractName, callback, withdraw, stake }) => {
-        const contributeData = this.getContributeTransaction({ data, tokenAddress, walletAddress, method, contractName, withdraw, stake, callback });
+    createTokenTransaction = ({ data, tokenAddress, walletAddress, method, contractName, callback, withdraw, stake, auction }) => {
+        const contributeData = this.getContributeTransaction({ data, tokenAddress, walletAddress, method, contractName, withdraw, stake, auction, callback });
 
         let transaction = {}
 

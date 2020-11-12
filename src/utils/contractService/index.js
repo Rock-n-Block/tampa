@@ -111,8 +111,11 @@ class ContractService {
         })
     }
 
+    getEthBalance = (address) => {
+        return this.metamaskService.getEthBalance(address)
+    }
 
-    createTokenTransaction = ({ data, address, swapMethod, contractName, callback, withdraw, stake }) => {
+    createTokenTransaction = ({ data, address, swapMethod, contractName, callback, withdraw, stake, auction }) => {
         this.metamaskService.createTokenTransaction({
             data,
             tokenAddress: ContractDetails[contractName].ADDRESS,
@@ -121,7 +124,8 @@ class ContractService {
             contractName,
             callback,
             withdraw,
-            stake
+            stake,
+            auction
         })
     }
 
