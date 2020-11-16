@@ -3,7 +3,7 @@ import Ticker from 'react-ticker'
 
 import './Ticker.scss'
 
-const TickerComponent = () => {
+const TickerComponent = ({isDarkTheme}) => {
 
     return (
         <div className="ticker-box">

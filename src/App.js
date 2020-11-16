@@ -55,7 +55,7 @@ function App() {
 
         <Route exact path="/" render={() => <StakePage isDarkTheme={isDarkTheme} userAddress={userAddress} />} />
         <Route path="/auction" render={() => <AuctionPage isDarkTheme={isDarkTheme} userAddress={userAddress} />} />
-        <Route path="/lottery" component={LotteyrPage} />
+        <Route path="/lottery" render={() => <LotteyrPage isDarkTheme={isDarkTheme} userAddress={userAddress} />} />
 
 
 

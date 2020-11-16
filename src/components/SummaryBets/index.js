@@ -3,7 +3,7 @@ import { Progress } from 'antd';
 
 import './SummaryBets.scss'
 
-const SummaryBets = ({ isDarkTheme, currentDays, participation, totalReceive, totalEntry }) => {
+const SummaryBets = ({ isDarkTheme, currentDays, participation, totalReceive, totalEntry, averageRate }) => {
 
     return (
         <div className="container s-bets">
@@ -22,7 +22,7 @@ const SummaryBets = ({ isDarkTheme, currentDays, participation, totalReceive, to
                     <div className="s-bets__item-content">total entry</div>
                 </div>
                 <div className="s-bets__item">
-                    <div className="s-bets__item-head">0.000</div>
+                    <div className="s-bets__item-head">{averageRate}</div>
                     <div className="s-bets__item-content">average rate tampa \ ETH</div>
                 </div>
             </div>

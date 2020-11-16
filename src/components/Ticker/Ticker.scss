@@ -6,3 +6,14 @@
   width: 100%;
   margin-bottom: 70px;
 }
+
+.darktheme {
+  .ticker-box {
+    background: #353194
+  }
+  .ticker {
+    &__element {
+      color: white;
+    }
+  }
+}

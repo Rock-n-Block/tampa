@@ -125,6 +125,20 @@
 }
 .darktheme {
   .header {
+    &.active {
+      background: linear-gradient(
+        210.96deg,
+        rgba(40, 36, 88, 0.61) 0.01%,
+        rgba(38, 35, 83, 0.7) 42.05%,
+        rgba(62, 59, 115, 0) 104.81%
+      );
+      box-shadow: inset 5px 5px 85px rgba(82, 157, 202, 0.1);
+    }
+    &__metamask {
+      span {
+        color: $blue;
+      }
+    }
     &__nav {
       &-item {
         color: rgba(255, 255, 255, 0.8);

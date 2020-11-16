@@ -6,6 +6,7 @@ import './StakeForm.scss'
 import tampaImg from '../../assets/img/tampa.svg';
 import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 import questionImg from '../../assets/img/question.svg';
+import questionImgDark from '../../assets/img/question-d.svg';
 import Spiner from '../../assets/img/oval.svg';
 import BigNumber from 'bignumber.js';
 
@@ -43,7 +44,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                 <div className="s-form__box s-form__head">
                     <div className="s-form__title">
                         <h1>Stake</h1>
-                        <img className="s-form__quest-img" src={questionImg} alt="" />
+                        {isDarkTheme ? <img className="s-form__quest-img" src={questionImgDark} alt="" /> : <img className="s-form__quest-img" src={questionImg} alt="" />}
                     </div>
                     <div className="s-form__balance">
                         Your balance: {walletBalance} <span onClick={handleSendMax}>MAX</span>
@@ -92,7 +93,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
             <div className="container s-form__bonus">
                 <div className="s-form__bonus-title">
                     <span>Bonus Info</span>
-                    <img className="s-form__quest-img" src={questionImg} alt="" />
+                    {isDarkTheme ? <img className="s-form__quest-img" src={questionImgDark} alt="" /> : <img className="s-form__quest-img" src={questionImg} alt="" />}
                 </div>
                 <div className="s-form__bonus-content">
                     <div className="s-form__bonus-box">

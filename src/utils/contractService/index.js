@@ -9,6 +9,22 @@ class ContractService {
         this.metamaskService = new MetamaskService()
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
+    
+    winners = (day) => {
+        return this.tampaContract.methods.winners(day).call()
+    }
+    
+    endLoteryDay = (day) => {
+        return this.tampaContract.methods.endLoteryDay(day).call()
+    }
+    
+    loteryCount = (day) => {
+        return this.tampaContract.methods.loteryCount(day).call()
+    }
+    
+    loteryCountLen = (day) => {
+        return this.tampaContract.methods.loteryCountLen(day).call()
+    }
 
     xfLobby = (day) => {
         return this.tampaContract.methods.xfLobby(day).call()

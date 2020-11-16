@@ -7,178 +7,6 @@ import decimals from '../../utils/web3/decimals';
 
 import './Auction.scss'
 
-// export default class AuctionPage extends React.PureComponent {
-//     constructor(props) {
-//         super(props)
-
-//         this.state = {
-//             contractService: new ContractService(),
-//             currentDays: 1,
-//             participation: 0,
-//             totalReceive: 0,
-//             totalEntry: 0,
-//             ethBalance: 0,
-//             auctionRows: [],
-//             ethBalance: 0
-//         }
-
-//         this.handleEnterAuction = this.handleEnterAuction.bind(this)
-//         this.getData = this.getData.bind(this)
-//     }
-
-
-//     getData = () => {
-//         this.state.contractService.currentDay()
-//             .then(days => {
-//                 this.setState({
-//                     currentDays: days
-//                 })
-
-
-//                 this.state.contractService.getFirstAuction()
-//                 .then(async res => {
-//                     if (res[0]) {
-//                         const receivePromises = []
-//                         let rawAmount = new BigNumber(0);
-//                         let newAuctionsRows = []
-//                         let newParticipation = 0
-                        
-//                         for (let i = +res[1]; i <= days; i++) {
-//                             let currentRawAmount = new BigNumber(0);
-
-//                             receivePromises.push(this.state.contractService.tampaReceivedAuction(i, this.props.userAddress))
-
-//                             const memberObj = await this.state.contractService.xfLobbyMembers(i, this.props.userAddress)
-                            
-//                             for(let j = +memberObj.headIndex; j < +memberObj.tailIndex; j++) {
-//                                 const memberEntry = await this.state.contractService.xfLobbyEntry(this.props.userAddress, i, j)
-//                                 rawAmount = rawAmount.plus(new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)))
-//                                 currentRawAmount = rawAmount
-//                             }
-
-//                             if (+memberObj.tailIndex > 0) {
-//                                 newParticipation++
-//                             }
-
-
-//                             const auctionRow = {
-//                                     day: '20.10.2020',
-//                                     pool: '100,000',
-//                                     eth: '100,000',
-//                                     state: 'Open',
-//                                     received: '100,000',
-//                                     yourEntry: '100,000',
-//                                     dailyEntry: '20.10.2020',
-//                                     status: 'Active'
-//                                 }
-
-//                             auctionRow.day = await this.state.contractService.getDayUnixTime(i)
-
-//                             if (i > 0 && i <= 365) {
-//                                 auctionRow.pool = new BigNumber(5)
-//                                 .multipliedBy(new BigNumber(10).pow(6))
-//                                 .multipliedBy(new BigNumber(10).pow(18))
-//                                 .minus(new BigNumber(i).minus(1).multipliedBy(new BigNumber(1095890410958))).toFixed();
-//                                 // 5 * 10^6 * 10^18 - ((enterDay - 1) * 1095890410958)
-//                             } else {
-//                                 auctionRow.pool = new BigNumber(1).multipliedBy(new BigNumber(10).pow(6)).multipliedBy(new BigNumber(10).pow(18)).toFixed();
-//                                 // 1 * 10^6 * 10^18
-//                             }
-//                             auctionRow.state = i == +days ? true : false
-
-//                             auctionRow.received = await this.state.contractService.tampaReceivedAuction(i, this.props.userAddress)
-
-//                             auctionRow.yourEntry = currentRawAmount.toString();
-
-//                             auctionRow.dailyEntry = await this.state.contractService.xfLobby(i)
-
-//                             auctionRow.status = memberObj.headIndex < memberObj.tailIndex
-
-//                             newAuctionsRows.push(auctionRow)
-//                         }
-//                         console.log('rerender')
-//                         this.setState({
-//                             totalEntry: rawAmount.toString(),
-//                             auctionRows: newAuctionsRows.reverse(),
-//                             participation: newParticipation
-//                         })
-
-//                         // this.state.contractService.getEthBalance(this.props.userAddress)
-//                         // .then(balance => setEthBalance(balance))
-//                         // .catch(err => console.log(err))
-
-//                         Promise.all(receivePromises)
-//                         .then(result => {
-//                             let totalReceive = 0
-
-//                             result.map(item => totalReceive += +item)
-
-//                             this.setState({
-//                                 totalReceive
-//                             })
-//                         })
-//                         .catch(err => {
-//                             console.log(err)
-//                         })
-//                     } else {
-//                         this.setState({
-//                             totalReceive: 0
-//                         })
-//                     }
-//                 })
-//                 .catch(err => {
-//                     console.log(err)
-//                 })
-
-
-//             })
-//             .catch(err => console.log(err))
-
-//     }
-
-
-//     handleEnterAuction = (amount) => {
-//         this.state.contractService.createTokenTransaction({
-//             data: {
-//                 amount,
-//                 other: [this.props.userAddress]
-//             },
-//             address: this.props.userAddress,
-//             swapMethod: 'xfLobbyEnter',
-//             contractName: 'TAMPA',
-//             stake: false,
-//             auction: true,
-//             callback: () => this.getData()
-//         })
-//     }
-
-//     componentDidUpdate(prevProps) {
-//         if(this.props.userAddress && this.props.userAddress !== prevProps.userAddress) {
-//             this.getData()
-//         }
-//     }
-
-//     render() {
-//         return (
-
-//             <div className="auction">
-//                 <div className="row row--lg">
-//                     <h1 className="auction__title">Auction</h1>
-//                     <Graph />
-//                     <SummaryBets
-//                         isDarkTheme={this.props.isDarkTheme}
-//                         currentDays={this.state.currentDays}
-//                         participation={this.state.participation}
-//                         totalReceive={this.state.totalReceive}
-//                         totalEntry={this.state.totalEntry}
-//                     />
-//                     <AuctionLobby rows={this.state.auctionRows} handleEnterAuction={this.handleEnterAuction} ethBalance={this.state.ethBalance}/>
-//                 </div>
-//             </div>
-//         )
-//     }
-// }
-
 const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
     const [contractService] = useState(new ContractService())
@@ -187,44 +15,41 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
     const [participation, setParticipation] = useState(0)
     const [totalReceive, setTotalReceive] = useState(0)
     const [totalEntry, setTotalEntry] = useState(0)
+    const [averageRate, setAverageRate] = useState(0)
     const [ethBalance, setEthBalance] = useState(0)
 
     const [auctionRows, setAuctionsRows] = useState([])
 
     const getData = () => {
-        console.log('getData')
         contractService.currentDay()
             .then(days => {
                 setCurrentDays(days)
 
 
                 contractService.getFirstAuction()
-                .then(async res => {
-                    if (res[0]) {
-                        const receivePromises = []
-                        let rawAmount = new BigNumber(0);
-                        let newAuctionsRows = []
-                        let newParticipation = 0
-                        
-                        for (let i = +res[1]; i <= days; i++) {
-                            let currentRawAmount = new BigNumber(0);
+                    .then(async res => {
+                        if (res[0]) {
+                            const receivePromises = []
+                            let rawAmount = new BigNumber(0);
+                            let newAuctionsRows = []
+                            let newParticipation = 0
+                            let newAverageRate = new BigNumber(0)
 
-                            receivePromises.push(contractService.tampaReceivedAuction(i, userAddress))
+                            for (let i = +res[1]; i <= days; i++) {
+                                let currentRawAmount = new BigNumber(0);
 
-                            const memberObj = await contractService.xfLobbyMembers(i, userAddress)
-                            
-                            for(let j = +memberObj.headIndex; j < +memberObj.tailIndex; j++) {
-                                const memberEntry = await contractService.xfLobbyEntry(userAddress, i, j)
-                                rawAmount = rawAmount.plus(new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)))
-                                currentRawAmount = rawAmount
-                            }
+                                receivePromises.push(contractService.tampaReceivedAuction(i, userAddress))
 
-                            if (+memberObj.tailIndex > 0) {
-                                newParticipation++
-                            }
+                                const memberObj = await contractService.xfLobbyMembers(i, userAddress)
+
+                                for (let j = +memberObj.headIndex; j < +memberObj.tailIndex; j++) {
+                                    const memberEntry = await contractService.xfLobbyEntry(userAddress, i, j)
+                                    rawAmount = rawAmount.plus(new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)))
+                                    currentRawAmount = rawAmount
+                                }
 
 
-                            const auctionRow = {
+                                const auctionRow = {
                                     day: '20.10.2020',
                                     pool: '100,000',
                                     eth: '100,000',
@@ -235,57 +60,66 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                                     status: 'Active'
                                 }
 
-                            auctionRow.day = await contractService.getDayUnixTime(i)
+                                auctionRow.day = await contractService.getDayUnixTime(i)
 
-                            if (i > 0 && i <= 365) {
-                                auctionRow.pool = new BigNumber(5)
-                                .multipliedBy(new BigNumber(10).pow(6))
-                                .multipliedBy(new BigNumber(10).pow(18))
-                                .minus(new BigNumber(i).minus(1).multipliedBy(new BigNumber(1095890410958))).toFixed();
-                                // 5 * 10^6 * 10^18 - ((enterDay - 1) * 1095890410958)
-                            } else {
-                                auctionRow.pool = new BigNumber(1).multipliedBy(new BigNumber(10).pow(6)).multipliedBy(new BigNumber(10).pow(18)).toFixed();
-                                // 1 * 10^6 * 10^18
+                                if (i > 0 && i <= 365) {
+                                    auctionRow.pool = new BigNumber(5)
+                                        .multipliedBy(new BigNumber(10).pow(6))
+                                        .multipliedBy(new BigNumber(10).pow(18))
+                                        .minus(new BigNumber(i).minus(1).multipliedBy(new BigNumber(1095890410958))).toFixed();
+                                    // 5 * 10^6 * 10^18 - ((enterDay - 1) * 1095890410958)
+                                } else {
+                                    auctionRow.pool = new BigNumber(1).multipliedBy(new BigNumber(10).pow(6)).multipliedBy(new BigNumber(10).pow(18)).toFixed();
+                                    // 1 * 10^6 * 10^18
+                                }
+                                auctionRow.state = i == +days ? true : false
+
+                                auctionRow.received = await contractService.tampaReceivedAuction(i, userAddress)
+
+                                auctionRow.yourEntry = currentRawAmount.toString();
+
+                                auctionRow.dailyEntry = await contractService.xfLobby(i - 1)
+
+                                auctionRow.status = memberObj.headIndex < memberObj.tailIndex
+
+                                newAuctionsRows.push(auctionRow)
+
+                                if (+memberObj.tailIndex > 0) {
+                                    newParticipation++
+
+                                    newAverageRate = newAverageRate.plus(new BigNumber(auctionRow.pool).dividedBy(auctionRow.dailyEntry))
+                                }
                             }
-                            auctionRow.state = i == +days ? true : false
 
-                            auctionRow.received = await contractService.tampaReceivedAuction(i, userAddress)
+                            setAuctionsRows(newAuctionsRows.reverse())
+                            setTotalEntry(rawAmount.toString())
+                            setParticipation(newParticipation)
+                            setAverageRate(newAverageRate.toString())
 
-                            auctionRow.yourEntry = currentRawAmount.toString();
+                            contractService.getEthBalance(userAddress)
+                                .then(balance => {
+                                    setEthBalance(new BigNumber(balance).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toString())
+                                })
+                                .catch(err => console.log(err))
 
-                            auctionRow.dailyEntry = await contractService.xfLobby(i)
+                            Promise.all(receivePromises)
+                                .then(result => {
+                                    let totalReceive = 0
 
-                            auctionRow.status = memberObj.headIndex < memberObj.tailIndex
+                                    result.map(item => totalReceive += +item)
 
-                            newAuctionsRows.push(auctionRow)
+                                    setTotalReceive(totalReceive)
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
+                        } else {
+                            setTotalReceive(0)
                         }
-
-                        setAuctionsRows(newAuctionsRows.reverse())
-                        setTotalEntry(rawAmount.toString())
-                        setParticipation(newParticipation)
-
-                        // contractService.getEthBalance(userAddress)
-                        // .then(balance => setEthBalance(balance))
-                        // .catch(err => console.log(err))
-
-                        Promise.all(receivePromises)
-                        .then(result => {
-                            let totalReceive = 0
-
-                            result.map(item => totalReceive += +item)
-
-                            setTotalReceive(totalReceive)
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
-                    } else {
-                        setTotalReceive(0)
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
 
 
             })
@@ -317,15 +151,16 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
         <div className="auction">
             <div className="row row--lg">
                 <h1 className="auction__title">Auction</h1>
-                <Graph />
+                <Graph isDarkTheme={isDarkTheme} />
                 <SummaryBets
                     isDarkTheme={isDarkTheme}
                     currentDays={currentDays}
                     participation={participation}
                     totalReceive={totalReceive}
+                    averageRate={averageRate}
                     totalEntry={totalEntry}
                 />
-                {auctionRows.length ? <AuctionLobby rows={auctionRows} handleEnterAuction={handleEnterAuction} ethBalance={ethBalance}/>  : ''}
+                {auctionRows.length ? <AuctionLobby rows={auctionRows} handleEnterAuction={handleEnterAuction} ethBalance={ethBalance} /> : ''}
             </div>
         </div>
     );

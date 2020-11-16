@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+.m-h {
+  display: none !important;
+}
+
 body {
   margin: 0;
   height: fit-content;
@@ -133,5 +137,15 @@ input {
   .btn {
     box-shadow: 4px 12px 20px rgba(74, 155, 198, 0.5);
     background: $blue;
+  }
+  .t-row {
+    &__content {
+      background: linear-gradient(
+        210.96deg,
+        rgba(60, 56, 109, 0.61) 0.01%,
+        rgba(91, 86, 165, 0.7) 42.05%,
+        #43408b 104.81%
+      );
+    }
   }
 }

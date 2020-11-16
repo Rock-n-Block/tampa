@@ -207,10 +207,12 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
 
     const handleWithdraw = (index, stakeId) => {
         contractService.createTokenTransaction({
-            data: {other: [
-                index,
-                stakeId
-            ]},
+            data: {
+                other: [
+                    index,
+                    stakeId
+                ]
+            },
             address: userAddress,
             swapMethod: 'stakeEnd',
             contractName: 'TAMPA',
@@ -241,7 +243,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     calcLBP={calcLBP}
                     calcBPB={calcBPB}
                 />
-                <Graph dividentsPool={dividentsPool} />
+                <Graph dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} />
                 <ReferrerLink />
             </div>
             <div className="row row--lg">

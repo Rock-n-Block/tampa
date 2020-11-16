@@ -1,6 +1,6 @@
 export default {
     TAMPA: {
-        ADDRESS: '0x5924a5b84923D053BC48F94ff3caedb297295768',
+        ADDRESS: '0x74aFD65904DC953cf1039dBfe4d7E165cd01abe2',
         ABI: [
             {
                 "inputs": [
@@ -1016,6 +1016,37 @@ export default {
                     {
                         "internalType": "uint256",
                         "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "loteryCount",
+                "outputs": [
+                    {
+                        "internalType": "address",
+                        "name": "who",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "chanceCount",
                         "type": "uint256"
                     }
                 ],

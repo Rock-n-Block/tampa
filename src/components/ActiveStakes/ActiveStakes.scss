@@ -69,5 +69,15 @@
         }
       }
     }
+    &__nav {
+      background: #504e9a;
+      box-shadow: 3px 3px 40px rgba(119, 116, 159, 0.05);
+      &-item {
+        color: rgba(255, 255, 255, 0.9);
+        &.active {
+          background: $blue;
+        }
+      }
+    }
   }
 }

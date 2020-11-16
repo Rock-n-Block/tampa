@@ -10,6 +10,7 @@ import { themeActions } from '../../redux/actions';
 import './Header.scss'
 
 import logoImg from '../../assets/img/logo.svg';
+import logoImgDark from '../../assets/img/logo-d.svg';
 import MetamaskImg from '../../assets/img/metamask.svg';
 
 const Header = ({ isDarkTheme, userAddress }) => {
@@ -54,7 +55,9 @@ const Header = ({ isDarkTheme, userAddress }) => {
             <div className="row">
                 <div className="header__content">
                     <div className="header__left">
-                        <NavLink to="/"><img src={logoImg} alt="" /></NavLink>
+                        <NavLink to="/">
+                            {isDarkTheme ? <img src={logoImgDark} alt="" /> : <img src={logoImg} alt="" />}
+                        </NavLink>
                         <div className="header__nav">
                             <NavLink exact className="header__nav-item" to="/" activeClassName="header__nav-item--active">Stake</NavLink>
                             <NavLink className="header__nav-item" to="/auction" activeClassName="header__nav-item--active">Auction</NavLink>
