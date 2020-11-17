@@ -32,9 +32,9 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
         setPageCount(newPageCount)
 
-        const startPoint = auctionObj[0] ? +auctionObj[1] : +days
-        const endPoint = +startPoint + +page * 10 - 1 > +days ? days : +startPoint + +page - 1
-
+        const startPoint = auctionObj[0] ? +auctionObj[1] + (page - 1) * 10 - 1 : +days
+        const endPoint = +startPoint + +page * 10 - 1 > +days ? days : +startPoint + +page * 10 - 1
+        debugger
         for (let i = startPoint; i <= endPoint; i++) {
             let currentRawAmount = new BigNumber(0);
 
@@ -75,7 +75,8 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
             auctionRow.state = +i === +days ? true : false
 
-            auctionRow.received = await contractService.tampaReceivedAuction(i, userAddress)
+            const received = await contractService.tampaReceivedAuction(i, userAddress)
+            auctionRow.received = new BigNumber(received).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
             auctionRow.yourEntry = currentRawAmount.toString();
 
@@ -85,8 +86,10 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
             auctionRow.status = memberObj.headIndex < memberObj.tailIndex
 
+            auctionRow.eth = new BigNumber(auctionRow.dailyEntry).dividedBy(auctionRow.pool).toFixed()
+
             if (+memberObj.tailIndex > 0) {
-                newAverageRate = newAverageRate.plus(new BigNumber(auctionRow.pool).dividedBy(auctionRow.dailyEntry))
+                newAverageRate = newAverageRate.plus(new BigNumber(auctionRow.dailyEntry).dividedBy(auctionRow.pool))
             }
 
             newAuctionsRows.push(auctionRow)

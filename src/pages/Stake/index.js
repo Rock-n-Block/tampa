@@ -253,7 +253,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     calcBPB={calcBPB}
                 />
                 <Graph dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} />
-                <ReferrerLink />
+                <ReferrerLink userAddress={userAddress} />
             </div>
             <div className="row row--lg">
                 <StakeInfo

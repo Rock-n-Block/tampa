@@ -21,6 +21,7 @@
   &__row {
     transition: 0.3s;
     border: 3px solid transparent;
+    grid-template-columns: 70px 100px 100px 100px 100px 100px 80px !important;
     &.active {
       border-color: #e26c6d;
       background: linear-gradient(
