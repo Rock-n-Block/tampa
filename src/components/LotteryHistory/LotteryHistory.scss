@@ -13,13 +13,16 @@
     padding: 13px 30px 11px;
     color: $black;
     display: grid;
-    grid-template-columns: 70px 150px 250px;
+    grid-template-columns: 80px 150px 250px;
     justify-content: space-between;
     font-family: BR;
     font-size: 15px;
     line-height: 28px;
     &-item {
       text-align: center;
+
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
     &-head {
       font-size: 13px;

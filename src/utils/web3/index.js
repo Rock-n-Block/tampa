@@ -153,6 +153,7 @@ class MetamaskService {
             depositMethod,
             stake ? [transactionData, ...data.other] : [...data.other]
         );
+
         const contributeTransaction = () => {
             return this.sendTransaction(
                 {

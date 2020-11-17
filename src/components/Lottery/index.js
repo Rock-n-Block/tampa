@@ -7,7 +7,7 @@ import './Lottery.scss'
 import tampaImg from '../../assets/img/tampa.svg';
 import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 
-const Lottery = ({ isDarkTheme, amountOfDraw }) => {
+const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents }) => {
     return (
         <div className="container lottery">
             <h1 className="lottery__title">lottery</h1>
@@ -27,7 +27,7 @@ const Lottery = ({ isDarkTheme, amountOfDraw }) => {
                         </div>
                     </div>
                 </div>
-                <LotteryProgress />
+                <LotteryProgress userAddress={userAddress} segments={lotteryPercents} />
             </div>
         </div>
     );

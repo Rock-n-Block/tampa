@@ -1,19 +1,13 @@
 import React from 'react';
+import { format } from 'date-fns';
 
 import './LotteryHistory.scss'
 
-const LotteryHistory = ({ data = [
-    {
-        date: '20.10.2020',
-        amount: '100,00',
-        winner: '0x50483798978979796306'
-    },
-    {
-        date: '20.10.2020',
-        amount: '100,00',
-        winner: '0x50483798978979796306'
+const LotteryHistory = ({ data }) => {
+
+    const dateFormat = (date) => {
+        return format(new Date(date * 1000), 'dd.MM.Y')
     }
-] }) => {
     return (
         <div className="container l-history">
             <div className="l-history__title">history</div>
@@ -23,10 +17,10 @@ const LotteryHistory = ({ data = [
                     <div className="l-history__row-item">amount</div>
                     <div className="l-history__row-item">winner</div>
                 </div>
-                {
+                {data &&
                     data.map((item, index) => {
                         return <div key={index} className="container l-history__row">
-                            <div className="l-history__row-item">{item.date}</div>
+                            <div className="l-history__row-item">{dateFormat(+item.date)}</div>
                             <div className="l-history__row-item">{item.amount}</div>
                             <div className="l-history__row-item">{item.winner}</div>
                         </div>

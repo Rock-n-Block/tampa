@@ -10,13 +10,16 @@
   &__content {
     margin: 40px 0;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
   }
   &__item {
     height: 7px;
     border-radius: 4px;
     width: 100%;
     position: relative;
+    & + & {
+      margin-left: 3px;
+    }
 
     &-percent {
       position: absolute;
@@ -42,6 +45,11 @@
       }
       span {
         font-family: BB;
+      }
+      &-text {
+        max-width: 50px;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
     &-circle {

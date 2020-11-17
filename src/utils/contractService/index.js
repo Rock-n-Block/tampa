@@ -9,19 +9,19 @@ class ContractService {
         this.metamaskService = new MetamaskService()
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
-    
+
     winners = (day) => {
         return this.tampaContract.methods.winners(day).call()
     }
-    
+
     endLoteryDay = (day) => {
         return this.tampaContract.methods.endLoteryDay(day).call()
     }
-    
-    loteryCount = (day) => {
-        return this.tampaContract.methods.loteryCount(day).call()
+
+    loteryCount = (day, index) => {
+        return this.tampaContract.methods.loteryCount(day, index).call()
     }
-    
+
     loteryCountLen = (day) => {
         return this.tampaContract.methods.loteryCountLen(day).call()
     }
@@ -29,7 +29,7 @@ class ContractService {
     xfLobby = (day) => {
         return this.tampaContract.methods.xfLobby(day).call()
     }
-    
+
     tampaReceivedAuction = (day, address) => {
         return this.tampaContract.methods.tampaReceivedAuction(day, address).call()
     }
@@ -80,8 +80,16 @@ class ContractService {
         })
     }
 
+    endedStakeLists = (address, stake) => {
+        return this.tampaContract.methods.endedStakeLists(address, stake).call()
+    }
+
     stakeLists = (address, stake) => {
         return this.tampaContract.methods.stakeLists(address, stake).call()
+    }
+
+    endedStakeCount = (address) => {
+        return this.tampaContract.methods.endedStakeCount(address).call()
     }
 
     stakeCount = (address) => {

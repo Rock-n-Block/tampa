@@ -2,6 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 import { format } from 'date-fns';
 
+import { RowItemTooltip } from '../../components';
+
 import './ActiveStakes.scss'
 
 import refreshImg from '../../assets/img/refresh.svg';
@@ -18,11 +20,17 @@ const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, is
     }
 
     const handleRefresh = () => {
-        if (!isRefreshingStates) handleRefreshActiveStakes().then().catch()
+        if (!isRefreshingStates) handleRefreshActiveStakes(!!!activeTab).then().catch()
+    }
+
+    const handlecChangeNav = (index) => {
+        setActiveTab(index)
+
+        if (!isRefreshingStates) handleRefreshActiveStakes(!!!index).then().catch()
     }
 
     return (
-        <div className="container stakes">
+        <div className="container stakes" id="stakes">
             <div className={classNames('stakes__refresh', {
                 'refreshing': isRefreshingStates
             })} onClick={handleRefresh}>
@@ -31,7 +39,7 @@ const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, is
             <div className="stakes__nav">
                 {
                     navItems.map((item, index) => {
-                        return <div key={index} onClick={() => setActiveTab(index)} className={classNames('stakes__nav-item', {
+                        return <div key={index} onClick={() => handlecChangeNav(index)} className={classNames('stakes__nav-item', {
                             'active': activeTab === index
                         })}>{item}</div>
                     })
@@ -55,11 +63,21 @@ const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, is
                         <div className="stakes__row-item">{dateFormat(+item.end)}</div>
                         <div className="stakes__row-item">{item.progress}</div>
                         <div className="stakes__row-item">{item.staked}</div>
-                        <div className="stakes__row-item">{item.shares}</div>
-                        <div className="stakes__row-item">{item.bonusday}</div>
-                        <div className="stakes__row-item">{item.dividents}</div>
-                        <div className="stakes__row-item stakes__red">{item.interest}</div>
-                        <div className="stakes__row-item">{item.currentValue}</div>
+                        <div className="stakes__row-item">
+                            <RowItemTooltip tooltipText={item.shares} parent="stakes">{item.shares}</RowItemTooltip>
+                        </div>
+                        <div className="stakes__row-item">
+                            <RowItemTooltip tooltipText={item.bonusday} parent="stakes">{item.bonusday}</RowItemTooltip>
+                        </div>
+                        <div className="stakes__row-item">
+                            <RowItemTooltip tooltipText={item.dividents} parent="stakes">{item.dividents}</RowItemTooltip>
+                        </div>
+                        <div className="stakes__row-item stakes__red">
+                            <RowItemTooltip tooltipText={item.interest} parent="stakes">{item.interest}</RowItemTooltip>
+                        </div>
+                        <div className="stakes__row-item">
+                            <RowItemTooltip tooltipText={item.currentValue} parent="stakes">{item.currentValue}</RowItemTooltip>
+                        </div>
                         <button onClick={() => handleWithdraw(+item.index, +item.stakeId)} className="stakes__btn btn btn--withdraw">withdraw</button>
                     </div>
                 })

@@ -23,9 +23,12 @@
       font-size: 24px;
       line-height: 29px;
       margin-bottom: 8px;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      span {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+      }
     }
     &-subhead {
       font-size: 13px;

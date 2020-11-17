@@ -103,7 +103,7 @@
         text-overflow: ellipsis;
         display: block;
       }
-      span:first-child {
+      & > span:first-child {
         color: $red;
         font-size: 24px;
         line-height: 29px;

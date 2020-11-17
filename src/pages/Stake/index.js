@@ -44,14 +44,19 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
         // amountToStake * (min{7 * 10^24; amountToStake} / 7 * 10^25)
     }
 
-    const getStakes = (currentDay = startDay) => {
+    const getStakes = (isActive = true, currentDay = startDay) => {
+        const method = isActive ? 'stakeCount' : 'endedStakeCount'
         setActiveStakesRefreshing(true)
         return new Promise((resolve, reject) => {
-            contractService.stakeCount(userAddress)
+            contractService[method](userAddress)
                 .then(res => {
                     const promises = []
                     for (let stakeIndex = 0; stakeIndex < res; stakeIndex++) {
-                        promises.push(contractService.stakeLists(userAddress, stakeIndex))
+                        if (isActive) {
+                            promises.push(contractService.stakeLists(userAddress, stakeIndex))
+                        } else {
+                            promises.push(contractService.endedStakeLists(userAddress, stakeIndex))
+                        }
                     }
                     return Promise.all([...promises])
                 })
@@ -75,6 +80,10 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
 
                         activeStakesItem.start = await contractService.getDayUnixTime(stake.lockedDay)
 
+                        activeStakesItem.staked = new BigNumber(stake.stakedSuns).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toString()
+
+                        activeStakesItem.shares = new BigNumber(stake.stakeShares).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toString()
+
                         activeStakesItem.end = await contractService.getDayUnixTime(stake.lockedDay + stake.stakedDays)
 
                         activeStakesItem.bonusday = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewardsBonusDays')
@@ -83,7 +92,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
 
                         activeStakesItem.interest = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewards')
 
-                        activeStakesItem.currentValue = BigNumber.sum(activeStakesItem.interest, activeStakesItem.shares).toString()
+                        activeStakesItem.currentValue = BigNumber.sum(activeStakesItem.interest, activeStakesItem.shares).toFixed()
 
                         activeStakesArray.push(activeStakesItem)
                     }
@@ -123,16 +132,16 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     })
                     .catch(err => console.log(err))
 
-                getStakes(currentDay)
+                getStakes(true, currentDay)
                     .then(result => {
                         let newTotalStaked = 0;
-                        let newTotalShares = 0;
+                        let newTotalShares = new BigNumber(0);
                         let newTotalTimeBonus = new BigNumber(0);
                         let newTotalValueBonus = new BigNumber(0);
 
                         const totalDividentsPromises = result.map(item => {
                             newTotalStaked = +newTotalStaked + +item.stakedSuns
-                            newTotalShares = +newTotalShares + +item.stakeShares
+                            newTotalShares = newTotalShares.plus(item.stakedSuns)
 
                             newTotalTimeBonus = newTotalTimeBonus.plus(calcLBP(item.stakedSuns, item.stakedDays))
                             newTotalValueBonus = newTotalValueBonus.plus(calcBPB(item.stakedSuns))
@@ -143,9 +152,9 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                         newTotalStaked = BigNumber((newTotalStaked) / Math.pow(10, decimals.TAMPA)).toString()
 
                         setTotalStaked(newTotalStaked)
-                        setTotalShares(newTotalShares)
-                        setTotalTimeBonus(newTotalTimeBonus.toString())
-                        setTotalValueBonus(newTotalValueBonus.toString())
+                        setTotalShares(newTotalShares.toString())
+                        setTotalTimeBonus(newTotalTimeBonus.toFixed())
+                        setTotalValueBonus(newTotalValueBonus.toFixed())
 
                         return Promise.all([...totalDividentsPromises])
 

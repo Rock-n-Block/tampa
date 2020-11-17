@@ -6,10 +6,6 @@
   box-sizing: border-box;
 }
 
-.m-h {
-  display: none !important;
-}
-
 body {
   margin: 0;
   height: fit-content;
@@ -147,5 +143,47 @@ input {
         #43408b 104.81%
       );
     }
+  }
+}
+
+.ant-tooltip {
+  &-inner {
+    background: linear-gradient(
+        190.57deg,
+        rgba(255, 255, 255, 0.56) 19.25%,
+        rgba(248, 248, 255, 0.71) 54.39%,
+        rgba(255, 255, 255, 0.59) 90.02%
+      ),
+      #ffffff !important;
+    border: 4px solid #f2f2f3 !important;
+    border-radius: 12px !important;
+    color: $black;
+    width: fit-content;
+  }
+  &-arrow {
+    width: 16px;
+    height: 16px;
+    top: -4.5px !important;
+    &-content {
+      width: 16px;
+      height: 16px;
+      box-shadow: none;
+      background: linear-gradient(
+          190.57deg,
+          rgba(255, 255, 255, 0.56) 19.25%,
+          rgba(248, 248, 255, 0.71) 54.39%,
+          rgba(255, 255, 255, 0.59) 90.02%
+        ),
+        #ffffff !important;
+      border-left: 4px solid #f2f2f3 !important;
+      border-top: 4px solid #f2f2f3 !important;
+      border-radius: 4px !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .m-h {
+    display: none !important;
   }
 }

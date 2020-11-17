@@ -58,13 +58,13 @@ const Header = ({ isDarkTheme, userAddress }) => {
                         <NavLink to="/">
                             {isDarkTheme ? <img src={logoImgDark} alt="" /> : <img src={logoImg} alt="" />}
                         </NavLink>
-                        <div className="header__nav">
+                        <div className="header__nav m-h">
                             <NavLink exact className="header__nav-item" to="/" activeClassName="header__nav-item--active">Stake</NavLink>
                             <NavLink className="header__nav-item" to="/auction" activeClassName="header__nav-item--active">Auction</NavLink>
                             <NavLink className="header__nav-item" to="/lottery" activeClassName="header__nav-item--active">lottery</NavLink>
                         </div>
                     </div>
-                    <div className="header__right">
+                    <div className="header__right m-h">
                         <div className="header__time">
                             Day ends in: <span>{timeUntil}</span>
                         </div>

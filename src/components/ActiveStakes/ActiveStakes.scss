@@ -17,8 +17,11 @@
     grid-template-columns: 75px 75px 75px 50px 50px 50px 55px 55px 55px 1fr !important;
     grid-column-gap: 20px !important;
     &-item {
-      overflow: hidden;
-      text-overflow: ellipsis;
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+      }
     }
   }
   &__nav {

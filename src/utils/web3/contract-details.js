@@ -1,6 +1,6 @@
 export default {
     TAMPA: {
-        ADDRESS: '0x74aFD65904DC953cf1039dBfe4d7E165cd01abe2',
+        ADDRESS: '0x3C96a8de8d9A650E96d64300CEC1a44e7A909E92',
         ABI: [
             {
                 "inputs": [
@@ -816,6 +816,78 @@ export default {
                 ],
                 "payable": false,
                 "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "stakerAddr",
+                        "type": "address"
+                    }
+                ],
+                "name": "endedStakeCount",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "endedStakeLists",
+                "outputs": [
+                    {
+                        "internalType": "uint40",
+                        "name": "stakeId",
+                        "type": "uint40"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "stakedSuns",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "stakeShares",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "lockedDay",
+                        "type": "uint16"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "stakedDays",
+                        "type": "uint16"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "unlockedDay",
+                        "type": "uint16"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
                 "type": "function"
             },
             {

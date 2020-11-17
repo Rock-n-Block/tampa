@@ -1,5 +1,8 @@
 import React from 'react';
 import { InputNumber } from 'antd';
+import BigNumber from 'bignumber.js';
+
+import { RowItemTooltip } from '../../components';
 
 import './StakeForm.scss'
 
@@ -8,7 +11,6 @@ import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 import questionImg from '../../assets/img/question.svg';
 import questionImgDark from '../../assets/img/question-d.svg';
 import Spiner from '../../assets/img/oval.svg';
-import BigNumber from 'bignumber.js';
 
 const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonusDay, isTokenApproving, handleApproveToken, handleStake, handleCalcBonusDay, calcLBP, calcBPB }) => {
     const [amount, setAmount] = React.useState(10)
@@ -53,7 +55,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                 <div className="container s-form__content">
                     <div className="s-form__input-box">
                         <div className="s-form__input-head">Amount to Stake:</div>
-                        <InputNumber value={amount} onChange={handleChangeTokenAmount} className="s-form__input" placeholder="1000,00" />
+                        <InputNumber value={amount} onChange={handleChangeTokenAmount} className="s-form__input" placeholder="0,00" />
                         <div className="s-form__img">
                             {isDarkTheme ? <img src={tampaDarkImg} alt="" /> : <img src={tampaImg} alt="" />}
                             <span>Tampa</span>
@@ -99,13 +101,17 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                     <div className="s-form__bonus-box">
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
-                                <span>+{timeBonus}</span>
+                                <span>
+                                    <RowItemTooltip tooltipText={amount ? timeBonus : 0} parent="stakes">+{amount ? timeBonus : 0}</RowItemTooltip>
+                                </span>
                                 <span>Time Bonus</span>
                             </div>
                         </div>
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
-                                <span>{new BigNumber(timeBonus).plus(valueBonus).toString()}</span>
+                                <span>
+                                    <RowItemTooltip tooltipText={amount ? new BigNumber(timeBonus).plus(valueBonus).toString() : 0} parent="stakes">{amount ? new BigNumber(timeBonus).plus(valueBonus).toString() : 0}</RowItemTooltip>
+                                </span>
                                 <span>Total</span>
                             </div>
                         </div>
@@ -113,13 +119,17 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                     <div className="s-form__bonus-box">
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
-                                <span>{valueBonus}</span>
+                                <span>
+                                    <RowItemTooltip tooltipText={amount ? valueBonus : 0} parent="stakes">{amount ? valueBonus : 0}</RowItemTooltip>
+                                </span>
                                 <span>Value Bonus</span>
                             </div>
                         </div>
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
-                                <span>{new BigNumber(timeBonus).plus(valueBonus).plus(amount).toString()}</span>
+                                <span>
+                                    <RowItemTooltip tooltipText={valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toString() : 0} parent="stakes">{valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toString() : 0}</RowItemTooltip>
+                                </span>
                                 <span>Effective Tampa</span>
                             </div>
                         </div>
