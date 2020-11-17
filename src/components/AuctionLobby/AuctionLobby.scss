@@ -10,6 +10,13 @@
   }
   &__btn {
     padding: 7px 0 !important;
+    &:disabled {
+      background: #ccb2b3 !important;
+    }
+    &--collect {
+      background: #68d5bd !important;
+      font-size: 14px !important;
+    }
   }
   &__row {
     transition: 0.3s;
@@ -117,6 +124,70 @@
       &-content {
         padding: 0 !important;
       }
+    }
+  }
+  &__pages {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    .ant-pagination {
+      width: fit-content !important;
+      &-prev,
+      &-next {
+        min-width: 42px !important;
+        height: 42px !important;
+        background: linear-gradient(
+            190.57deg,
+            rgba(255, 255, 255, 0.56) 19.25%,
+            rgba(248, 248, 255, 0.71) 54.39%,
+            rgba(255, 255, 255, 0.59) 90.02%
+          ),
+          #ffffff;
+        box-shadow: 20px 30px 85px rgba(119, 116, 159, 0.15),
+          0px 0px 20px #eeeeee, inset 0px 12px 20px rgba(255, 255, 255, 0.5);
+        border-radius: 12px !important;
+        overflow: hidden;
+      }
+    }
+    .ant-pagination-item,
+    .ant-pagination-item-link {
+      font-size: 14px;
+      line-height: 32px;
+      border: none !important;
+      border-radius: 12px;
+      min-width: 42px !important;
+      height: 42px !important;
+      a {
+        color: $black !important;
+        height: 100% !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: linear-gradient(
+            190.57deg,
+            rgba(255, 255, 255, 0.56) 19.25%,
+            rgba(248, 248, 255, 0.71) 54.39%,
+            rgba(255, 255, 255, 0.59) 90.02%
+          ),
+          #ffffff;
+        box-shadow: 20px 30px 85px rgba(119, 116, 159, 0.15),
+          0px 0px 20px #eeeeee, inset 0px 12px 20px rgba(255, 255, 255, 0.5);
+      }
+      &-active {
+        a {
+          color: $red !important;
+        }
+      }
+      svg {
+        fill: $black !important;
+      }
+      &-ellipsis {
+        color: $black !important;
+      }
+    }
+    .ant-pagination-options {
+      display: none !important;
     }
   }
 }

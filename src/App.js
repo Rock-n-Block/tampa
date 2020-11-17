@@ -43,7 +43,7 @@ function App() {
         dispatch(modalActions.toggleModal(true))
       }
     }, 10)
-  }, [])
+  }, [dispatch])
 
   return (
     <div className={classNames('tampa', {

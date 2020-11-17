@@ -3,22 +3,8 @@ import classNames from 'classnames';
 
 import './LotteryProgress.scss'
 
-const LotteryProgress = ({ segments = [
-    {
-        percent: 19
-    },
-    {
-        percent: 51,
-        isMe: true
-    },
-    {
-        percent: 19
-    },
-    {
-        percent: 11
-    }
-], userAddress }) => {
-    const colors = ['#FF6B6B', '#6478C0', '#1DD1A1', '#F9D06A']
+const LotteryProgress = ({ segments, userAddress }) => {
+    const colors = React.useMemo(() => ['#FF6B6B', '#6478C0', '#1DD1A1', '#F9D06A'], [])
 
     const [segmentItems, setSegmentItems] = React.useState([])
     const [colorItems, setColorItems] = React.useState([])
@@ -50,7 +36,7 @@ const LotteryProgress = ({ segments = [
 
         setSegmentItems(newSegmentItems)
         setColorItems(newColorItems)
-    }, [segments])
+    }, [segments, colors, count, userAddress])
 
     return (
         <div className="l-progress">

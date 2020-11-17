@@ -1,8 +1,6 @@
 import React from 'react';
 import {
-    ResponsiveContainer, LineChart, Line, XAxis, YAxis, ReferenceLine, ReferenceArea,
-    ReferenceDot, Tooltip, CartesianGrid, Legend, Brush, ErrorBar, AreaChart, Area,
-    Label, LabelList
+    ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid
 } from 'recharts';
 
 import './Graph.scss'

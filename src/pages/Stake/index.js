@@ -31,7 +31,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
         const amount = new BigNumber(firstArg).multipliedBy(new BigNumber(10).pow(decimals.TAMPA))
         const days = new BigNumber(secondArg)
 
-        return firstArg == 0 || secondArg == 0 ? 0 : amount.multipliedBy(BigNumber.min(3640, days.minus(1)).dividedBy(1820))
+        return +firstArg === 0 || +secondArg === 0 ? 0 : amount.multipliedBy(BigNumber.min(3640, days.minus(1)).dividedBy(1820))
 
         // amountToStake * (min{3640; daysToStake - 1} / 1820)
     }
@@ -40,7 +40,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
         const amount = new BigNumber(firstArg).multipliedBy(new BigNumber(10).pow(decimals.TAMPA))
         const multi = BigNumber(7).multipliedBy(new BigNumber(10).pow(24))
 
-        return firstArg == 0 ? 0 : amount.multipliedBy(BigNumber.min(multi, amount).dividedBy(BigNumber(7).multipliedBy(new BigNumber(10).pow(25))))
+        return +firstArg === 0 ? 0 : amount.multipliedBy(BigNumber.min(multi, amount).dividedBy(BigNumber(7).multipliedBy(new BigNumber(10).pow(25))))
         // amountToStake * (min{7 * 10^24; amountToStake} / 7 * 10^25)
     }
 

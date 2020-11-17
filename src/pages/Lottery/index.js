@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 import { Lottery, LotteryHistory } from '../../components';
 import ContractService from '../../utils/contractService';
-import decimals from '../../utils/web3/decimals';
 
 import './Lottery.scss'
 
@@ -14,7 +13,7 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
     const [lotteryPercents, setLotteryPercents] = useState({})
     const [lotteryHistoryItems, setLotteryHistoryItems] = useState([])
 
-    const getWinners = async (days) => {
+    const getWinners = React.useCallback(async (days) => {
         const newWinners = []
         for (let i = 0; i <= days; i++) {
             const winner = await contractService.winners(i)
@@ -31,9 +30,9 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
             }
         }
         setLotteryHistoryItems(newWinners)
-    }
+    }, [contractService])
 
-    const getData = () => {
+    const getData = React.useCallback(() => {
 
         contractService.currentDay()
             .then(days => {
@@ -61,7 +60,7 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
                             .then(result => {
                                 const members = {}
 
-                                result.map(member => {
+                                result.forEach(member => {
                                     if (members[member.who]) {
                                         members[member.who] += +member.chanceCount
                                     } else {
@@ -87,13 +86,13 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
                 //     .catch(err => console.log(err))
             })
             .catch(err => console.log(err))
-    }
+    }, [contractService, getWinners])
 
     React.useEffect(() => {
         if (userAddress) {
             getData()
         }
-    }, [userAddress])
+    }, [userAddress, getData])
 
     return (
         <div className="p-lottery">
