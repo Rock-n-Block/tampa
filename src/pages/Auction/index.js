@@ -27,6 +27,8 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
     const [auctionRows, setAuctionsRows] = useState([])
 
+    const [isSummaryBetsLoading, setIsSummaryBetsLoading] = useState(false)
+
     const getAuctionPool = (day) => {
         let result = 0;
         if (day >= 0 && day <= 365) {
@@ -106,6 +108,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
     }, [currentPage, userAddress, contractService])
 
     const getData = React.useCallback(() => {
+        setIsSummaryBetsLoading(true)
         contractService.currentDay()
             .then(days => {
                 setCurrentDays(days)
@@ -165,6 +168,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                             .catch(err => {
                                 console.log(err)
                             })
+                        setIsSummaryBetsLoading(false)
                     })
                     .catch(err => {
                         console.log(err)
@@ -237,6 +241,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                     totalReceive={totalReceive}
                     averageRate={averageRate}
                     totalEntry={totalEntry}
+                    isLoading={isSummaryBetsLoading}
                 />
                 <AuctionLobby
                     handleChangePage={handleChangePage}

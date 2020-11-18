@@ -152,19 +152,19 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                         newTotalStaked = BigNumber((newTotalStaked) / Math.pow(10, decimals.TAMPA)).toString()
 
                         setTotalStaked(newTotalStaked)
-                        setTotalShares(newTotalShares.toString())
-                        setTotalTimeBonus(newTotalTimeBonus.toFixed())
-                        setTotalValueBonus(newTotalValueBonus.toFixed())
+                        setTotalShares(newTotalShares.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
+                        setTotalTimeBonus(newTotalTimeBonus.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
+                        setTotalValueBonus(newTotalValueBonus.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
 
                         return Promise.all([...totalDividentsPromises])
 
                     })
                     .then(result => {
-                        let newTotalDividents = 0
+                        let newTotalDividents = new BigNumber(0)
 
-                        result.map(item => newTotalDividents = +newTotalDividents + item)
+                        result.map(item => newTotalDividents = newTotalDividents.plus(item))
 
-                        setTotalDividents(newTotalDividents)
+                        setTotalDividents(newTotalDividents.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                     })
                     .catch(err => console.log(err))
             })

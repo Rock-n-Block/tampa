@@ -24,7 +24,9 @@ const StakeInfo = ({ totalStaked, totalShares, fromReferrs, totalDividents, tota
                     <div className="s-info__item-subhead">From referrs</div>
                 </div>
                 <div className="s-info__item">
-                    <div className="s-info__item-head">{totalDividents}</div>
+                    <div className="s-info__item-head">
+                        <RowItemTooltip tooltipText={totalDividents} parent="s-info__content">{totalDividents}</RowItemTooltip>
+                    </div>
                     <div className="s-info__item-subhead">Total dividends</div>
                 </div>
                 <div className="s-info__item">

@@ -3,6 +3,13 @@
   text-transform: uppercase;
   padding: 30px 10px 20px;
   margin: 10px 0;
+  position: relative;
+  &__spinner {
+    width: 20px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
   &__title {
     font-size: 18px;
     line-height: 22px;

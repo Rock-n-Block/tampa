@@ -4,11 +4,13 @@ import { Progress } from 'antd';
 import { RowItemTooltip } from '../../components';
 
 import './SummaryBets.scss'
+import Spiner from '../../assets/img/oval-r.svg';
 
-const SummaryBets = ({ isDarkTheme, currentDays, participation, totalReceive, totalEntry, averageRate }) => {
+const SummaryBets = ({ isDarkTheme, currentDays, participation, totalReceive, totalEntry, averageRate, isLoading }) => {
 
     return (
         <div className="container s-bets" id="s-bets">
+            {isLoading && <img src={Spiner} alt="" className="s-bets__spinner" />}
             <div className="s-bets__title">My summary bets</div>
             <div className="container s-bets__content">
                 <div className="s-bets__item s-bets__item-progress">
