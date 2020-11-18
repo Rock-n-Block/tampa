@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { SummaryBets, AuctionLobby, Graph } from '../../components';
 import ContractService from '../../utils/contractService';
@@ -8,6 +9,8 @@ import decimals from '../../utils/web3/decimals';
 import './Auction.scss'
 
 const AuctionPage = ({ isDarkTheme, userAddress }) => {
+    const location = useLocation()
+    const params = new URLSearchParams(location.search)
 
     const [contractService] = useState(new ContractService())
 
@@ -24,18 +27,37 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
     const [auctionRows, setAuctionsRows] = useState([])
 
-    const getRows = React.useCallback(async (page = 1, days, auctionObj) => {
-        let newAuctionsRows = []
-        let newAverageRate = new BigNumber(0)
+    const getAuctionPool = (day) => {
+        let result = 0;
+        if (day >= 0 && day <= 365) {
+            result = new BigNumber(5)
+                .multipliedBy(new BigNumber(10).pow(6))
+                .multipliedBy(new BigNumber(10).pow(18))
+                .minus(new BigNumber(day).multipliedBy(new BigNumber(10958904109589041095890)));
+            // 5 * 10^6 * 10^18 - ((enterDay - 1) * 1095890410958)
+        } else {
+            result = new BigNumber(1).multipliedBy(new BigNumber(10).pow(6)).multipliedBy(new BigNumber(10).pow(18));
+            // 1 * 10^6 * 10^18
+        }
 
-        const newPageCount = Math.ceil(new BigNumber(days).dividedBy(10))
+        return result.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+    }
+
+    const getRows = React.useCallback(async (page = 1, days, auctionObj) => {
+        setAuctionsRows([])
+        let newAuctionsRows = []
+
+        const newPageCount = Math.ceil(new BigNumber(days).minus(+auctionObj[1]).dividedBy(5))
 
         setPageCount(newPageCount)
 
-        const startPoint = auctionObj[0] ? +auctionObj[1] + (page - 1) * 10 - 1 : +days
-        const endPoint = +startPoint + +page * 10 - 1 > +days ? days : +startPoint + +page * 10 - 1
-        debugger
-        for (let i = startPoint; i <= endPoint; i++) {
+        // const startPoint = auctionObj[0] ? +auctionObj[1] + (page - 1) * 5 - 1 : +days
+        // const endPoint = +startPoint + 5 - 1 > +days ? days : +startPoint + 5 - 1
+
+        const startPoint = +days - (page - 1) * 5
+        const endPoint = +startPoint - 5 < +auctionObj[1] ? +auctionObj[1] : +startPoint - 5
+
+        for (let i = startPoint; i >= endPoint; i--) {
             let currentRawAmount = new BigNumber(0);
 
             const memberObj = await contractService.xfLobbyMembers(i, userAddress)
@@ -60,18 +82,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
             auctionRow.day = await contractService.getDayUnixTime(i)
 
-            if (i >= 0 && i <= 365) {
-                auctionRow.pool = new BigNumber(5)
-                    .multipliedBy(new BigNumber(10).pow(6))
-                    .multipliedBy(new BigNumber(10).pow(18))
-                    .minus(new BigNumber(i).multipliedBy(new BigNumber(10958904109589041095890)));
-                // 5 * 10^6 * 10^18 - ((enterDay - 1) * 1095890410958)
-            } else {
-                auctionRow.pool = new BigNumber(1).multipliedBy(new BigNumber(10).pow(6)).multipliedBy(new BigNumber(10).pow(18));
-                // 1 * 10^6 * 10^18
-            }
-
-            auctionRow.pool = new BigNumber(auctionRow.pool).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+            auctionRow.pool = getAuctionPool(i)
 
             auctionRow.state = +i === +days ? true : false
 
@@ -88,15 +99,10 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
             auctionRow.eth = new BigNumber(auctionRow.dailyEntry).dividedBy(auctionRow.pool).toFixed()
 
-            if (+memberObj.tailIndex > 0) {
-                newAverageRate = newAverageRate.plus(new BigNumber(auctionRow.dailyEntry).dividedBy(auctionRow.pool))
-            }
-
             newAuctionsRows.push(auctionRow)
         }
 
-        setAuctionsRows(newAuctionsRows.reverse())
-        setAverageRate(newAverageRate.toFixed())
+        setAuctionsRows(newAuctionsRows)
     }, [currentPage, userAddress, contractService])
 
     const getData = React.useCallback(() => {
@@ -108,7 +114,11 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                 contractService.getFirstAuction()
                     .then(async res => {
                         setFirstAuctionObj(res)
+
+                        getRows(1, days, res)
+
                         const receivePromises = []
+                        let newAverageRate = new BigNumber(0)
                         let rawAmount = new BigNumber(0);
                         let newParticipation = 0
 
@@ -127,11 +137,14 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                             if (+memberObj.tailIndex > 0) {
                                 newParticipation++
 
+                                const dailyEntry = await contractService.xfLobby(i - 1)
+                                const pool = getAuctionPool(i)
+
+                                newAverageRate = newAverageRate.plus(new BigNumber(dailyEntry).dividedBy(pool))
                             }
                         }
 
-                        getRows(1, days, res)
-
+                        setAverageRate(newAverageRate.toFixed())
                         setTotalEntry(rawAmount.toString())
                         setParticipation(newParticipation)
 
@@ -173,7 +186,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
         contractService.createTokenTransaction({
             data: {
                 amount,
-                other: [userAddress]
+                other: [window.localStorage.referal || userAddress]
             },
             address: userAddress,
             swapMethod: 'xfLobbyEnter',
@@ -204,6 +217,14 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
         }
     }, [userAddress, getData])
 
+    React.useEffect(() => {
+        const referal = params.get('ref')
+
+        if (referal) {
+            window.localStorage['referal'] = referal
+        }
+    }, [])
+
     return (
         <div className="auction">
             <div className="row row--lg">
@@ -217,7 +238,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                     averageRate={averageRate}
                     totalEntry={totalEntry}
                 />
-                {auctionRows.length ? <AuctionLobby
+                <AuctionLobby
                     handleChangePage={handleChangePage}
                     pageCount={pageCount}
                     currentPage={currentPage}
@@ -226,7 +247,6 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                     handleExitAuction={handleExitAuction}
                     ethBalance={ethBalance}
                 />
-                    : ''}
             </div>
         </div>
     );

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { format } from 'date-fns';
 import { Pagination } from 'antd';
 
-import { RowItemTooltip } from '../../components';
+import { RowItemTooltip, AuctionRowLoading } from '../../components';
 
 import './AuctionLobby.scss'
 
@@ -54,7 +54,7 @@ export default class AuctionLobby extends React.PureComponent {
                         <div className="a-lobby__row-head-item">Daily Entry</div>
                         {/* <div className="a-lobby__row-head-item a-lobby__red">Status</div> */}
                     </div>
-                    {this.props.rows &&
+                    {this.props.rows.length ?
                         this.props.rows.map((item, index) => {
                             return <div key={index} className={classNames('container a-lobby__row t-row t-row__content', {
                                 'active': index === this.state.activeRow
@@ -70,7 +70,9 @@ export default class AuctionLobby extends React.PureComponent {
                                 <div className="a-lobby__row-item">
                                     <RowItemTooltip tooltipText={item.received} parent="a-lobby">{item.received}</RowItemTooltip>
                                 </div>
-                                <div className="a-lobby__row-item">{item.yourEntry}</div>
+                                <div className="a-lobby__row-item">
+                                    <RowItemTooltip tooltipText={item.yourEntry} parent="a-lobby">{item.yourEntry}</RowItemTooltip>
+                                </div>
                                 <div className="a-lobby__row-item">
                                     <RowItemTooltip tooltipText={item.dailyEntry} parent="a-lobby">{item.dailyEntry}</RowItemTooltip>
                                 </div>
@@ -99,7 +101,8 @@ export default class AuctionLobby extends React.PureComponent {
                                     {!item.state && !item.status && <button className="a-lobby__btn btn btn--md" disabled>ENDED</button>}
                                 </div>
                             </div>
-                        })
+                        }) :
+                        new Array(6).fill(0).map(() => <AuctionRowLoading />)
                     }
                 </div>
                 {this.props.pageCount > 1 && <div className="a-lobby__pages">

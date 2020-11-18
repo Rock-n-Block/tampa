@@ -28,6 +28,10 @@
     line-height: 15px;
     color: $black;
     margin-top: 10px;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 .darktheme {

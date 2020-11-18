@@ -13,9 +13,9 @@ const ReferrerLink = ({ userAddress }) => {
             <img src={rightImg} alt="" className="r-link__img r-link__img--right" />
             <div className="r-link__box">
                 <div className="r-link__title">Your Referrer Link</div>
-                <div className="r-link__link">{`${window.location.origin}/?ref=${userAddress}`}</div>
+                <div className="r-link__link">{`${window.location.origin}/auction/?ref=${userAddress}`}</div>
             </div>
-            <CopyToClipboard text={`${window.location.origin}/?ref=${userAddress}`}>
+            <CopyToClipboard text={`${window.location.origin}/auction/?ref=${userAddress}`}>
                 <button className="r-link__btn btn btn--md">COPY</button>
             </CopyToClipboard>
         </div>
