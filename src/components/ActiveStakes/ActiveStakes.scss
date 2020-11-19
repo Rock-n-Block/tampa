@@ -16,13 +16,6 @@
   &__row {
     grid-template-columns: 75px 75px 75px 50px 50px 50px 55px 55px 55px 1fr !important;
     grid-column-gap: 20px !important;
-    &-item {
-      span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
-      }
-    }
   }
   &__nav {
     padding: 3px;
@@ -50,6 +43,20 @@
   }
   &__red {
     color: $red;
+  }
+  .ant-progress-show-info .ant-progress-outer {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .ant-progress-text {
+    display: none !important;
+  }
+  .ant-progress-inner {
+    background: #ededf2 !important;
+    margin-top: -3px;
+  }
+  .ant-progress-bg {
+    height: 6px !important;
   }
   @keyframes rotate {
     from {

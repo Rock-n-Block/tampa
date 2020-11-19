@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { format } from 'date-fns';
+import { format, eachDayOfInterval } from 'date-fns';
 
 import { RowItemTooltip } from '../../components';
 
@@ -27,6 +27,20 @@ const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, is
         setActiveTab(index)
 
         if (!isRefreshingStates) handleRefreshActiveStakes(!!!index).then().catch()
+    }
+
+    const calcProgress = (start, end) => {
+        const stakeDays = eachDayOfInterval({
+            start: new Date(+start * 1000),
+            end: new Date(+end * 1000)
+        })
+
+        const pastDays = eachDayOfInterval({
+            start: new Date(+start * 1000),
+            end: new Date()
+        })
+
+        return ((pastDays.length - 1) / (stakeDays.length - 1) * 100).toFixed(0)
     }
 
     return (
@@ -61,7 +75,10 @@ const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, is
                     return <div key={index} className="container stakes__row t-row t-row__content">
                         <div className="stakes__row-item">{dateFormat(+item.start)}</div>
                         <div className="stakes__row-item">{dateFormat(+item.end)}</div>
-                        <div className="stakes__row-item">{item.progress}</div>
+                        <div className="stakes__row-item">
+                            {/* {(item.start / item.end * 100).toFixed(0)}% */}
+                            {calcProgress(item.start, item.end)}%
+                        </div>
                         <div className="stakes__row-item">{item.staked}</div>
                         <div className="stakes__row-item">
                             <RowItemTooltip tooltipText={item.shares} parent="stakes">{item.shares}</RowItemTooltip>

@@ -27,6 +27,8 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
     const [auctionRows, setAuctionsRows] = useState([])
 
+    const [graphData, setGraphData] = useState([])
+
     const [isSummaryBetsLoading, setIsSummaryBetsLoading] = useState(false)
 
     const getAuctionPool = (day) => {
@@ -91,7 +93,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
             const received = await contractService.tampaReceivedAuction(i, userAddress)
             auctionRow.received = new BigNumber(received).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
-            auctionRow.yourEntry = currentRawAmount.toString();
+            auctionRow.yourEntry = currentRawAmount.toFixed();
 
             const dailyEntry = await contractService.xfLobby(i - 1)
 
@@ -148,7 +150,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                         }
 
                         setAverageRate(newAverageRate.toFixed())
-                        setTotalEntry(rawAmount.toString())
+                        setTotalEntry(rawAmount.toFixed())
                         setParticipation(newParticipation)
 
                         contractService.getEthBalance(userAddress)
@@ -173,6 +175,27 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                     .catch(err => {
                         console.log(err)
                     })
+
+
+                contractService.getFirstAuction()
+                    .then(async auctionObj => {
+                        const graphDots = []
+                        for (let i = auctionObj[1]; i <= days; i++) {
+                            let value = await contractService.xfLobby(i)
+
+                            const graphDot = {
+                                day: i,
+                                value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                            }
+
+                            if (+value !== 0) {
+                                graphDots.push(graphDot)
+                            }
+                        }
+
+                        setGraphData(graphDots)
+                    })
+                    .catch(err => console.log(err))
 
 
             })
@@ -233,7 +256,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
         <div className="auction">
             <div className="row row--lg">
                 <h1 className="auction__title">Auction</h1>
-                <Graph isDarkTheme={isDarkTheme} />
+                <Graph isDarkTheme={isDarkTheme} data={graphData} />
                 <SummaryBets
                     isDarkTheme={isDarkTheme}
                     currentDays={currentDays}

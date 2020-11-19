@@ -24,6 +24,8 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
     const [activeStakes, setActiveStakes] = useState([])
     const [activeStakesRefreshing, setActiveStakesRefreshing] = useState([])
 
+    const [graphData, setGraphData] = useState([])
+
     const [isTokenApproved, setIsTokenApproved] = useState(false)
     const [isTokenApproving, setIsTokenApproving] = useState(false)
 
@@ -84,7 +86,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
 
                         activeStakesItem.shares = new BigNumber(stake.stakeShares).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toString()
 
-                        activeStakesItem.end = await contractService.getDayUnixTime(stake.lockedDay + stake.stakedDays)
+                        activeStakesItem.end = await contractService.getDayUnixTime(+stake.lockedDay + +stake.stakedDays)
 
                         activeStakesItem.bonusday = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewardsBonusDays')
 
@@ -119,18 +121,30 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
         contractService.currentDay()
             .then(res => {
                 setStartDay(+res)
-                console.log(res, 'days')
                 return +res
             })
             .then(currentDay => {
 
+                contractService.getFirstAuction()
+                    .then(async auctionObj => {
+                        const graphDots = []
+                        for (let i = auctionObj[1]; i <= currentDay; i++) {
+                            let value = await contractService.xfLobby(i)
 
-                contractService.xfLobby(currentDay)
-                    .then(resXfLobby => {
-                        const result = BigNumber(resXfLobby * 0.9).toString()
-                        setDividentsPool(result)
+                            const graphDot = {
+                                day: i,
+                                value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                            }
+
+                            if (+value !== 0) {
+                                graphDots.push(graphDot)
+                            }
+                        }
+
+                        setGraphData(graphDots)
                     })
                     .catch(err => console.log(err))
+
 
                 getStakes(true, currentDay)
                     .then(result => {
@@ -252,7 +266,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     calcLBP={calcLBP}
                     calcBPB={calcBPB}
                 />
-                <Graph dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} />
+                <Graph dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} data={graphData} />
                 <ReferrerLink userAddress={userAddress} />
             </div>
             <div className="row row--lg">

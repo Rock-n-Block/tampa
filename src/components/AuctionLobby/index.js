@@ -102,7 +102,7 @@ export default class AuctionLobby extends React.PureComponent {
                                 </div>
                             </div>
                         }) :
-                        new Array(6).fill(0).map(() => <AuctionRowLoading />)
+                        new Array(6).fill(0).map((_, index) => <AuctionRowLoading key={index} />)
                     }
                 </div>
                 {this.props.pageCount > 1 && <div className="a-lobby__pages">
