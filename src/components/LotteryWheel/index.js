@@ -27,12 +27,19 @@ const LotteryWheel = () => {
     const iniLottery = (params) => {
 
         const data = [];
-        for (let k = 0; k < 10000; k++) {
+        for (let k = 0; k < 100; k++) {
             data.push('0x' + ('00000000000' + k.toString(16)).slice(-8));
         }
         params.data = data;
         const lottery = new lotteryWheel(params);
         lottery.start();
+
+        setTimeout(() => {
+            lottery.showWinner('0x00000020');
+        }, 0)
+        setTimeout(() => {
+            lottery.setWinner('0x00000020')
+        }, 10000)
     }
 
     React.useEffect(() => {
@@ -41,7 +48,6 @@ const LotteryWheel = () => {
                 element: container.current,
                 data: [],
                 visibleElementsCount: 20,
-                winner: '0x00000020',
                 speed: 1,
                 audioEnd: audioEnd.current,
                 playingAudio: playingAudio.current,

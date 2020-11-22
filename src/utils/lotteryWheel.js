@@ -48,6 +48,19 @@ export default class Lottery {
         });
     }
 
+    setWinner(winner) {
+        this.winner = winner
+    }
+
+    showWinner(winner) {
+        this.playingAudio.pause()
+        clearInterval(this.interval)
+        const item = document.querySelectorAll('.lottery-item')[5]
+
+        item.innerHTML = winner
+        item.classList.add('winner')
+        this.container.classList.add('lottery-end')
+    }
 
     start() {
         this.playingAudio.play()

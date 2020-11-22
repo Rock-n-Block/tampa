@@ -1,0 +1,12 @@
+.lottery-a {
+  margin-bottom: 40px;
+  padding-top: 40px;
+  &__title {
+    text-align: center;
+  }
+  &__info {
+    &-item {
+      border-radius: 12px;
+    }
+  }
+}

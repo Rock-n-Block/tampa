@@ -2,28 +2,24 @@ import React from 'react';
 import {
     ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid
 } from 'recharts';
+import { Link } from 'react-router-dom';
 
 import './Graph.scss'
 
 import arrowImg from '../../assets/img/arrow.svg';
 import ethImg from '../../assets/img/eth-r.svg';
 import ethImgDark from '../../assets/img/eth-b.svg';
+import refreshImg from '../../assets/img/refresh.svg';
+import refreshDarkImg from '../../assets/img/refresh-dark.svg';
 
-const Graph = ({ dividentsPool, isDarkTheme, data }) => {
-    // const data = [
-    //     { day: 0, value: 0 },
-    //     { day: 10, value: 1000 },
-    //     { day: 35, value: 2050 },
-    //     { day: 40, value: 5000 },
-    //     { day: 50, value: 3000 },
-    // ]
+const Graph = ({ dividentsPool, isDarkTheme, data, to }) => {
     return (
         <>
-            {data && data.length ? <div className="container s-graph">
+            <div className="container s-graph">
                 <div className="s-graph__head">
                     <div className="s-graph__wrapper">
                         <div className="s-graph__text">ETH DIVIDENDS HISTORY</div>
-                        <button className="s-graph__btn btn btn--md"><img src={arrowImg} alt="" /></button>
+                        {to && <Link to={to}><button className="s-graph__btn btn btn--md"><img src={arrowImg} alt="" /></button></Link>}
                     </div>
                     <div className="">
                         <div className="s-graph__text">
@@ -34,6 +30,9 @@ const Graph = ({ dividentsPool, isDarkTheme, data }) => {
                     </div>
                 </div>
                 <div className="s-graph__content">
+                    {!data.length && <div className="s-graph__loader">
+                        {isDarkTheme ? <img src={refreshDarkImg} alt="" className="s-graph__loader-img" /> : <img src={refreshImg} alt="" className="s-graph__loader-img" />}
+                    </div>}
                     <ResponsiveContainer width="100%" height={400}>
                         <LineChart data={data} syncId="test">
                             <CartesianGrid stroke={isDarkTheme ? '#252253' : '#FCFCFF'} fill={isDarkTheme ? '#363362' : '#F8F7FD'} strokeWidth="10" />
@@ -72,7 +71,7 @@ const Graph = ({ dividentsPool, isDarkTheme, data }) => {
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
-            </div> : ''}
+            </div>
         </>
     );
 }

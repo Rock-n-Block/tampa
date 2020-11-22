@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { memo } from 'react';
 import classNames from 'classnames';
-import { format, eachDayOfInterval } from 'date-fns';
+import { format } from 'date-fns';
 
-import { RowItemTooltip } from '../../components';
+import { RowItemTooltip, AuctionRowLoading } from '../../components';
 
 import './ActiveStakes.scss'
 
 import refreshImg from '../../assets/img/refresh.svg';
 import refreshDarkImg from '../../assets/img/refresh-dark.svg';
 
-const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isRefreshingStates, handleWithdraw }) => {
+export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isRefreshingStates, handleWithdraw }) => {
     const navItems = ['My Active Stakes', 'My Ended Stakes']
 
     const [activeTab, setActiveTab] = React.useState(0)
@@ -20,28 +20,15 @@ const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, is
     }
 
     const handleRefresh = () => {
-        if (!isRefreshingStates) handleRefreshActiveStakes(!!!activeTab).then().catch()
+        if (!isRefreshingStates) handleRefreshActiveStakes(!!!activeTab)
     }
 
     const handlecChangeNav = (index) => {
         setActiveTab(index)
 
-        if (!isRefreshingStates) handleRefreshActiveStakes(!!!index).then().catch()
+        if (!isRefreshingStates) handleRefreshActiveStakes(!!!index)
     }
 
-    const calcProgress = (start, end) => {
-        const stakeDays = eachDayOfInterval({
-            start: new Date(+start * 1000),
-            end: new Date(+end * 1000)
-        })
-
-        const pastDays = eachDayOfInterval({
-            start: new Date(+start * 1000),
-            end: new Date()
-        })
-
-        return ((pastDays.length - 1) / (stakeDays.length - 1) * 100).toFixed(0)
-    }
 
     return (
         <div className="container stakes" id="stakes">
@@ -59,26 +46,29 @@ const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, is
                     })
                 }
             </div>
-            <div className="stakes__row t-row t-row__head">
+            <div className={classNames("stakes__row t-row t-row__head", {
+                'stakes__row--ended': activeStakes[0] && activeStakes[0].isEnded
+            })}>
                 <div className="stakes__row-head-item">Start</div>
                 <div className="stakes__row-head-item">END</div>
-                <div className="stakes__row-head-item">Progress</div>
+                {!activeTab && <div className="stakes__row-head-item">Progress</div>}
                 <div className="stakes__row-head-item">Staked</div>
                 <div className="stakes__row-head-item">Shares</div>
                 <div className="stakes__row-head-item">BonusDay Rewards</div>
-                <div className="stakes__row-head-item">Dividends Rewards</div>
+                <div className="stakes__row-head-item">eth Dividends Rewards</div>
                 <div className="stakes__row-head-item stakes__red">Interest</div>
-                <div className="stakes__row-head-item">Current Value</div>
+                <div className="stakes__row-head-item">{!activeTab ? 'Current Value' : 'paid amount'}</div>
             </div>
-            {activeStakes &&
+            {activeStakes.length ?
                 activeStakes.map((item, index) => {
-                    return <div key={index} className="container stakes__row t-row t-row__content">
+                    return <div key={index} className={classNames("container stakes__row t-row t-row__content", {
+                        'stakes__row--ended': item.isEnded
+                    })}>
                         <div className="stakes__row-item">{dateFormat(+item.start)}</div>
                         <div className="stakes__row-item">{dateFormat(+item.end)}</div>
-                        <div className="stakes__row-item">
-                            {/* {(item.start / item.end * 100).toFixed(0)}% */}
-                            {calcProgress(item.start, item.end)}%
-                        </div>
+                        {!item.isEnded && <div className="stakes__row-item">
+                            {item.progress}%
+                        </div>}
                         <div className="stakes__row-item">{item.staked}</div>
                         <div className="stakes__row-item">
                             <RowItemTooltip tooltipText={item.shares} parent="stakes">{item.shares}</RowItemTooltip>
@@ -93,14 +83,15 @@ const ActiveStakes = ({ isDarkTheme, activeStakes, handleRefreshActiveStakes, is
                             <RowItemTooltip tooltipText={item.interest} parent="stakes">{item.interest}</RowItemTooltip>
                         </div>
                         <div className="stakes__row-item">
-                            <RowItemTooltip tooltipText={item.currentValue} parent="stakes">{item.currentValue}</RowItemTooltip>
+                            <RowItemTooltip tooltipText={!activeTab ? item.currentValue : item.paidAmount} parent="stakes">{!activeTab ? item.currentValue : item.paidAmount}</RowItemTooltip>
                         </div>
-                        <button onClick={() => handleWithdraw(+item.index, +item.stakeId)} className="stakes__btn btn btn--withdraw">withdraw</button>
+                        {!item.isEnded && <button onClick={() => handleWithdraw(+item.index, +item.stakeId)} className="stakes__btn btn btn--withdraw">withdraw</button>}
                     </div>
-                })
+                }) :
+                isRefreshingStates && <AuctionRowLoading />
             }
         </div>
     );
-}
+})
 
-export default ActiveStakes;
+// export default ActiveStakes;

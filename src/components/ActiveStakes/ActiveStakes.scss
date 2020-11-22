@@ -16,6 +16,9 @@
   &__row {
     grid-template-columns: 75px 75px 75px 50px 50px 50px 55px 55px 55px 1fr !important;
     grid-column-gap: 20px !important;
+    &--ended {
+      grid-template-columns: 75px 75px repeat(6, 85px) !important;
+    }
   }
   &__nav {
     padding: 3px;

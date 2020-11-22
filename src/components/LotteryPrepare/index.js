@@ -1,29 +1,39 @@
 import React from 'react';
 
-import { LotteryProgress, LotteryWheel } from '../../components';
+import { LotteryProgress } from '../../components';
 
 import './Lottery.scss'
 
-import tampaImg from '../../assets/img/tampa.svg';
-import tampaDarkImg from '../../assets/img/tampa-dark.svg';
+import tampaImg from '../../assets/img/eth.svg';
+import tampaDarkImg from '../../assets/img/eth.svg';
+import ruleSImg from '../../assets/img/rule-s.svg';
+import ruleFImg from '../../assets/img/rule-f.svg';
 
 const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents }) => {
     return (
         <div className="container lottery">
             <h1 className="lottery__title">lottery</h1>
-            <LotteryWheel />
+            <div className="lottery__subtitle">You are a lottery participant</div>
+            <div className="lottery__rule">
+                <img src={ruleSImg} alt="" />
+                <span>purchase on the current day in the first hour</span>
+            </div>
+            <div className="lottery__rule">
+                <img src={ruleFImg} alt="" />
+                <span>active staking made for at least 5 days</span>
+            </div>
             <div className="container lottery__content">
                 <div className="lottery__info">
                     <div className="container lottery__info-item">
-                        <div className="lottery__info-head">Draw</div>
-                        <div className="lottery__info-content lottery__info-date">NOW</div>
+                        <div className="lottery__info-head">lottery pool from</div>
+                        <div className="lottery__info-content lottery__info-date">18.11.2020</div>
                     </div>
                     <div className="container lottery__info-item">
                         <div className="lottery__info-head">Amount of the draw</div>
                         <div className="lottery__info-content">{amountOfDraw}</div>
                         <div className="lottery__info-wrapper">
                             {isDarkTheme ? <img src={tampaDarkImg} alt="" /> : <img src={tampaImg} alt="" />}
-                            <span>Tampa</span>
+                            <span>eth</span>
                         </div>
                     </div>
                 </div>

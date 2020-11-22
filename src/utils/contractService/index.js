@@ -10,6 +10,10 @@ class ContractService {
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
 
+    getUnstakeParams = (address, stakeIndex, stakeId) => {
+        return this.tampaContract.methods.getUnstakeParams(address, stakeIndex, +stakeId).call()
+    }
+
     winners = (day) => {
         return this.tampaContract.methods.winners(day).call()
     }

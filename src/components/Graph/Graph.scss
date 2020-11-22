@@ -4,6 +4,21 @@
   margin-top: 40px;
   padding: 30px 40px;
   text-transform: uppercase;
+  &__loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-img {
+      animation: rotate 1s linear infinite;
+    }
+  }
   &__tooltip {
     display: flex;
     align-items: center;
@@ -22,6 +37,9 @@
       border-radius: 50%;
       margin-right: 2px;
     }
+  }
+  &__content {
+    position: relative;
   }
   &__text {
     font-size: 18px;
@@ -58,6 +76,14 @@
     justify-content: center;
     max-width: 35px !important;
     margin-left: 15px;
+  }
+  @keyframes rotate {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
   }
 }
 .darktheme {

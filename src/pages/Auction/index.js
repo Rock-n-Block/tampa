@@ -1,14 +1,17 @@
 import BigNumber from 'bignumber.js';
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { SummaryBets, AuctionLobby, Graph } from '../../components';
 import ContractService from '../../utils/contractService';
 import decimals from '../../utils/web3/decimals';
+import { graphActions } from '../../redux/actions';
 
 import './Auction.scss'
 
 const AuctionPage = ({ isDarkTheme, userAddress }) => {
+    const dispatch = useDispatch()
     const location = useLocation()
     const params = new URLSearchParams(location.search)
 
@@ -19,6 +22,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
     const [participation, setParticipation] = useState(0)
     const [totalReceive, setTotalReceive] = useState(0)
     const [totalEntry, setTotalEntry] = useState(0)
+    const [dividentsPool, setDividentsPool] = useState(0)
     const [averageRate, setAverageRate] = useState(0)
     const [ethBalance, setEthBalance] = useState(0)
 
@@ -27,9 +31,9 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
     const [auctionRows, setAuctionsRows] = useState([])
 
-    const [graphData, setGraphData] = useState([])
-
     const [isSummaryBetsLoading, setIsSummaryBetsLoading] = useState(false)
+
+    const graphData = useSelector(({ graph }) => graph.graphDots)
 
     const getAuctionPool = (day) => {
         let result = 0;
@@ -177,10 +181,13 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                     })
 
 
-                contractService.getFirstAuction()
+                !graphData.length && contractService.getFirstAuction()
                     .then(async auctionObj => {
-                        const graphDots = []
-                        for (let i = auctionObj[1]; i <= days; i++) {
+                        const graphDots = [{
+                            day: 0,
+                            value: 0
+                        }]
+                        for (let i = auctionObj[1]; i < days; i++) {
                             let value = await contractService.xfLobby(i)
 
                             const graphDot = {
@@ -191,9 +198,13 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                             if (+value !== 0) {
                                 graphDots.push(graphDot)
                             }
+
+                            if (i === days) {
+                                setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
+                            }
                         }
 
-                        setGraphData(graphDots)
+                        dispatch(graphActions.setDots(graphDots))
                     })
                     .catch(err => console.log(err))
 
@@ -256,7 +267,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
         <div className="auction">
             <div className="row row--lg">
                 <h1 className="auction__title">Auction</h1>
-                <Graph isDarkTheme={isDarkTheme} data={graphData} />
+                <Graph dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} data={graphData} />
                 <SummaryBets
                     isDarkTheme={isDarkTheme}
                     currentDays={currentDays}

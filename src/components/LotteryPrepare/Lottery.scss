@@ -7,9 +7,29 @@
   &__title {
     text-align: center;
   }
+  &__rule {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    font-size: 14px;
+    opacity: 0.9;
+    line-height: 17px;
+    img {
+      margin-right: 8px;
+    }
+  }
+  &__subtitle {
+    opacity: 0.9;
+    font-family: BM;
+    font-size: 14px;
+    text-align: center;
+    line-height: 17px;
+    margin-top: 15px;
+  }
   &__content {
     padding: 30px;
-    margin-top: 30px;
+    margin-top: 40px;
   }
   &__info {
     display: flex;
@@ -28,6 +48,7 @@
       font-size: 14px;
       line-height: 17px;
       color: $black;
+      text-transform: uppercase;
     }
     &-content {
       font-size: 24px;

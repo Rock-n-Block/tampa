@@ -1,13 +1,17 @@
 import BigNumber from 'bignumber.js';
+import classNames from 'classnames';
 import React, { useState } from 'react';
 
-import { Lottery, LotteryHistory } from '../../components';
+import { LotteryPrepare, LotteryHistory, LotteryActive } from '../../components';
 import ContractService from '../../utils/contractService';
 
 import './Lottery.scss'
 
 const LotteryPage = ({ isDarkTheme, userAddress }) => {
+    const navItems = ["today's lottery", "tomorrow's lottery"]
     const [contractService] = useState(new ContractService())
+
+    const [activeTab, setActiveTab] = useState(0)
 
     const [amountOfDraw, setAmountOfDraw] = useState(0)
     const [lotteryPercents, setLotteryPercents] = useState({})
@@ -97,11 +101,23 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
     return (
         <div className="p-lottery">
             <div className="row row--md">
-                <Lottery
+                <div className="p-lottery__nav container">
+                    <div className="nav">
+                        {
+                            navItems.map((item, index) => {
+                                return <div key={index} onClick={() => setActiveTab(index)} className={classNames('nav__item', {
+                                    'active': activeTab === index
+                                })}>{item}</div>
+                            })
+                        }
+                    </div>
+                </div>
+                {activeTab === 0 && <LotteryPrepare
                     amountOfDraw={amountOfDraw}
                     userAddress={userAddress}
                     lotteryPercents={lotteryPercents}
-                />
+                />}
+                {activeTab === 1 && <LotteryActive />}
                 <LotteryHistory data={lotteryHistoryItems} />
             </div>
         </div>

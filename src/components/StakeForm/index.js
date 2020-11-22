@@ -3,6 +3,7 @@ import { InputNumber } from 'antd';
 import BigNumber from 'bignumber.js';
 
 import { RowItemTooltip } from '../../components';
+import decimals from '../../utils/web3/decimals';
 
 import './StakeForm.scss'
 
@@ -13,7 +14,7 @@ import questionImgDark from '../../assets/img/question-d.svg';
 import Spiner from '../../assets/img/oval.svg';
 
 const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonusDay, isTokenApproving, handleApproveToken, handleStake, handleCalcBonusDay, calcLBP, calcBPB }) => {
-    const [amount, setAmount] = React.useState(10)
+    const [amount, setAmount] = React.useState('')
     const [days, setDays] = React.useState(90)
 
     const [valueBonus, setValueBonus] = React.useState(0)
@@ -36,8 +37,10 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
     }
 
     React.useEffect(() => {
-        setTimeBonus(calcLBP(amount, days).toString())
-        setValueBonus(calcBPB(amount).toString())
+        const calclbp = calcLBP(amount, days)
+        const calcbpb = calcBPB(amount)
+        setTimeBonus(calclbp ? calclbp.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed() : 0)
+        setValueBonus(calcbpb ? calcbpb.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed() : 0)
     }, [amount, days])
 
     return (
@@ -110,7 +113,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
                                 <span>
-                                    <RowItemTooltip tooltipText={amount ? new BigNumber(timeBonus).plus(valueBonus).toString() : 0} parent="stakes">{amount ? new BigNumber(timeBonus).plus(valueBonus).toString() : 0}</RowItemTooltip>
+                                    <RowItemTooltip tooltipText={amount ? new BigNumber(timeBonus).plus(valueBonus).toFixed() : 0} parent="stakes">{amount ? new BigNumber(timeBonus).plus(valueBonus).toFixed() : 0}</RowItemTooltip>
                                 </span>
                                 <span>Total</span>
                             </div>
@@ -128,7 +131,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
                                 <span>
-                                    <RowItemTooltip tooltipText={valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toString() : 0} parent="stakes">{valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toString() : 0}</RowItemTooltip>
+                                    <RowItemTooltip tooltipText={valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toFixed() : 0} parent="stakes">{valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toFixed() : 0}</RowItemTooltip>
                                 </span>
                                 <span>Effective Tampa</span>
                             </div>

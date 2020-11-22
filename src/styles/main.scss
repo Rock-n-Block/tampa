@@ -20,11 +20,14 @@ body {
   padding: 0 10px;
   width: 100%;
   margin: 0 auto;
-  &--md {
+  &--sm {
     max-width: 630px;
   }
   &--lg {
     max-width: 920px;
+  }
+  &--md {
+    max-width: 690px;
   }
 }
 
@@ -38,6 +41,7 @@ h1 {
   line-height: 36px;
   color: $red;
   font-family: BR;
+  text-transform: uppercase;
 }
 .ant-input-number-handler-wrap {
   display: none !important;
@@ -97,6 +101,31 @@ input {
   }
 }
 
+.nav {
+  padding: 3px;
+  background: #ededf2;
+  box-shadow: 3px 3px 40px rgba(119, 116, 159, 0.05);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  &__item {
+    font-size: 14px;
+    line-height: 17px;
+    color: $black;
+    cursor: pointer;
+    padding: 9px 25px 8px;
+    text-transform: uppercase;
+    &.active {
+      color: $red;
+      background: #ffffff;
+      box-shadow: 20px 30px 85px rgba(119, 116, 159, 0.15),
+        inset 0px 12px 20px rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+    }
+  }
+}
+
 .t-row {
   display: grid;
   grid-template-columns: 75px 70px 70px 50px 50px 62px 75px 70px 65px;
@@ -142,6 +171,16 @@ input {
         rgba(91, 86, 165, 0.7) 42.05%,
         #43408b 104.81%
       );
+    }
+  }
+  .nav {
+    background: #504e9a;
+    box-shadow: 3px 3px 40px rgba(119, 116, 159, 0.05);
+    &__item {
+      color: rgba(255, 255, 255, 0.9);
+      &.active {
+        background: $blue;
+      }
     }
   }
 }
