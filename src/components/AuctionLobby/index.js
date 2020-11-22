@@ -47,12 +47,10 @@ export default class AuctionLobby extends React.PureComponent {
                     <div className="a-lobby__row t-row t-row__head">
                         <div className="a-lobby__row-head-item">Day</div>
                         <div className="a-lobby__row-head-item">Tampa Pool</div>
-                        <div className="a-lobby__row-head-item">Tampa\ETH</div>
-                        {/* <div className="a-lobby__row-head-item">State</div> */}
+                        <div className="a-lobby__row-head-item">eth \ tampa</div>
                         <div className="a-lobby__row-head-item">Tampa Received</div>
                         <div className="a-lobby__row-head-item">Your Entry</div>
                         <div className="a-lobby__row-head-item">Daily Entry</div>
-                        {/* <div className="a-lobby__row-head-item a-lobby__red">Status</div> */}
                     </div>
                     {this.props.rows.length ?
                         this.props.rows.map((item, index) => {
@@ -66,7 +64,6 @@ export default class AuctionLobby extends React.PureComponent {
                                 <div className="a-lobby__row-item">
                                     <RowItemTooltip tooltipText={item.eth} parent="a-lobby">{item.eth}</RowItemTooltip>
                                 </div>
-                                {/* <div className="a-lobby__row-item">{item.state ? 'Open' : 'Close'}</div> */}
                                 <div className="a-lobby__row-item">
                                     <RowItemTooltip tooltipText={item.received} parent="a-lobby">{item.received}</RowItemTooltip>
                                 </div>
@@ -76,7 +73,6 @@ export default class AuctionLobby extends React.PureComponent {
                                 <div className="a-lobby__row-item">
                                     <RowItemTooltip tooltipText={item.dailyEntry} parent="a-lobby">{item.dailyEntry}</RowItemTooltip>
                                 </div>
-                                {/* <div className="a-lobby__row-item a-lobby__red">{item.status ? 'Active' : 'Inactive'}</div> */}
                                 <div className="a-lobby__row-item">
                                     {item.state && <Popover
                                         getPopupContainer={() => document.getElementById(`a-lobby`)}
@@ -91,7 +87,7 @@ export default class AuctionLobby extends React.PureComponent {
                                                     <img src={ethImg} alt="" />
                                                     <span>ETH</span>
                                                 </div>
-                                                <button onClick={() => this.props.handleEnterAuction(this.state.auctionValue)} className="a-lobby__popover-btn btn">BID</button>
+                                                <button onClick={() => this.props.handleEnterAuction(this.state.auctionValue)} className="a-lobby__popover-btn btn">send</button>
                                                 <div className="a-lobby__popover-text">Your balance: {this.props.ethBalance} <span onClick={() => this.setState({ auctionValue: this.props.ethBalance })}>MAX</span></div>
                                             </div>
                                         } >

@@ -1,20 +1,32 @@
 @import '../../styles/vars';
 .ant-modal {
+  padding-bottom: 0 !important;
   &-content {
-    background-color: white !important;
     color: $black;
+    background: linear-gradient(
+        190.57deg,
+        rgba(255, 255, 255, 0.56) 19.25%,
+        rgba(248, 248, 255, 0.71) 54.39%,
+        rgba(255, 255, 255, 0.59) 90.02%
+      ),
+      #ffffff;
+    border: 4px solid #f2f2f3 !important;
+    box-shadow: 10px 10px 85px rgba(119, 116, 159, 0.8) !important;
+    border-radius: 12px !important;
     img {
       width: 70px;
       margin-bottom: 20px;
+      margin-top: 20px;
     }
     p {
       font-size: 14px;
       line-height: 17px;
+      margin-bottom: 20px;
     }
   }
   &-body {
     text-align: center;
-    padding: 50px 25px !important;
+    padding: 0 !important;
   }
   &-close-x {
     cursor: pointer;

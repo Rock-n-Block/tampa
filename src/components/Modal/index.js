@@ -26,6 +26,7 @@ const ModalComponent = () => {
         <Modal
             visible={isOpen}
             onOk={handleOk}
+            centered={true}
             onCancel={handleOk}
             footer={[
                 <button key="submit" type="primary" className="btn" onClick={handleOk}>

@@ -1,11 +1,9 @@
 export default {
     TAMPA: {
-        ADDRESS: '0x2FabB420c78F0B51713BEf4D5653bfbFE75b8045',
+        ADDRESS: '0xE081730EFA09603a3fb5d66d3b14a522fdB8f6b7',
         ABI: [
             {
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "constructor"
@@ -438,9 +436,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "allocatedSupply",
                 "outputs": [
                     {
@@ -621,9 +617,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "currentDay",
                 "outputs": [
                     {
@@ -713,9 +707,7 @@ export default {
                     }
                 ],
                 "name": "dailyDataUpdate",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -743,9 +735,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "decimals",
                 "outputs": [
                     {
@@ -786,9 +776,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "defaultReferrerAddr",
                 "outputs": [
                     {
@@ -811,9 +799,7 @@ export default {
                     }
                 ],
                 "name": "endLoteryDay",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -884,6 +870,16 @@ export default {
                         "internalType": "uint16",
                         "name": "unlockedDay",
                         "type": "uint16"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "unstakePayout",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "unstakeDividends",
+                        "type": "uint256"
                     }
                 ],
                 "payable": false,
@@ -892,9 +888,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "flushAddr",
                 "outputs": [
                     {
@@ -951,9 +945,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "getFirstAuction",
                 "outputs": [
                     {
@@ -1024,9 +1016,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "globalInfo",
                 "outputs": [
                     {
@@ -1041,9 +1031,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "globals",
                 "outputs": [
                     {
@@ -1114,9 +1102,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "isOwner",
                 "outputs": [
                     {
@@ -1131,9 +1117,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "lastEndedLoteryDay",
                 "outputs": [
                     {
@@ -1231,9 +1215,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "name",
                 "outputs": [
                     {
@@ -1248,9 +1230,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "owner",
                 "outputs": [
                     {
@@ -1265,13 +1245,9 @@ export default {
             },
             {
                 "constant": false,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "renounceOwnership",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -1286,9 +1262,7 @@ export default {
                     }
                 ],
                 "name": "setDefaultReferrerAddr",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -1303,9 +1277,7 @@ export default {
                     }
                 ],
                 "name": "setFlushAddr",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -1346,9 +1318,7 @@ export default {
                     }
                 ],
                 "name": "stakeEnd",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -1373,9 +1343,7 @@ export default {
                     }
                 ],
                 "name": "stakeGoodAccounting",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -1446,18 +1414,14 @@ export default {
                     }
                 ],
                 "name": "stakeStart",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "symbol",
                 "outputs": [
                     {
@@ -1498,9 +1462,7 @@ export default {
             },
             {
                 "constant": true,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "totalSupply",
                 "outputs": [
                     {
@@ -1580,9 +1542,7 @@ export default {
                     }
                 ],
                 "name": "transferOwnership",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -1628,22 +1588,16 @@ export default {
                     }
                 ],
                 "name": "withdrawLotery",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
                 "constant": false,
-                "inputs": [
-
-                ],
+                "inputs": [],
                 "name": "xfFlush",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -1679,9 +1633,7 @@ export default {
                     }
                 ],
                 "name": "xfLobbyEnter",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": true,
                 "stateMutability": "payable",
                 "type": "function"
@@ -1737,9 +1689,7 @@ export default {
                     }
                 ],
                 "name": "xfLobbyExit",
-                "outputs": [
-
-                ],
+                "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"

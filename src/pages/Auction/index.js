@@ -95,6 +95,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
             auctionRow.state = +i === +days ? true : false
 
             const received = await contractService.tampaReceivedAuction(i, userAddress)
+
             auctionRow.received = new BigNumber(received).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
             auctionRow.yourEntry = currentRawAmount.toFixed();
@@ -105,7 +106,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
             auctionRow.status = memberObj.headIndex < memberObj.tailIndex
 
-            auctionRow.eth = new BigNumber(auctionRow.dailyEntry).dividedBy(auctionRow.pool).toFixed()
+            auctionRow.eth = new BigNumber(auctionRow.pool).dividedBy(auctionRow.dailyEntry).toFixed()
 
             newAuctionsRows.push(auctionRow)
         }
@@ -149,7 +150,9 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                                 const dailyEntry = await contractService.xfLobby(i - 1)
                                 const pool = getAuctionPool(i)
 
-                                newAverageRate = newAverageRate.plus(new BigNumber(dailyEntry).dividedBy(pool))
+                                console.log(dailyEntry, 'pool')
+
+                                newAverageRate = newAverageRate.plus(new BigNumber(pool).dividedBy(new BigNumber(dailyEntry).dividedBy(new BigNumber(10).pow(decimals.TAMPA))))
                             }
                         }
 

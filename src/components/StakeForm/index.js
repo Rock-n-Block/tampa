@@ -13,7 +13,7 @@ import questionImg from '../../assets/img/question.svg';
 import questionImgDark from '../../assets/img/question-d.svg';
 import Spiner from '../../assets/img/oval.svg';
 
-const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonusDay, isTokenApproving, handleApproveToken, handleStake, handleCalcBonusDay, calcLBP, calcBPB }) => {
+const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTokenApproving, handleApproveToken, handleStake, calcLBP, calcBPB }) => {
     const [amount, setAmount] = React.useState('')
     const [days, setDays] = React.useState(90)
 
@@ -26,14 +26,10 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
 
     const handleChangeTokenAmount = (value) => {
         setAmount(value)
-
-        handleCalcBonusDay(value, days)
     }
 
     const handleChangeDays = (days) => {
         setDays(days)
-
-        handleCalcBonusDay(amount, days)
     }
 
     React.useEffect(() => {
@@ -140,7 +136,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, bonu
                 </div>
                 <div className="s-form__bonus-day">
                     <div className="s-form__info-item">
-                        <span>{bonusDay}</span>
+                        <span>{Math.floor(days / 5)}</span>
                         <span>bonus day</span>
                     </div>
                 </div>

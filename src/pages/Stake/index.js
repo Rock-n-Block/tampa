@@ -25,7 +25,6 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
     const [totalTimeBonus, setTotalTimeBonus] = useState(0)
     const [totalValueBonus, setTotalValueBonus] = useState(0)
     const [totalPaidAmount, setTotalPaidAmount] = useState(0)
-    const [bonusDay, setBonusDay] = useState(0)
 
     const [activeStakes, setActiveStakes] = useState([])
     const [activeStakesRefreshing, setActiveStakesRefreshing] = useState([])
@@ -154,9 +153,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
 
                         newTotalShares = newTotalShares.plus(activeStakesItem.currentValue)
 
-                        activeStakesItem.paidAmount = await contractService.getUnstakeParams(userAddress, activeStakesItem.index, stake.stakeId)
-
-                        activeStakesItem.paidAmount = new BigNumber(activeStakesItem.paidAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                        activeStakesItem.paidAmount = stake.unstakePayout ? new BigNumber(stake.unstakePayout).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed() : 0
 
                         newTotalPaidAmount = newTotalPaidAmount.plus(activeStakesItem.paidAmount)
 
@@ -258,21 +255,6 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
             .catch(err => console.log(err))
     }
 
-    const handleCalcBonusDay = (amount, days) => {
-        contractService.dailyData(startDay - 1)
-            .then(res => {
-                const { dayPayoutTotal, dayStakeSharesTotal } = res
-                const formAmount = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(decimals.TAMPA))
-
-                const calcBonusDay = +dayStakeSharesTotal === 0 ? 0 : formAmount.multipliedBy(dayPayoutTotal).multipliedBy(new BigNumber(days).dividedBy(5)).dividedBy(dayStakeSharesTotal)
-
-                setBonusDay(calcBonusDay.toString())
-
-                // dayPayoutTotal * amountToStake * (daysToStake / 5) / dayStakeSharesTotal
-            })
-            .catch(err => console.log(err))
-    }
-
     const handleApproveToken = () => {
         setIsTokenApproving(true)
         contractService.approveToken(userAddress, (res) => {
@@ -332,8 +314,6 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     isTokenApproving={isTokenApproving}
                     handleApproveToken={handleApproveToken}
                     handleStake={handleStake}
-                    bonusDay={bonusDay}
-                    handleCalcBonusDay={handleCalcBonusDay}
                     calcLBP={calcLBP}
                     calcBPB={calcBPB}
                 />
