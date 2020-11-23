@@ -204,34 +204,6 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                     })
 
 
-                !graphData.length && contractService.getFirstAuction()
-                    .then(async auctionObj => {
-                        const graphDots = [{
-                            day: 0,
-                            value: 0
-                        }]
-                        for (let i = auctionObj[1]; i < days; i++) {
-                            let value = await contractService.xfLobby(i)
-
-                            const graphDot = {
-                                day: i,
-                                value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
-                            }
-
-                            if (+value !== 0) {
-                                graphDots.push(graphDot)
-                            }
-
-                            if (i === days) {
-                                setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
-                            }
-                        }
-
-                        dispatch(graphActions.setDots(graphDots))
-                    })
-                    .catch(err => console.log(err))
-
-
             })
             .catch(err => console.log(err))
 
@@ -241,6 +213,42 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
         setCurrentPage(page)
 
         getRows(page, currentDays, firstAuctionObj)
+    }
+    const getGraphDots = () => {
+        if (!graphData.length && userAddress && currentDays) {
+            contractService.getFirstAuction()
+                .then(async auctionObj => {
+                    const graphDots = []
+                    let isWasZeroDay = false
+                    for (let i = auctionObj[1]; i < currentDays; i++) {
+                        let value = await contractService.xfLobby(i)
+
+                        const graphDot = {
+                            day: i,
+                            value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                        }
+
+                        if (+value !== 0) {
+                            graphDots.push(graphDot)
+                        }
+
+                        if (i === currentDays) {
+                            setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
+                        }
+                        if (i === 0) {
+                            isWasZeroDay = true
+                        }
+                    }
+                    if (!isWasZeroDay) {
+                        graphDots.unshift({
+                            day: 0,
+                            value: 0
+                        })
+                    }
+                    dispatch(graphActions.setDots(graphDots))
+                })
+                .catch(err => console.log(err))
+        }
     }
 
     const handleEnterAuction = (amount) => {
@@ -285,6 +293,9 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
             window.localStorage['referal'] = referal
         }
     }, [])
+    React.useEffect(() => {
+        getGraphDots()
+    }, [userAddress, currentDays])
 
     return (
         <div className="auction" id="auction">

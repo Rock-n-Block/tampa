@@ -182,6 +182,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
             contractService.getFirstAuction()
                 .then(async auctionObj => {
                     const graphDots = []
+                    let isWasZeroDay = false
                     for (let i = auctionObj[1]; i < startDay; i++) {
                         let value = await contractService.xfLobby(i)
 
@@ -197,12 +198,16 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                         if (i === startDay) {
                             setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                         }
+                        if (i === 0) {
+                            isWasZeroDay = true
+                        }
                     }
-                    graphDots.unshift({
-                        day: 0,
-                        value: 0
-                    })
-                    console.log(graphDots, 'graphDots')
+                    if (!isWasZeroDay) {
+                        graphDots.unshift({
+                            day: 0,
+                            value: 0
+                        })
+                    }
                     dispatch(graphActions.setDots(graphDots))
                 })
                 .catch(err => console.log(err))

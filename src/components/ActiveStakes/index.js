@@ -85,7 +85,9 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                             {!item.isEnded && <div className="stakes__row-item">
                                 {item.progress}%
                         </div>}
-                            <div className="stakes__row-item">{item.staked}</div>
+                            <div className="stakes__row-item">
+                                <RowItemTooltip tooltipText={item.staked} parent="stakes">{item.staked}</RowItemTooltip>
+                            </div>
                             <div className="stakes__row-item">
                                 <RowItemTooltip tooltipText={item.shares} parent="stakes">{item.shares}</RowItemTooltip>
                             </div>

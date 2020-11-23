@@ -13,7 +13,7 @@ import Spiner from '../../assets/img/oval.svg';
 
 const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTokenApproving, handleApproveToken, handleStake, calcLBP, calcBPB }) => {
     const [amount, setAmount] = React.useState('')
-    const [days, setDays] = React.useState(90)
+    const [days, setDays] = React.useState('')
 
     const [valueBonus, setValueBonus] = React.useState(0)
     const [timeBonus, setTimeBonus] = React.useState(0)
@@ -62,7 +62,7 @@ At the end of every day, a daily stake pool of Jackpot tokens will be calculated
                     <div className="container s-form__days">
                         <div className="s-form__days-head">Days to Stake:</div>
                         <div className="s-form__days-input-box">
-                            <InputNumber value={days} onChange={handleChangeDays} className="s-form__input s-form__days-input" placeholder="90" />
+                            <InputNumber value={days} onChange={handleChangeDays} className="s-form__input s-form__days-input" placeholder="0" />
                         </div>
                     </div>
                 </div>
