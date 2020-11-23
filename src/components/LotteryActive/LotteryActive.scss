@@ -4,6 +4,11 @@
   &__title {
     text-align: center;
   }
+  &__withdraw {
+    padding: 13px 0 11px !important;
+    max-width: 120px !important;
+    margin: 15px 0 10px;
+  }
   &__info {
     &-item {
       border-radius: 12px;

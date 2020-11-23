@@ -13,9 +13,6 @@
   &__title {
     display: flex;
     align-items: center;
-    h1 {
-      margin-right: 10px;
-    }
   }
   &__box {
     display: flex;
@@ -101,7 +98,8 @@
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
-        display: block;
+        display: flex;
+        align-items: center;
       }
       & > span:first-child {
         color: $red;
@@ -136,9 +134,6 @@
       font-size: 14px;
       line-height: 17px;
       font-family: BR;
-      span {
-        margin-right: 5px;
-      }
     }
     &-box {
       position: relative;

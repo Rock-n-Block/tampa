@@ -43,7 +43,7 @@
     right: 20px;
     height: 80px;
     padding: 20px;
-    display: none;
+    display: flex;
     justify-content: flex-end;
     font-family: BM;
     font-size: 20px;
@@ -65,14 +65,20 @@
   }
   .lottery-item {
     line-height: 80px;
-    font-size: 45px;
+    font-size: 30px;
     text-align: center;
     will-change: line-height;
-    &.winner {
-      color: $red;
-    }
+    overflow: hidden;
+    text-overflow: ellipsis;
     &_text {
       will-change: transform;
+      max-width: 350px;
+      margin: 0 auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      &.winner {
+        color: $red;
+      }
     }
   }
   .lottery-list {
@@ -97,8 +103,10 @@
       }
     }
     .lottery-item {
-      &.winner {
-        color: $blue;
+      &_text {
+        &.winner {
+          color: $blue;
+        }
       }
     }
   }

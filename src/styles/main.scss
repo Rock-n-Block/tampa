@@ -186,6 +186,7 @@ input {
 }
 
 .ant-tooltip {
+  max-width: 400px !important;
   &-inner {
     background: linear-gradient(
         190.57deg,
@@ -197,7 +198,8 @@ input {
     border: 4px solid #f2f2f3 !important;
     border-radius: 12px !important;
     color: $black;
-    width: fit-content;
+    width: max-content;
+    max-width: 400px;
   }
   &-arrow {
     width: 16px;

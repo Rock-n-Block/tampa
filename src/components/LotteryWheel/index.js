@@ -1,55 +1,49 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import lotteryWheel from '../../utils/lotteryWheel';
-import { lotteryActions } from '../../redux/actions';
 
 import './LotteryWheel.scss'
 
 import lotteryEndAudio from '../../assets/mp3/click_wheel.mp3';
 import lotteryPlayingAudio from '../../assets/mp3/test.mp3';
 
-const LotteryWheel = () => {
-    const dispatch = useDispatch();
+const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted }) => {
+
+    const [lottery, setLottery] = React.useState(null)
 
     const container = React.useRef()
     const audioEnd = React.useRef()
     const playingAudio = React.useRef()
 
-    const isLotteryStarted = useSelector(({ lottery }) => lottery.isLotteryStarted)
-
-    const handleStartLottery = () => {
-        dispatch(lotteryActions.startLottery())
-        window.localStorage.isLotteryStarted = true
-    }
-
-
     const iniLottery = (params) => {
-
         const data = [];
-        for (let k = 0; k < 100; k++) {
-            data.push('0x' + ('00000000000' + k.toString(16)).slice(-8));
+        for (let k = 0; k < 30; k++) {
+            data.push(...params.lotteryMembers);
         }
         params.data = data;
         const lottery = new lotteryWheel(params);
+        setLottery(lottery)
         lottery.start();
 
-        setTimeout(() => {
-            lottery.showWinner('0x00000020');
-        }, 0)
-        setTimeout(() => {
-            lottery.setWinner('0x00000020')
-        }, 10000)
+        if (lotteryWinner) {
+            setTimeout(() => {
+                lottery.showWinner(lotteryWinner);
+            }, 0)
+        }
+        // setTimeout(() => {
+        //     lottery.setWinner('0x00000020')
+        // }, 10000)
     }
 
     React.useEffect(() => {
-        if (isLotteryStarted) {
+        if (isLotteryStarted && lotteryMembers) {
             iniLottery({
                 element: container.current,
                 data: [],
                 visibleElementsCount: 20,
                 speed: 1,
                 audioEnd: audioEnd.current,
+                lotteryMembers: lotteryMembers,
                 playingAudio: playingAudio.current,
                 callback: () => {
                     delete window.localStorage.isLotteryStarted
@@ -60,7 +54,6 @@ const LotteryWheel = () => {
 
     return (
         <div className="l-wheel">
-            {!isLotteryStarted && <button onClick={handleStartLottery} className="l-wheel__btn btn">START</button>}
             <div className="l-wheel__content" ref={container}></div>
             <audio ref={audioEnd} src={lotteryEndAudio}></audio>
             <audio ref={playingAudio} src={lotteryPlayingAudio} loop></audio>

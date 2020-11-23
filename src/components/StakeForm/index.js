@@ -2,15 +2,13 @@ import React from 'react';
 import { InputNumber } from 'antd';
 import BigNumber from 'bignumber.js';
 
-import { RowItemTooltip } from '../../components';
+import { RowItemTooltip, QuestionTooltip } from '../../components';
 import decimals from '../../utils/web3/decimals';
 
 import './StakeForm.scss'
 
 import tampaImg from '../../assets/img/tampa.svg';
 import tampaDarkImg from '../../assets/img/tampa-dark.svg';
-import questionImg from '../../assets/img/question.svg';
-import questionImgDark from '../../assets/img/question-d.svg';
 import Spiner from '../../assets/img/oval.svg';
 
 const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTokenApproving, handleApproveToken, handleStake, calcLBP, calcBPB }) => {
@@ -40,12 +38,13 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
     }, [amount, days])
 
     return (
-        <div className="s-form">
+        <div className="s-form" id="s-form">
             <div className="container s-form__container">
                 <div className="s-form__box s-form__head">
                     <div className="s-form__title">
                         <h1>Stake</h1>
-                        {isDarkTheme ? <img className="s-form__quest-img" src={questionImgDark} alt="" /> : <img className="s-form__quest-img" src={questionImg} alt="" />}
+                        <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="You can stake your Jackpot token for a fixed number of days to earn interest on them. Make sure to stake more than 5 days to be eligible to get bonus days reward and participation in the lucky draw.
+At the end of every day, a daily stake pool of Jackpot tokens will be calculated and it will be shared and allocate to all the open stakes between all the open stakes based on their staked tokens amount which will be available for users to withdraw when the stake ends." />
                     </div>
                     <div className="s-form__balance">
                         Your balance: {walletBalance} <span onClick={handleSendMax}>MAX</span>
@@ -94,7 +93,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
             <div className="container s-form__bonus">
                 <div className="s-form__bonus-title">
                     <span>Bonus Info</span>
-                    {isDarkTheme ? <img className="s-form__quest-img" src={questionImgDark} alt="" /> : <img className="s-form__quest-img" src={questionImg} alt="" />}
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="For starting a stake you get a bonus reward for your stake which is based on the amount and time that you are staking." />
                 </div>
                 <div className="s-form__bonus-content">
                     <div className="s-form__bonus-box">
@@ -137,7 +136,9 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                 <div className="s-form__bonus-day">
                     <div className="s-form__info-item">
                         <span>{Math.floor(days / 5)}</span>
-                        <span>bonus day</span>
+                        <span>bonus day
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="For starting a stake you get a bonus reward for your stake which is based on the amount and time that you are staking." />
+                        </span>
                     </div>
                 </div>
             </div>

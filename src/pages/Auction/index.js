@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { SummaryBets, AuctionLobby, Graph } from '../../components';
+import { SummaryBets, AuctionLobby, Graph, QuestionTooltip } from '../../components';
 import ContractService from '../../utils/contractService';
 import decimals from '../../utils/web3/decimals';
 import { graphActions } from '../../redux/actions';
@@ -51,9 +51,28 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
         return result.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
     }
 
+    const calcReceived = async (day, memberEntry, currentRawAmount, pool) => {
+
+        const dailyEntryCurrentDay = await contractService.xfLobby(day)
+
+        console.log(dailyEntryCurrentDay, 'dailyEntryCurrentDay', day)
+
+        let calcTotalReceive = +dailyEntryCurrentDay !== 0 ? new BigNumber(currentRawAmount.dividedBy(dailyEntryCurrentDay).multipliedBy(pool)) : new BigNumber(0)
+
+
+        const defaultReferrerAddr = await contractService.defaultReferrerAddr()
+
+        if (memberEntry.referrerAddr !== 0 && memberEntry.referrerAddr !== userAddress && memberEntry.referrerAddr !== defaultReferrerAddr) {
+            calcTotalReceive = calcTotalReceive.multipliedBy(1.05)
+        }
+
+        return calcTotalReceive.toFixed()
+    }
+
     const getRows = React.useCallback(async (page = 1, days, auctionObj) => {
         setAuctionsRows([])
         let newAuctionsRows = []
+        let newTotalReceive = new BigNumber(0)
 
         const newPageCount = Math.ceil(new BigNumber(days).minus(+auctionObj[1]).dividedBy(5))
 
@@ -70,11 +89,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
             const memberObj = await contractService.xfLobbyMembers(i, userAddress)
 
-            for (let j = +memberObj.headIndex; j < +memberObj.tailIndex; j++) {
-                const memberEntry = await contractService.xfLobbyEntry(userAddress, i, j)
-                currentRawAmount = new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA))
-            }
-
+            let memberEntry = {}
 
             const auctionRow = {
                 countDay: i,
@@ -82,21 +97,32 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                 pool: '100,000',
                 eth: '100,000',
                 state: 'Open',
-                received: '100,000',
+                received: '0',
                 yourEntry: '100,000',
                 dailyEntry: '20.10.2020',
                 status: 'Active'
             }
 
-            auctionRow.day = await contractService.getDayUnixTime(i)
-
             auctionRow.pool = getAuctionPool(i)
 
+            for (let j = +memberObj.headIndex; j < +memberObj.tailIndex; j++) {
+                memberEntry = await contractService.xfLobbyEntry(userAddress, i, j)
+                currentRawAmount = new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA))
+
+                // const received = await contractService.tampaReceivedAuction(i, userAddress)
+                const received = await calcReceived(i, memberEntry, currentRawAmount, auctionRow.pool)
+
+                console.log(received, 'received')
+
+                auctionRow.received = new BigNumber(received).multipliedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+
+                newTotalReceive = newTotalReceive.plus(auctionRow.received)
+            }
+
+
+            auctionRow.day = await contractService.getDayUnixTime(i)
+
             auctionRow.state = +i === +days ? true : false
-
-            const received = await contractService.tampaReceivedAuction(i, userAddress)
-
-            auctionRow.received = new BigNumber(received).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
             auctionRow.yourEntry = currentRawAmount.toFixed();
 
@@ -106,12 +132,13 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
             auctionRow.status = memberObj.headIndex < memberObj.tailIndex
 
-            auctionRow.eth = new BigNumber(auctionRow.pool).dividedBy(auctionRow.dailyEntry).toFixed()
+            auctionRow.eth = +auctionRow.dailyEntry !== 0 ? new BigNumber(auctionRow.pool).dividedBy(auctionRow.dailyEntry).toFixed() : 0
 
             newAuctionsRows.push(auctionRow)
         }
 
         setAuctionsRows(newAuctionsRows)
+        setTotalReceive(newTotalReceive.toFixed())
     }, [currentPage, userAddress, contractService])
 
     const getData = React.useCallback(() => {
@@ -127,20 +154,27 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
                         getRows(1, days, res)
 
-                        const receivePromises = []
                         let newAverageRate = new BigNumber(0)
                         let rawAmount = new BigNumber(0);
                         let newParticipation = 0
+                        let currentRawAmount = new BigNumber(0);
+                        let newTotalReceive = new BigNumber(0)
 
                         for (let i = res[0] ? +res[1] : days; i <= days; i++) {
 
-                            receivePromises.push(contractService.tampaReceivedAuction(i, userAddress))
-
                             const memberObj = await contractService.xfLobbyMembers(i, userAddress)
+
+                            const pool = getAuctionPool(i)
 
                             for (let j = +memberObj.headIndex; j < +memberObj.tailIndex; j++) {
                                 const memberEntry = await contractService.xfLobbyEntry(userAddress, i, j)
-                                rawAmount = rawAmount.plus(new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)))
+                                currentRawAmount = new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA))
+                                rawAmount = rawAmount.plus(currentRawAmount)
+
+                                // let calcTotalReceive = calcReceived(days, memberEntry, currentRawAmount, pool)
+                                let calcTotalReceive = 0
+
+                                newTotalReceive = newTotalReceive.plus(calcTotalReceive)
                             }
 
 
@@ -148,9 +182,6 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                                 newParticipation++
 
                                 const dailyEntry = await contractService.xfLobby(i - 1)
-                                const pool = getAuctionPool(i)
-
-                                console.log(dailyEntry, 'pool')
 
                                 newAverageRate = newAverageRate.plus(new BigNumber(pool).dividedBy(new BigNumber(dailyEntry).dividedBy(new BigNumber(10).pow(decimals.TAMPA))))
                             }
@@ -166,17 +197,6 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                             })
                             .catch(err => console.log(err))
 
-                        Promise.all(receivePromises)
-                            .then(result => {
-                                let totalReceive = new BigNumber(0)
-
-                                result.map(item => totalReceive = totalReceive.plus(item))
-
-                                setTotalReceive(totalReceive.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
-                            })
-                            .catch(err => {
-                                console.log(err)
-                            })
                         setIsSummaryBetsLoading(false)
                     })
                     .catch(err => {
@@ -267,9 +287,21 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
     }, [])
 
     return (
-        <div className="auction">
+        <div className="auction" id="auction">
             <div className="row row--lg">
-                <h1 className="auction__title">Auction</h1>
+                <h1 className="auction__title">Auction
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="auction"
+                        tooltipText="Auction lobbies are Daily Auctions that offer J tokens for ETH based on the J and ETH pool at the end of the day.<br>
+
+The J token pool in the lobby will start at 5 million TMP per day and decrease to 1 million over the next 365 days. Starting from day 366, the auction pool will be equal to 1 million J tokens per day.<br><br>
+
+Lobbies are daily and restart every day at 01:00 UTC.<br>
+Enter the auction in the first hour to participate in the lottery.<br><br>
+
+Auction lobbies are another way to buy J tokens that might be more profitable than purchasing on exchanges. Plus the ETH spent is rewarded back to Stakers."
+
+                    />
+                </h1>
                 <Graph dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} data={graphData} />
                 <SummaryBets
                     isDarkTheme={isDarkTheme}

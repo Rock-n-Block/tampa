@@ -19,6 +19,8 @@
   }
   &__title {
     font-family: BR;
+    display: flex;
+    align-items: center;
     font-size: 18px;
     line-height: 22px;
     color: $red;

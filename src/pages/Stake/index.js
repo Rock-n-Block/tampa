@@ -151,7 +151,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
 
                         activeStakesItem.currentValue = BigNumber.sum(activeStakesItem.interest, activeStakesItem.shares).toFixed()
 
-                        newTotalShares = newTotalShares.plus(activeStakesItem.currentValue)
+                        newTotalShares = newTotalShares.plus(activeStakesItem.shares)
 
                         activeStakesItem.paidAmount = stake.unstakePayout ? new BigNumber(stake.unstakePayout).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed() : 0
 
@@ -318,7 +318,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     calcBPB={calcBPB}
                 />
                 <Graph to="/auction" dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} data={graphData.length > 7 ? graphData.slice(-7) : graphData} />
-                <ReferrerLink userAddress={userAddress} />
+                <ReferrerLink userAddress={userAddress} isDarkTheme={isDarkTheme} />
             </div>
             <div className="row row--lg">
                 <StakeInfo
@@ -331,6 +331,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     isActiveStakes={isActiveStakes}
                     totalBonusShares={totalBonusShares}
                     totalPaidAmount={totalPaidAmount}
+                    isDarkTheme={isDarkTheme}
                 />
                 <ActiveStakes
                     isDarkTheme={isDarkTheme}

@@ -2,6 +2,10 @@
 .stakes {
   padding: 20px 30px 30px;
   position: relative;
+  &__wrapper {
+    display: flex;
+    align-items: center;
+  }
   &__modal {
     text-align: left;
     padding: 30px;
@@ -54,6 +58,7 @@
   }
   &__nav {
     padding: 3px;
+    margin-right: 15px;
     background: #ededf2;
     box-shadow: 3px 3px 40px rgba(119, 116, 159, 0.05);
     border-radius: 8px;

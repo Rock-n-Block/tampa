@@ -10,6 +10,10 @@ class ContractService {
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
 
+    defaultReferrerAddr = () => {
+        return this.tampaContract.methods.defaultReferrerAddr().call()
+    }
+
     getUnstakeParams = (address, stakeIndex, stakeId) => {
         return this.tampaContract.methods.getUnstakeParams(address, stakeIndex, +stakeId).call()
     }
@@ -60,10 +64,6 @@ class ContractService {
 
     dailyData = (currentDay) => {
         return this.tampaContract.methods.dailyData(currentDay - 1).call()
-    }
-
-    getDayUnixTime = (lockedDay) => {
-        return this.tampaContract.methods.getDayUnixTime(lockedDay).call()
     }
 
     calcPayoutReward = (stakeShares, lockedDay, stakedDays, currentDay, method) => {

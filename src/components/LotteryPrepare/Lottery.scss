@@ -1,11 +1,28 @@
 @import '../../styles/vars';
 
 .lottery {
-  padding: 40px 0 0px;
+  padding: 40px 0px;
   margin-bottom: 40px;
   text-transform: uppercase;
   &__title {
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &__list {
+    padding: 0 30px;
+    margin-top: 35px;
+    font-size: 14px;
+    line-height: 17px;
+    opacity: 0.9;
+    &-head {
+      margin-bottom: 10px;
+    }
+    &-subitem {
+      margin: 8px 0;
+      padding-left: 15px;
+    }
   }
   &__rule {
     display: flex;

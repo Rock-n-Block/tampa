@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Modal } from 'antd';
 import { format } from 'date-fns';
 
-import { RowItemTooltip, AuctionRowLoading } from '../../components';
+import { RowItemTooltip, AuctionRowLoading, QuestionTooltip } from '../../components';
 
 import './ActiveStakes.scss'
 
@@ -50,14 +50,17 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                 })} onClick={handleRefresh}>
                     {isDarkTheme ? <img src={refreshDarkImg} alt="" /> : <img src={refreshImg} alt="" />}
                 </div>
-                <div className="stakes__nav">
-                    {
-                        navItems.map((item, index) => {
-                            return <div key={index} onClick={() => handlecChangeNav(index)} className={classNames('stakes__nav-item', {
-                                'active': activeTab === index
-                            })}>{item}</div>
-                        })
-                    }
+                <div className="stakes__wrapper">
+                    <div className="stakes__nav">
+                        {
+                            navItems.map((item, index) => {
+                                return <div key={index} onClick={() => handlecChangeNav(index)} className={classNames('stakes__nav-item', {
+                                    'active': activeTab === index
+                                })}>{item}</div>
+                            })
+                        }
+                    </div>
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="stakes" tooltipText="You are subject up to a 100% penalty depending on your stake terms." />
                 </div>
                 <div className={classNames("stakes__row t-row t-row__head", {
                     'stakes__row--ended': activeStakes[0] && activeStakes[0].isEnded

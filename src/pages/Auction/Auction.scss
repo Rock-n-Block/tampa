@@ -1,3 +1,7 @@
 .auction {
   padding-bottom: 200px;
+  &__title {
+    display: flex;
+    align-items: center;
+  }
 }

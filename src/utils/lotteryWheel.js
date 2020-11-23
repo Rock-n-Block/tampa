@@ -49,13 +49,14 @@ export default class Lottery {
     }
 
     setWinner(winner) {
+        debugger
         this.winner = winner
     }
 
     showWinner(winner) {
         this.playingAudio.pause()
         clearInterval(this.interval)
-        const item = document.querySelectorAll('.lottery-item')[5]
+        const item = document.querySelectorAll('.lottery-item')[5].querySelector('.lottery-item_text')
 
         item.innerHTML = winner
         item.classList.add('winner')

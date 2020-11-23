@@ -4,6 +4,8 @@ import {
 } from 'recharts';
 import { Link } from 'react-router-dom';
 
+import { QuestionTooltip } from '../../components';
+
 import './Graph.scss'
 
 import arrowImg from '../../assets/img/arrow.svg';
@@ -15,7 +17,7 @@ import refreshDarkImg from '../../assets/img/refresh-dark.svg';
 const Graph = ({ dividentsPool, isDarkTheme, data, to }) => {
     return (
         <>
-            <div className="container s-graph">
+            <div className="container s-graph" id="s-graph">
                 <div className="s-graph__head">
                     <div className="s-graph__wrapper">
                         <div className="s-graph__text">ETH DIVIDENDS HISTORY</div>
@@ -25,6 +27,7 @@ const Graph = ({ dividentsPool, isDarkTheme, data, to }) => {
                         <div className="s-graph__text">
                             {dividentsPool}
                             {isDarkTheme ? <img src={ethImgDark} alt="" /> : <img src={ethImg} alt="" />}
+                            <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-graph" tooltipText="- 90% of all ETH that enters the daily Auction Lobby is pooled and distributed back out to Stakers. <br>- 5% of ETH is allocated to the lottery pool. <br>- the other 5% ETH reserve for promotion and platform development costs." />
                         </div>
                         <div className="s-graph__text--black">Current Dividends Pool </div>
                     </div>
