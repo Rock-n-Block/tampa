@@ -4,6 +4,9 @@ import { intervalToDuration } from 'date-fns'
 import { Switch } from 'antd';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
+
+import ContractService from '../../utils/contractService';
 
 import { themeActions } from '../../redux/actions';
 
@@ -15,6 +18,9 @@ import MetamaskImg from '../../assets/img/metamask.svg';
 
 const Header = ({ isDarkTheme, userAddress }) => {
     const dispatch = useDispatch()
+    const [contractService] = React.useState(new ContractService())
+
+    const [secondInterval, setSecondInterval] = React.useState(null)
 
     const [timeUntil, setTimeUntil] = React.useState('00:00:00')
     const [isHeaderActive, setIsHeaderActive] = React.useState(false)
@@ -23,18 +29,46 @@ const Header = ({ isDarkTheme, userAddress }) => {
         dispatch(themeActions.toggleTheme(!value))
     }
 
-    const timeCounter = (date) => {
-        const dateObj = intervalToDuration({
-            start: new Date(),
-            end: date
-        })
-        setTimeUntil(`${dateObj.days * 24 + dateObj.hours < 10 ? '0' + (dateObj.days * 24 + dateObj.hours) : dateObj.days * 24 + dateObj.hours}:${dateObj.minutes < 10 ? '0' + dateObj.minutes : dateObj.minutes}:${dateObj.seconds < 10 ? '0' + dateObj.seconds : dateObj.seconds}`)
+    const timeCounter = (seconds) => {
+
+        const hours = Math.floor(seconds / 3600)
+
+        const minutes = Math.floor(seconds / 60) - (hours * 60)
+
+        const sec = seconds - (minutes * 60) - (hours * 3600)
+
+        setTimeUntil(`${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${sec < 10 ? '0' + sec : sec}`)
+    }
+
+    const getDate = () => {
+        contractService.currentDay()
+            .then(day => {
+                window.moment = moment
+                contractService.getDayUnixTime(day)
+                    .then(date => {
+                        const interval = setInterval(() => {
+                            let lotteryDateStart = moment.utc(date * 1000).add(10, 'minutes')
+                            let dateNow = moment.utc()
+
+                            const seconds = lotteryDateStart.diff(dateNow, 'seconds')
+
+                            if (seconds === 0 || seconds < 0) {
+                                clearInterval(secondInterval)
+                                clearInterval(interval)
+
+                                getDate()
+                            }
+
+                            timeCounter(seconds)
+                        }, 1000)
+
+                        setSecondInterval(interval)
+                    })
+            })
     }
 
     React.useEffect(() => {
-        setInterval(() => {
-            timeCounter(1604799025961)
-        }, 1000)
+        getDate()
     }, [])
 
     React.useEffect(() => {

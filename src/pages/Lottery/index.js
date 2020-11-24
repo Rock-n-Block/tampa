@@ -5,6 +5,7 @@ import { isAfter } from 'date-fns';
 import moment from 'moment';
 
 import { LotteryPrepare, LotteryHistory, LotteryActive } from '../../components';
+import decimals from '../../utils/web3/decimals';
 import ContractService from '../../utils/contractService';
 
 import './Lottery.scss'
@@ -93,7 +94,7 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
 
                 contractService.xfLobby(days - 1)
                     .then(amount => {
-                        setAmountOfDraw(new BigNumber(amount).multipliedBy(25).dividedBy(1000).toString())
+                        setAmountOfDraw(new BigNumber(amount).multipliedBy(25).dividedBy(1000).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                     })
                     .catch(err => console.log(err))
 

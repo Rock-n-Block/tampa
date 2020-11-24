@@ -25,14 +25,14 @@ class MetamaskService {
     Web3Provider;
 
     constructor() {
+        // this.providers.infura = new Web3.providers.HttpProvider(
+        //     WEB3_CONSTANTS[networks[IS_PRODUCTION ? 'mainnet' : 'testnet']].WEB3_PROVIDER
+        // );
         this.providers = {};
         this.providers.metamask = Web3.givenProvider;
-        this.providers.infura = new Web3.providers.HttpProvider(
-            WEB3_CONSTANTS[networks[IS_PRODUCTION ? 'mainnet' : 'testnet']].WEB3_PROVIDER
-        );
 
         this.metaMaskWeb3 = window['ethereum'];
-        this.Web3Provider = new Web3(this.providers.infura);
+        this.Web3Provider = new Web3(this.providers.metamask);
         window.web34 = this.Web3Provider
     }
 
@@ -54,7 +54,7 @@ class MetamaskService {
             };
 
             const onError = (errorParams) => {
-                this.Web3Provider.setProvider(this.providers.infura);
+                this.Web3Provider.setProvider(this.providers.metamask);
                 reject(errorParams)
             };
             const usedNetworkVersion = IS_PRODUCTION ? 1 : 42;
@@ -324,7 +324,7 @@ class MetamaskService {
                 )
                 .finally(() => {
                     if (provider) {
-                        this.Web3Provider.eth.setProvider(this.providers.infura);
+                        this.Web3Provider.eth.setProvider(this.providers.metamask);
                     }
                 });
         });

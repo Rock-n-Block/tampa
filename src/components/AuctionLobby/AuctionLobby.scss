@@ -3,11 +3,32 @@
 .a-lobby {
   text-transform: uppercase;
   padding: 30px;
+  position: relative;
   &__title {
     color: $red;
     font-size: 18px;
     line-height: 22px;
   }
+  &__refresh {
+    position: absolute;
+    top: 14px;
+    right: 15px;
+    cursor: pointer;
+    transform: rotate(0);
+    transition: 1s;
+    &.refreshing {
+      animation: rotate 1s linear infinite;
+    }
+  }
+  @keyframes rotate {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+
   &__btn {
     padding: 7px 0 !important;
     &:disabled {

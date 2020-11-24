@@ -199,7 +199,10 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                             setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                         }
                         if (i === 0) {
-                            isWasZeroDay = true
+                            isWasZeroDay = {
+                                day: 0,
+                                value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                            }
                         }
                     }
                     if (!isWasZeroDay) {
@@ -207,6 +210,8 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                             day: 0,
                             value: 0
                         })
+                    } else {
+                        graphDots.unshift(isWasZeroDay)
                     }
                     dispatch(graphActions.setDots(graphDots))
                 })
@@ -322,7 +327,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     calcLBP={calcLBP}
                     calcBPB={calcBPB}
                 />
-                <Graph to="/auction" dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} data={graphData.length > 7 ? graphData.slice(-7) : graphData} />
+                <Graph to="/auction" dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} data={graphData} />
                 <ReferrerLink userAddress={userAddress} isDarkTheme={isDarkTheme} />
             </div>
             <div className="row row--lg">

@@ -37,8 +37,10 @@
       font-size: 13px;
       line-height: 15px;
       display: flex;
-      align-items: center;
       text-transform: uppercase;
+      img {
+        margin-top: -3px;
+      }
     }
     & + & {
       padding-left: 15px;

@@ -8,6 +8,8 @@ import { RowItemTooltip, AuctionRowLoading } from '../../components';
 
 import './AuctionLobby.scss'
 
+import refreshImg from '../../assets/img/refresh.svg';
+import refreshDarkImg from '../../assets/img/refresh-dark.svg';
 import ethImg from '../../assets/img/eth.svg';
 
 export default class AuctionLobby extends React.PureComponent {
@@ -43,12 +45,17 @@ export default class AuctionLobby extends React.PureComponent {
         return (
             <>
                 <div className="container a-lobby" id="a-lobby">
+                    <div className={classNames('a-lobby__refresh', {
+                        'refreshing': this.props.isRefreshing
+                    })} onClick={this.props.handleRefresh}>
+                        {this.props.isDarkTheme ? <img src={refreshDarkImg} alt="" /> : <img src={refreshImg} alt="" />}
+                    </div>
                     <div className="a-lobby__title">Auction lobby</div>
                     <div className="a-lobby__row t-row t-row__head">
                         <div className="a-lobby__row-head-item">Day</div>
-                        <div className="a-lobby__row-head-item">Tampa Pool</div>
-                        <div className="a-lobby__row-head-item">eth \ tampa</div>
-                        <div className="a-lobby__row-head-item">Tampa Received</div>
+                        <div className="a-lobby__row-head-item">Jackpot Pool</div>
+                        <div className="a-lobby__row-head-item">eth \ Jackpot</div>
+                        <div className="a-lobby__row-head-item">Jackpot Received</div>
                         <div className="a-lobby__row-head-item">Your Entry</div>
                         <div className="a-lobby__row-head-item">Daily Entry</div>
                     </div>

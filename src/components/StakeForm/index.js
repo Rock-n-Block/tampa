@@ -56,7 +56,7 @@ At the end of every day, a daily stake pool of Jackpot tokens will be calculated
                         <InputNumber value={amount} onChange={handleChangeTokenAmount} className="s-form__input" placeholder="0,00" />
                         <div className="s-form__img">
                             {isDarkTheme ? <img src={tampaDarkImg} alt="" /> : <img src={tampaImg} alt="" />}
-                            <span>Tampa</span>
+                            <span>Jackpot</span>
                         </div>
                     </div>
                     <div className="container s-form__days">
@@ -128,7 +128,7 @@ At the end of every day, a daily stake pool of Jackpot tokens will be calculated
                                 <span>
                                     <RowItemTooltip tooltipText={valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toFixed() : 0} parent="stakes">{valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toFixed() : 0}</RowItemTooltip>
                                 </span>
-                                <span>Effective Tampa</span>
+                                <span>Effective Jackpot</span>
                             </div>
                         </div>
                     </div>

@@ -9,6 +9,7 @@ import decimals from '../../utils/web3/decimals';
 import { graphActions } from '../../redux/actions';
 
 import './Auction.scss'
+import { getDate } from 'date-fns';
 
 const AuctionPage = ({ isDarkTheme, userAddress }) => {
     const dispatch = useDispatch()
@@ -32,6 +33,8 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
     const [auctionRows, setAuctionsRows] = useState([])
 
     const [isSummaryBetsLoading, setIsSummaryBetsLoading] = useState(false)
+
+    const [isAuctionRefreshing, setAuctionRefreshing] = useState(false)
 
     const graphData = useSelector(({ graph }) => graph.graphDots)
 
@@ -139,9 +142,11 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
         setAuctionsRows(newAuctionsRows)
         setTotalReceive(newTotalReceive.toFixed())
+        setAuctionRefreshing(false)
     }, [currentPage, userAddress, contractService])
 
     const getData = React.useCallback(() => {
+        setAuctionRefreshing(true)
         setIsSummaryBetsLoading(true)
         contractService.currentDay()
             .then(days => {
@@ -152,7 +157,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                     .then(async res => {
                         setFirstAuctionObj(res)
 
-                        getRows(1, days, res)
+                        getRows(currentPage, days, res)
 
                         let newAverageRate = new BigNumber(0)
                         let rawAmount = new BigNumber(0);
@@ -171,8 +176,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                                 currentRawAmount = new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA))
                                 rawAmount = rawAmount.plus(currentRawAmount)
 
-                                // let calcTotalReceive = calcReceived(days, memberEntry, currentRawAmount, pool)
-                                let calcTotalReceive = 0
+                                let calcTotalReceive = await calcReceived(days, memberEntry, currentRawAmount, pool)
 
                                 newTotalReceive = newTotalReceive.plus(calcTotalReceive)
                             }
@@ -214,6 +218,12 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
         getRows(page, currentDays, firstAuctionObj)
     }
+    const handleRefreshAuctions = () => {
+        if (!isAuctionRefreshing) {
+            getData()
+        }
+    }
+
     const getGraphDots = () => {
         if (!graphData.length && userAddress && currentDays) {
             contractService.getFirstAuction()
@@ -326,11 +336,13 @@ Auction lobbies are another way to buy J tokens that might be more profitable th
                 <AuctionLobby
                     handleChangePage={handleChangePage}
                     pageCount={pageCount}
+                    isRefreshing={isAuctionRefreshing}
                     currentPage={currentPage}
                     rows={auctionRows}
                     handleEnterAuction={handleEnterAuction}
                     handleExitAuction={handleExitAuction}
                     ethBalance={ethBalance}
+                    handleRefresh={handleRefreshAuctions}
                 />
             </div>
         </div>
