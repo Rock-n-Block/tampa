@@ -35,7 +35,7 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
             if (winner.who !== '0x0000000000000000000000000000000000000000') {
                 const winnerObj = {
                     date: '20.10.2020',
-                    amount: winner.totalAmount,
+                    amount: new BigNumber(winner.totalAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed(),
                     winner: winner.who
                 }
 
@@ -144,7 +144,7 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
                             setLotteryWinner({
                                 who: res.who,
                                 isMe: res.who.toLowerCase() === userAddress.toLowerCase(),
-                                totalAmount: res.totalAmount
+                                totalAmount: new BigNumber(res.totalAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed(),
                             })
                         }
                     })

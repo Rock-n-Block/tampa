@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import { LotteryWheel } from '../../components';
+import { LotteryWheel, RowItemTooltip } from '../../components';
 
 import './LotteryActive.scss'
 import tampaImg from '../../assets/img/eth.svg';
@@ -17,7 +17,9 @@ const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotterySt
                     <div className="lottery__info-item lottery-a__info-item">
                         <div className="lottery__info-head">{lotteryWinner && lotteryWinner.isMe ? 'you win' : 'winner'}</div>
                         {(lotteryWinner && lotteryWinner.isMe) && <button onClick={handleLotteryWithdraw} className="lottery-a__withdraw btn">withdraw</button>}
-                        <div className="lottery__info-head">{lotteryWinner && lotteryWinner.who}</div>
+                        <div className="lottery__info-head">
+                            <RowItemTooltip tooltipText={lotteryWinner && lotteryWinner.who} parent="stakes">{lotteryWinner && lotteryWinner.who}</RowItemTooltip>
+                        </div>
                     </div>
                     <div className="lottery__info-item lottery-a__info-item">
                         <div className="lottery__info-head">lottery pool from</div>

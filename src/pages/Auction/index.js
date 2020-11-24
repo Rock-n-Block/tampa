@@ -9,7 +9,6 @@ import decimals from '../../utils/web3/decimals';
 import { graphActions } from '../../redux/actions';
 
 import './Auction.scss'
-import { getDate } from 'date-fns';
 
 const AuctionPage = ({ isDarkTheme, userAddress }) => {
     const dispatch = useDispatch()
@@ -18,7 +17,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
     const [contractService] = useState(new ContractService())
 
-    const [currentDays, setCurrentDays] = useState(1)
+    const [currentDays, setCurrentDays] = useState(0)
     const [firstAuctionObj, setFirstAuctionObj] = useState({})
     const [participation, setParticipation] = useState(0)
     const [totalReceive, setTotalReceive] = useState(0)
@@ -58,7 +57,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
         const dailyEntryCurrentDay = await contractService.xfLobby(day)
 
-        console.log(dailyEntryCurrentDay, 'dailyEntryCurrentDay', day)
+        // console.log(dailyEntryCurrentDay, 'dailyEntryCurrentDay', day)
 
         let calcTotalReceive = +dailyEntryCurrentDay !== 0 ? new BigNumber(currentRawAmount.dividedBy(dailyEntryCurrentDay).multipliedBy(pool)) : new BigNumber(0)
 
@@ -112,10 +111,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                 memberEntry = await contractService.xfLobbyEntry(userAddress, i, j)
                 currentRawAmount = new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA))
 
-                // const received = await contractService.tampaReceivedAuction(i, userAddress)
                 const received = await calcReceived(i, memberEntry, currentRawAmount, auctionRow.pool)
-
-                console.log(received, 'received')
 
                 auctionRow.received = new BigNumber(received).multipliedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
@@ -129,7 +125,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
 
             auctionRow.yourEntry = currentRawAmount.toFixed();
 
-            const dailyEntry = await contractService.xfLobby(i - 1)
+            const dailyEntry = await contractService.xfLobby(i)
 
             auctionRow.dailyEntry = new BigNumber(dailyEntry).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
@@ -185,7 +181,7 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                             if (+memberObj.tailIndex > 0) {
                                 newParticipation++
 
-                                const dailyEntry = await contractService.xfLobby(i - 1)
+                                const dailyEntry = await contractService.xfLobby(i)
 
                                 newAverageRate = newAverageRate.plus(new BigNumber(pool).dividedBy(new BigNumber(dailyEntry).dividedBy(new BigNumber(10).pow(decimals.TAMPA))))
                             }
@@ -228,17 +224,20 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
         if (!graphData.length && userAddress && currentDays) {
             contractService.getFirstAuction()
                 .then(async auctionObj => {
-                    const graphDots = []
-                    let isWasZeroDay = false
-                    for (let i = auctionObj[1]; i < currentDays; i++) {
+                    let graphDots = []
+                    let zeroDay = {
+                        day: 0,
+                        value: 0
+                    }
+                    for (let i = auctionObj[1]; i < +currentDays; i++) {
                         let value = await contractService.xfLobby(i)
-
+                        console.log(value, 'value')
                         const graphDot = {
                             day: i,
                             value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
                         }
 
-                        if (+value !== 0) {
+                        if (+value !== 0 && i !== 0) {
                             graphDots.push(graphDot)
                         }
 
@@ -246,15 +245,15 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
                             setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                         }
                         if (i === 0) {
-                            isWasZeroDay = true
+                            zeroDay = {
+                                day: 0,
+                                value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                            }
                         }
                     }
-                    if (!isWasZeroDay) {
-                        graphDots.unshift({
-                            day: 0,
-                            value: 0
-                        })
-                    }
+
+                    graphDots.unshift(zeroDay)
+
                     dispatch(graphActions.setDots(graphDots))
                 })
                 .catch(err => console.log(err))
@@ -334,6 +333,7 @@ Auction lobbies are another way to buy J tokens that might be more profitable th
                     isLoading={isSummaryBetsLoading}
                 />
                 <AuctionLobby
+                    isDarkTheme={isDarkTheme}
                     handleChangePage={handleChangePage}
                     pageCount={pageCount}
                     isRefreshing={isAuctionRefreshing}

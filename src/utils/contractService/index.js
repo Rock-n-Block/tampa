@@ -34,10 +34,6 @@ class ContractService {
         return this.tampaContract.methods.loteryCountLen(day).call()
     }
 
-    xfLobby = (day) => {
-        return this.tampaContract.methods.xfLobby(day).call()
-    }
-
     tampaReceivedAuction = (day, address) => {
         return this.tampaContract.methods.tampaReceivedAuction(day, address).call()
     }
@@ -105,7 +101,7 @@ class ContractService {
     }
 
     xfLobby = (days) => {
-        return this.tampaContract.methods.xfLobby(++days).call()
+        return this.tampaContract.methods.xfLobby(days).call()
     }
 
     balanceOf = (address) => {

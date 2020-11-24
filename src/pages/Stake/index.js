@@ -175,14 +175,17 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
         })
     }
 
-    const graphData = useSelector(({ graph }) => graph.graphDots)
+    const graphData = useSelector(({ graph }) => graph.stakeGraphDots)
 
     const getGraphDots = () => {
         if (!graphData.length && userAddress && startDay) {
             contractService.getFirstAuction()
                 .then(async auctionObj => {
-                    const graphDots = []
-                    let isWasZeroDay = false
+                    let graphDots = []
+                    let zeroDay = {
+                        day: 0,
+                        value: 0
+                    }
                     for (let i = auctionObj[1]; i < startDay; i++) {
                         let value = await contractService.xfLobby(i)
 
@@ -191,7 +194,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                             value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
                         }
 
-                        if (+value !== 0) {
+                        if (+value !== 0 && i !== 0) {
                             graphDots.push(graphDot)
                         }
 
@@ -199,20 +202,19 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                             setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                         }
                         if (i === 0) {
-                            isWasZeroDay = {
+                            zeroDay = {
                                 day: 0,
                                 value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
                             }
                         }
                     }
-                    if (!isWasZeroDay) {
-                        graphDots.unshift({
-                            day: 0,
-                            value: 0
-                        })
-                    } else {
-                        graphDots.unshift(isWasZeroDay)
-                    }
+
+                    // if (graphDots.length > 7) {
+                    //     graphDots = graphDots.splice(-7)
+                    // }
+
+                    graphDots.unshift(zeroDay)
+
                     dispatch(graphActions.setDots(graphDots))
                 })
                 .catch(err => console.log(err))

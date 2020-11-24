@@ -30,6 +30,12 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
         setDays(days)
     }
 
+    const onStake = () => {
+        handleStake(amount, days)
+        setAmount('')
+        setDays('')
+    }
+
     React.useEffect(() => {
         const calclbp = calcLBP(amount, days)
         const calcbpb = calcBPB(amount)
@@ -68,7 +74,7 @@ At the end of every day, a daily stake pool of Jackpot tokens will be calculated
                 </div>
                 <div className="s-form__box">
                     {isTokenApproved ?
-                        <button className="s-form__btn btn" onClick={() => handleStake(amount, days)}>STAKE</button> :
+                        <button className="s-form__btn btn" onClick={onStake} disabled={!amount || !days}>STAKE</button> :
                         <button className="s-form__btn btn" onClick={handleApproveToken} disabled={isTokenApproving}>
                             {isTokenApproving && <img src={Spiner} alt="" />}
                             <span>{isTokenApproving ? 'Waiting' : 'Approve'}</span>

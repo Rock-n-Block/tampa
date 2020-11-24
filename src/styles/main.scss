@@ -72,6 +72,9 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
+  &:disabled {
+    background: #ccb2b3;
+  }
   &--md {
     padding: 12px 0;
     max-width: 110px;
@@ -162,14 +165,22 @@ input {
   .btn {
     box-shadow: 4px 12px 20px rgba(74, 155, 198, 0.5);
     background: $blue;
+    &:disabled {
+      background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.2) 0%,
+          rgba(255, 255, 255, 0) 100%
+        ),
+        #646099;
+    }
   }
   .t-row {
     &__content {
       background: linear-gradient(
         210.96deg,
-        rgba(60, 56, 109, 0.61) 0.01%,
-        rgba(91, 86, 165, 0.7) 42.05%,
-        #43408b 104.81%
+        rgba(60, 56, 109, 0.61) -28.99%,
+        rgba(91, 86, 165, 0.7) 7.05%,
+        #43408b 43.81%
       );
     }
   }
