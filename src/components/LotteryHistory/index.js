@@ -1,9 +1,10 @@
 import React from 'react';
 import { format } from 'date-fns';
+import classNames from 'classnames';
 
 import './LotteryHistory.scss'
 
-const LotteryHistory = ({ data }) => {
+const LotteryHistory = ({ data, handleLotteryWithdraw }) => {
 
     const dateFormat = (date) => {
         return format(new Date(date * 1000), 'dd.MM.Y')
@@ -19,10 +20,21 @@ const LotteryHistory = ({ data }) => {
                 </div>
                 {data &&
                     data.map((item, index) => {
-                        return <div key={index} className="container l-history__row">
+                        return <div key={index} className={classNames('container l-history__row l-history__row-content', {
+                            'active': item.isMe
+                        })}>
                             <div className="l-history__row-item">{dateFormat(+item.date)}</div>
                             <div className="l-history__row-item">{item.amount}</div>
-                            <div className="l-history__row-item">{item.winner}</div>
+                            <div className="l-history__row-item">
+                                {
+                                    item.isMe ?
+                                        <div className="l-history__win">
+                                            <span>YOU WIN</span>
+                                            <button onClick={() => handleLotteryWithdraw(item.day)} className="btn btn--withdraw l-history__win-btn">WITHDRAW</button>
+                                        </div>
+                                        : item.winner
+                                }
+                            </div>
                         </div>
                     })
                 }

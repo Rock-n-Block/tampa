@@ -1,3 +1,4 @@
+@import '../../styles/vars';
 .lottery-a {
   margin-bottom: 40px;
   padding-top: 40px;
@@ -13,12 +14,26 @@
     }
   }
   &__info {
+    margin-top: 15px;
     &-item {
       border-radius: 12px;
     }
     &-head {
-      max-width: 150px;
-      margin-top: 40px;
+      margin-top: 15px;
+      font-size: 24px;
+      line-height: 29px;
+      color: $red;
+    }
+  }
+}
+.darktheme {
+  .lottery-a {
+    &__info {
+      &-item {
+        &-head {
+          color: $blue;
+        }
+      }
     }
   }
 }

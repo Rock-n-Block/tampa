@@ -9,6 +9,19 @@
     line-height: 22px;
     margin-bottom: 10px;
   }
+  &__win {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    &-btn {
+      padding: 7px 0 !important;
+      width: 86px !important;
+    }
+    span {
+      color: $red;
+      margin-right: 60px;
+    }
+  }
   &__row {
     padding: 13px 30px 11px;
     color: $black;
@@ -30,6 +43,20 @@
       line-height: 15px;
       margin-bottom: -5px;
     }
+    &-content {
+      border: 3px solid transparent;
+      &.active {
+        border-color: #e26c6d;
+        color: $red;
+        background: linear-gradient(
+            190.57deg,
+            rgba(255, 255, 255, 0.56) 19.25%,
+            rgba(248, 248, 255, 0.71) 54.39%,
+            rgba(255, 255, 255, 0.59) 90.02%
+          ),
+          #ffe6e6 !important;
+      }
+    }
     & + & {
       margin-top: 5px;
     }
@@ -40,8 +67,31 @@
     &__title {
       color: $blue;
     }
+    &__win {
+      span {
+        color: $blue;
+      }
+    }
     &__row {
       color: white;
+      &-content {
+        background: linear-gradient(
+          210.96deg,
+          rgba(60, 56, 109, 0.61) -28.99%,
+          rgba(91, 86, 165, 0.7) 7.05%,
+          #43408b 43.81%
+        ) !important;
+        &.active {
+          border-color: $blue;
+          color: $blue;
+          background: linear-gradient(
+            210.96deg,
+            rgba(60, 56, 109, 0.61) -28.99%,
+            rgba(91, 86, 165, 0.7) 7.05%,
+            #43408b 43.81%
+          ) !important;
+        }
+      }
       &-head {
         color: $purple;
       }

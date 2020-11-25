@@ -11,7 +11,7 @@ import ContractService from '../../utils/contractService';
 import './Lottery.scss'
 
 const LotteryPage = ({ isDarkTheme, userAddress }) => {
-    const navItems = ["today's lottery", "tomorrow's lottery"]
+    const navItems = ["tomorrow's lottery", "today's lottery"]
 
     const [contractService] = useState(new ContractService())
 
@@ -34,9 +34,11 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
 
             if (winner.who !== '0x0000000000000000000000000000000000000000') {
                 const winnerObj = {
+                    day: i,
                     date: '20.10.2020',
                     amount: new BigNumber(winner.totalAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed(),
-                    winner: winner.who
+                    winner: winner.who,
+                    isMe: winner.who.toLowerCase() === userAddress.toLowerCase()
                 }
 
                 winnerObj.date = await contractService.getDayUnixTime(i)
@@ -61,18 +63,18 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
         })
     }
 
-    const handleLotteryWithdraw = () => {
+    const handleLotteryWithdraw = (day) => {
         contractService.createTokenTransaction({
             data: {
                 other: [
-                    currentDay
+                    day
                 ]
             },
             address: userAddress,
             swapMethod: 'withdrawLotery',
             contractName: 'TAMPA',
             withdraw: true,
-            callback: () => getData()
+            callback: () => getWinners(currentDay)
         })
     }
 
@@ -179,9 +181,10 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
                     userAddress={userAddress}
                     lotteryPercents={lotteryPercents}
                     isParticipant={isParticipant}
+                    isDarkTheme={isDarkTheme}
                 />}
                 {activeTab === 1 && <LotteryActive handleLotteryWithdraw={handleLotteryWithdraw} lotteryWinner={lotteryWinner} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />}
-                <LotteryHistory data={lotteryHistoryItems} />
+                <LotteryHistory data={lotteryHistoryItems} handleLotteryWithdraw={handleLotteryWithdraw} />
             </div>
         </div>
     );

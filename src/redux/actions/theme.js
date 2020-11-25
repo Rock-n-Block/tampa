@@ -1,6 +1,9 @@
 export default {
-    toggleTheme: data => ({
-        type: 'THEME:TOGGLE',
-        payload: data
-    })
+    toggleTheme: data => {
+        window.localStorage.isDarkTheme = data ? true : ''
+        return {
+            type: 'THEME:TOGGLE',
+            payload: data
+        }
+    }
 }

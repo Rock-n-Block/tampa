@@ -151,6 +151,16 @@ input {
       margin-top: 5px;
     }
   }
+  .active {
+    border-color: #e26c6d;
+    background: linear-gradient(
+        190.57deg,
+        rgba(255, 255, 255, 0.56) 19.25%,
+        rgba(248, 248, 255, 0.71) 54.39%,
+        rgba(255, 255, 255, 0.59) 90.02%
+      ),
+      #ffe6e6;
+  }
 }
 .tampa.darktheme {
   background: linear-gradient(0deg, #14133d, #14133d);
@@ -176,6 +186,15 @@ input {
   }
   .t-row {
     &__content {
+      background: linear-gradient(
+        210.96deg,
+        rgba(60, 56, 109, 0.61) -28.99%,
+        rgba(91, 86, 165, 0.7) 7.05%,
+        #43408b 43.81%
+      );
+    }
+    .active {
+      border-color: #53b9ea;
       background: linear-gradient(
         210.96deg,
         rgba(60, 56, 109, 0.61) -28.99%,

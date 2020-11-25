@@ -247,6 +247,38 @@
         }
       }
     }
+    &__pages {
+      .ant-pagination-item,
+      .ant-pagination-item-link {
+        background: #1f1d51 !important;
+        overflow: visible !important;
+        box-shadow: inset 5px 5px 85px rgba(82, 157, 202, 0.1);
+        a {
+          background: #1f1d51;
+          box-shadow: inset 5px 5px 85px rgba(82, 157, 202, 0.1);
+          color: white !important;
+        }
+        &-active {
+          a {
+            color: $blue !important;
+          }
+        }
+      }
+      .ant-pagination {
+        &-prev,
+        &-next {
+          background: #1f1d51;
+          box-shadow: inset 5px 5px 85px rgba(82, 157, 202, 0.1);
+          color: white;
+        }
+      }
+
+      .ant-pagination-item-link {
+        svg {
+          fill: white !important;
+        }
+      }
+    }
   }
   .ant-popover {
     &-inner {

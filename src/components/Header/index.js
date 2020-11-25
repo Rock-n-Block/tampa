@@ -106,7 +106,7 @@ const Header = ({ isDarkTheme, userAddress }) => {
                             active: !isDarkTheme
                         })}>
                             <span>night</span>
-                            <Switch defaultChecked size="big" onChange={handleThemeChange} />
+                            <Switch defaultChecked={!isDarkTheme} size="big" onChange={handleThemeChange} />
                             <span>Light</span>
                         </div>
                         {userAddress && <div className="header__metamask">

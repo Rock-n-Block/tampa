@@ -94,13 +94,13 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     return Promise.all([...promises])
                 })
                 .then(async result => {
+                    console.log('start')
                     const activeStakesArray = []
                     let newTotalShares = new BigNumber(0)
                     let newTotalDividents = new BigNumber(0)
                     let newTotalInterests = new BigNumber(0)
                     let newTotalBonusShares = new BigNumber(0)
                     let newTotalPaidAmount = new BigNumber(0)
-
 
                     for (let i = 0; i < result.length; i++) {
                         const stake = result[i]
@@ -139,7 +139,6 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                         activeStakesItem.end = await contractService.getDayUnixTime(+stake.lockedDay + +stake.stakedDays)
 
                         activeStakesItem.progress = calcStakeProgress(activeStakesItem.start, activeStakesItem.end)
-
                         activeStakesItem.bonusday = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewardsBonusDays')
 
                         activeStakesItem.bonusday = new BigNumber(activeStakesItem.bonusday).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
@@ -175,8 +174,9 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     setTotalInterests(newTotalInterests.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                     setTotalBonusShares(newTotalBonusShares.toFixed())
                     setTotalPaidAmount(newTotalPaidAmount.toFixed())
-                    resolve(result)
 
+                    resolve(result)
+                    console.log('end')
                 })
                 .catch(err => {
                     reject(err)
@@ -218,10 +218,6 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                         }
                     }
 
-                    // if (graphDots.length > 7) {
-                    //     graphDots = graphDots.splice(-7)
-                    // }
-
                     graphDots.unshift(zeroDay)
 
                     dispatch(graphActions.setDots(graphDots))
@@ -247,7 +243,6 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                 return +res
             })
             .then(currentDay => {
-
 
                 getStakes(isActive, currentDay)
                     .then(result => {

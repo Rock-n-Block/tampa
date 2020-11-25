@@ -13,14 +13,14 @@ const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotterySt
             <h1 className="lottery-a__title">today's lottery</h1>
             <LotteryWheel lotteryWinner={lotteryWinner && lotteryWinner.who} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />
             <div className="lottery__content container">
-                <div className="lottery__info">
-                    <div className="lottery__info-item lottery-a__info-item">
-                        <div className="lottery__info-head">{lotteryWinner && lotteryWinner.isMe ? 'you win' : 'winner'}</div>
-                        {(lotteryWinner && lotteryWinner.isMe) && <button onClick={handleLotteryWithdraw} className="lottery-a__withdraw btn">withdraw</button>}
-                        <div className="lottery__info-head lottery-a__info-head">
-                            <RowItemTooltip tooltipText={lotteryWinner && lotteryWinner.who} parent="stakes">{lotteryWinner && lotteryWinner.who}</RowItemTooltip>
-                        </div>
+                <div className="lottery__info-item lottery-a__info-item">
+                    <div className="lottery__info-head">{lotteryWinner && lotteryWinner.isMe ? 'you win' : 'winner'}</div>
+                    {/* {(lotteryWinner && lotteryWinner.isMe) && <button onClick={handleLotteryWithdraw} className="lottery-a__withdraw btn">withdraw</button>} */}
+                    <div className="lottery__info-head lottery-a__info-head">
+                        {lotteryWinner && lotteryWinner.who}
                     </div>
+                </div>
+                <div className="lottery__info lottery-a__info">
                     <div className="lottery__info-item lottery-a__info-item">
                         <div className="lottery__info-head">lottery pool from</div>
                         <div className="lottery__info-content lottery__info-date">{moment.utc().add(1, 'days').format('DD.MM.YYYY')}</div>
