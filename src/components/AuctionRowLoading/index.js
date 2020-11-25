@@ -7,6 +7,7 @@ const AuctionRowLoading = () => {
             speed={2}
             width={840}
             height={63}
+            style={{ marginTop: '5px' }}
             viewBox="0 0 840 63"
             backgroundColor="#f3f3f3"
             foregroundColor="#dedede"

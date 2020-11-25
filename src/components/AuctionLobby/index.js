@@ -104,9 +104,10 @@ export default class AuctionLobby extends React.PureComponent {
                                     {!item.state && !item.status && <button className="a-lobby__btn btn btn--md" disabled>ENDED</button>}
                                 </div>
                             </div>
-                        }) :
-                        new Array(6).fill(0).map((_, index) => <AuctionRowLoading key={index} />)
+                        }) : ''
+
                     }
+                    {this.props.isRefreshing && <AuctionRowLoading />}
                 </div>
                 {this.props.pageCount > 1 && <div className="a-lobby__pages">
                     <Pagination current={this.props.currentPage} onChange={this.props.handleChangePage} total={this.props.pageCount * 10} />

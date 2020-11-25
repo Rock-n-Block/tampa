@@ -4,18 +4,15 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { SummaryBets, AuctionLobby, Graph, QuestionTooltip } from '../../components';
-import ContractService from '../../utils/contractService';
 import decimals from '../../utils/web3/decimals';
 import { graphActions } from '../../redux/actions';
 
 import './Auction.scss'
 
-const AuctionPage = ({ isDarkTheme, userAddress }) => {
+const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
     const dispatch = useDispatch()
     const location = useLocation()
     const params = new URLSearchParams(location.search)
-
-    const [contractService] = useState(new ContractService())
 
     const [currentDays, setCurrentDays] = useState(0)
     const [firstAuctionObj, setFirstAuctionObj] = useState({})
@@ -130,9 +127,8 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
             auctionRow.eth = +auctionRow.dailyEntry !== 0 ? new BigNumber(auctionRow.pool).dividedBy(auctionRow.dailyEntry).toFixed() : 0
 
             newAuctionsRows.push(auctionRow)
+            setAuctionsRows(newAuctionsRows)
         }
-
-        setAuctionsRows(newAuctionsRows)
         setAuctionRefreshing(false)
     }, [currentPage, userAddress, contractService])
 
@@ -289,10 +285,10 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
     }
 
     React.useEffect(() => {
-        if (userAddress) {
+        if (userAddress && contractService) {
             getData()
         }
-    }, [userAddress, getData])
+    }, [userAddress, getData, contractService])
 
     React.useEffect(() => {
         const referal = params.get('ref')
@@ -302,8 +298,10 @@ const AuctionPage = ({ isDarkTheme, userAddress }) => {
         }
     }, [])
     React.useEffect(() => {
-        getGraphDots()
-    }, [userAddress, currentDays])
+        if (contractService) {
+            getGraphDots()
+        }
+    }, [userAddress, currentDays, contractService])
 
     return (
         <div className="auction" id="auction">

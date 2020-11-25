@@ -16,9 +16,8 @@ import logoImg from '../../assets/img/logo.svg';
 import logoImgDark from '../../assets/img/logo-d.svg';
 import MetamaskImg from '../../assets/img/metamask.svg';
 
-const Header = ({ isDarkTheme, userAddress }) => {
+const Header = ({ isDarkTheme, userAddress, contractService }) => {
     const dispatch = useDispatch()
-    const [contractService] = React.useState(new ContractService())
 
     const [secondInterval, setSecondInterval] = React.useState(null)
 
@@ -68,8 +67,11 @@ const Header = ({ isDarkTheme, userAddress }) => {
     }
 
     React.useEffect(() => {
-        getDate()
-    }, [])
+        if (contractService) {
+
+            getDate()
+        }
+    }, [contractService])
 
     React.useEffect(() => {
         window.addEventListener('scroll', () => {

@@ -6,14 +6,11 @@ import moment from 'moment';
 
 import { LotteryPrepare, LotteryHistory, LotteryActive } from '../../components';
 import decimals from '../../utils/web3/decimals';
-import ContractService from '../../utils/contractService';
 
 import './Lottery.scss'
 
-const LotteryPage = ({ isDarkTheme, userAddress }) => {
+const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
     const navItems = ["tomorrow's lottery", "today's lottery"]
-
-    const [contractService] = useState(new ContractService())
 
     const [activeTab, setActiveTab] = useState(0)
     const [currentDay, setCurrentDay] = useState(null)
@@ -156,11 +153,10 @@ const LotteryPage = ({ isDarkTheme, userAddress }) => {
     }, [contractService, getWinners])
 
     React.useEffect(() => {
-        window.moment = moment
-        if (userAddress) {
+        if (userAddress && contractService) {
             getData()
         }
-    }, [userAddress, getData])
+    }, [userAddress, getData, contractService])
 
     return (
         <div className="p-lottery">

@@ -126,9 +126,10 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                             </div>
                             {!item.isEnded && <button onClick={() => onWithdrawClick(item, +item.index, +item.stakeId, +item.end)} className="stakes__btn btn btn--withdraw">withdraw</button>}
                         </div>
-                    }) :
-                    isRefreshingStates && <AuctionRowLoading />
+                    }) : ''
+
                 }
+                {isRefreshingStates && <AuctionRowLoading />}
             </div>
             <Modal
                 visible={isVisibleModal}

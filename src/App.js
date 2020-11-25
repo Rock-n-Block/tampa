@@ -6,11 +6,13 @@ import classNames from 'classnames';
 import { Header, Ticker, Modal } from './components';
 import { StakePage, AuctionPage, LotteyrPage, testPage } from './pages';
 import MetamaskService from './utils/web3';
+import ContractService from './utils/contractService';
 import { userActions, modalActions } from './redux/actions';
 
 import './styles/main.scss'
 
 function App() {
+  const [contractService, setContractService] = React.useState(null)
   const dispatch = useDispatch()
   const { isDarkTheme, userAddress } = useSelector(({ theme, user }) => ({
     isDarkTheme: theme.isDarkTheme,
@@ -24,7 +26,6 @@ function App() {
 
     const interval = setInterval(() => {
       counter += 10;
-      console.log(1)
       if (window['ethereum'] && window['ethereum'].isMetaMask) {
         clearInterval(interval)
 
@@ -46,17 +47,23 @@ function App() {
     }, 10)
   }, [dispatch])
 
+  React.useEffect(() => {
+    const contractService = new ContractService()
+
+    setContractService(contractService)
+  }, [])
+
   return (
     <div className={classNames('tampa', {
       'darktheme': isDarkTheme
     })}>
-      <Header isDarkTheme={isDarkTheme} userAddress={userAddress} />
+      <Header isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />
       <div className="row">
         <Ticker />
 
-        <Route exact path="/" render={() => <StakePage isDarkTheme={isDarkTheme} userAddress={userAddress} />} />
-        <Route path="/auction" render={() => <AuctionPage isDarkTheme={isDarkTheme} userAddress={userAddress} />} />
-        <Route path="/lottery" render={() => <LotteyrPage isDarkTheme={isDarkTheme} userAddress={userAddress} />} />
+        <Route exact path="/" render={() => <StakePage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />
+        <Route path="/auction" render={() => <AuctionPage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />
+        <Route path="/lottery" render={() => <LotteyrPage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />
 
 
 

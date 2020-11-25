@@ -4,15 +4,13 @@ import { eachDayOfInterval } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes, Graph } from '../../components';
-import ContractService from '../../utils/contractService';
 import decimals from '../../utils/web3/decimals';
 import { graphActions } from '../../redux/actions';
 
 import './Stake.scss'
 
-const StakePage = ({ isDarkTheme, userAddress }) => {
+const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     const dispatch = useDispatch()
-    const [contractService] = useState(new ContractService())
 
     const [walletBalance, setWalletBalance] = useState(0)
     const [startDay, setStartDay] = useState(0)
@@ -82,11 +80,14 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
         setActiveStakesRefreshing(true)
         return new Promise((resolve, reject) => {
             contractService[method](userAddress)
-                .then(res => {
+                .then(async res => {
                     const promises = []
                     for (let stakeIndex = 0; stakeIndex < res; stakeIndex++) {
                         if (isActive) {
                             promises.push(contractService.stakeLists(userAddress, stakeIndex))
+
+                            // const test = await contractService.stakeLists(userAddress, stakeIndex)
+                            // console.log(test)
                         } else {
                             promises.push(contractService.endedStakeLists(userAddress, stakeIndex))
                         }
@@ -102,7 +103,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     let newTotalBonusShares = new BigNumber(0)
                     let newTotalPaidAmount = new BigNumber(0)
 
-                    for (let i = 0; i < result.length; i++) {
+                    for (let i = result.length - 1; i >= 0; i--) {
                         const stake = result[i]
 
                         const activeStakesItem = {
@@ -166,9 +167,9 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                         newTotalPaidAmount = newTotalPaidAmount.plus(activeStakesItem.paidAmount)
 
                         activeStakesArray.push(activeStakesItem)
+                        setActiveStakes(activeStakesArray)
                     }
                     setActiveStakesRefreshing(false)
-                    setActiveStakes(activeStakesArray.reverse())
                     setTotalShares(newTotalShares.toFixed())
                     setTotalDividents(newTotalDividents.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                     setTotalInterests(newTotalInterests.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
@@ -176,7 +177,6 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                     setTotalPaidAmount(newTotalPaidAmount.toFixed())
 
                     resolve(result)
-                    console.log('end')
                 })
                 .catch(err => {
                     reject(err)
@@ -208,6 +208,7 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                         }
 
                         if (i === startDay) {
+                            debugger
                             setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                         }
                         if (i === 0) {
@@ -310,14 +311,16 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
     }
 
     useEffect(() => {
-        if (userAddress) {
+        if (userAddress && contractService) {
             getData()
         }
-    }, [userAddress])
+    }, [userAddress, contractService])
 
     useEffect(() => {
-        getGraphDots()
-    }, [userAddress, startDay])
+        if (contractService) {
+            getGraphDots()
+        }
+    }, [userAddress, startDay, contractService])
 
     return (
         <div className="stake">
