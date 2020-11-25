@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import classNames from 'classnames';
 import { Modal } from 'antd';
 import { format } from 'date-fns';
+import moment from 'moment';
 
 import { RowItemTooltip, AuctionRowLoading, QuestionTooltip } from '../../components';
 
@@ -16,6 +17,7 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
     const [activeTab, setActiveTab] = React.useState(0)
     const [activeStake, setActiveStake] = React.useState({})
     const [isVisibleModal, setVisibleModal] = React.useState(false)
+    const [isEarlyUnstake, setEarlyUnstake] = React.useState(null)
 
     const dateFormat = (date) => {
         return format(new Date(date * 1000), 'dd.MM.Y')
@@ -31,14 +33,33 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
         if (!isRefreshingStates) handleRefreshActiveStakes(!!!index)
     }
 
-    const onWithdrawClick = ({ index, stakeId }) => {
+    const onWithdrawClick = (stake, index, stakeId, end) => {
+        const endDay = moment.utc(end * 1000)
+
+        // const diffDays = moment.utc().diff(endDay, 'days')
+        const diffDays = moment.utc().diff(endDay, 'minutes')
+
+        console.log(diffDays, 'diffDays')
+
+        if (diffDays < 0) {
+            setEarlyUnstake(true)
+            // } else if (diffDays >= 14) {
+        } else if (diffDays >= 10) {
+            setEarlyUnstake(false)
+        }
 
         setActiveStake({
+            stake,
             index,
             stakeId
         })
 
-        setVisibleModal(true)
+        // if (diffDays < 0 || diffDays >= 14) {
+        if (diffDays < 0 || diffDays >= 10) {
+            setVisibleModal(true)
+        } else {
+            handleWithdraw(index, stakeId)
+        }
     }
 
 
@@ -103,7 +124,7 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                             <div className="stakes__row-item">
                                 <RowItemTooltip tooltipText={!activeTab ? item.currentValue : item.paidAmount} parent="stakes">{!activeTab ? item.currentValue : item.paidAmount}</RowItemTooltip>
                             </div>
-                            {!item.isEnded && <button onClick={() => onWithdrawClick({ index: +item.index, stakeId: +item.stakeId })} className="stakes__btn btn btn--withdraw">withdraw</button>}
+                            {!item.isEnded && <button onClick={() => onWithdrawClick(item, +item.index, +item.stakeId, +item.end)} className="stakes__btn btn btn--withdraw">withdraw</button>}
                         </div>
                     }) :
                     isRefreshingStates && <AuctionRowLoading />
@@ -120,9 +141,11 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
             >
                 <div className="stakes__modal">
                     <div className="stakes__modal-title">Attention!</div>
-                    <div className="stakes__modal-text">
-                        Early unstake! You will ger 931,33 ETH, 401,31 EHT will be peranized!
-                    </div>
+                    {activeStake.stake && <div className="stakes__modal-text">
+                        {/* {isEarlyUnstake ? 'Early unstake! You will get 931,33 ETH, 401,31 EHT will be peranized!' : 'Later unstake! You will get 931.33 J, 401.31 J will be penalized!'} */}
+                        {`tokens return: ${activeStake.stake.stakeReturn}, penalti: ${activeStake.stake.penalti}, dividents: ${activeStake.stake.penaltiDividents}`}
+                        {isEarlyUnstake ? ' ,early' : 'later'}
+                    </div>}
                     <div className="stakes__modal-btns">
                         <button className="stakes__modal-btn stakes__modal-btn--cancel btn btn--withdraw" onClick={() => setVisibleModal(false)}>CLOSE</button>
                         <button className="stakes__modal-btn btn btn--withdraw" onClick={() => { handleWithdraw(activeStake.index, activeStake.stakeId); setVisibleModal(false) }}>OK</button>

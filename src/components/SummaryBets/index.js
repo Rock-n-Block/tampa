@@ -25,7 +25,7 @@ const SummaryBets = ({ isDarkTheme, currentDays, participation, totalReceive, to
                 </div>
                 <div className="s-bets__item">
                     <div className="s-bets__item-head">
-                        +{totalEntry}
+                        <RowItemTooltip tooltipText={totalEntry} parent="s-bets">+{totalEntry}</RowItemTooltip>
                     </div>
                     <div className="s-bets__item-content">total entry</div>
                 </div>

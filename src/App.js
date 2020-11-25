@@ -24,6 +24,7 @@ function App() {
 
     const interval = setInterval(() => {
       counter += 10;
+      console.log(1)
       if (window['ethereum'] && window['ethereum'].isMetaMask) {
         clearInterval(interval)
 

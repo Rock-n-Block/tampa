@@ -9,7 +9,7 @@ import tampaDarkImg from '../../assets/img/eth.svg';
 
 const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotteryStarted, handleLotteryWithdraw }) => {
     return (
-        <div className="container lottery-a">
+        <div className="container lottery-a" id="lottery-a">
             <h1 className="lottery-a__title">today's lottery</h1>
             <LotteryWheel lotteryWinner={lotteryWinner && lotteryWinner.who} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />
             <div className="lottery__content container">
@@ -17,7 +17,7 @@ const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotterySt
                     <div className="lottery__info-item lottery-a__info-item">
                         <div className="lottery__info-head">{lotteryWinner && lotteryWinner.isMe ? 'you win' : 'winner'}</div>
                         {(lotteryWinner && lotteryWinner.isMe) && <button onClick={handleLotteryWithdraw} className="lottery-a__withdraw btn">withdraw</button>}
-                        <div className="lottery__info-head">
+                        <div className="lottery__info-head lottery-a__info-head">
                             <RowItemTooltip tooltipText={lotteryWinner && lotteryWinner.who} parent="stakes">{lotteryWinner && lotteryWinner.who}</RowItemTooltip>
                         </div>
                     </div>

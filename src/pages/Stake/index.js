@@ -118,8 +118,17 @@ const StakePage = ({ isDarkTheme, userAddress }) => {
                             interest: '1,000',
                             currentValue: '1,000',
                             paidAmount: '1000',
-                            isEnded: !isActive
+                            isEnded: !isActive,
+                            penalti: 0,
+                            penaltiDividents: 0,
+                            stakeReturn: 0
                         }
+
+                        const unstakeParams = await contractService.getUnstakeParams(userAddress, i, stake.stakeId)
+
+                        activeStakesItem.penalti = unstakeParams.cappedPenalty
+                        activeStakesItem.penaltiDividents = unstakeParams.dividends
+                        activeStakesItem.stakeReturn = new BigNumber(unstakeParams.stakeReturn).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
                         activeStakesItem.start = await contractService.getDayUnixTime(stake.lockedDay)
 
