@@ -1,6 +1,6 @@
 export default {
     TAMPA: {
-        ADDRESS: '0x41B595d3Ef2c010ab64Ac8A2f222b5AeD1F80052',
+        ADDRESS: '0x54417deA0344Da8b15AE76f13f2b0E3365dB70AF',
         ABI: [
             {
                 "inputs": [

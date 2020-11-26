@@ -1,6 +1,7 @@
 const initialState = {
     graphDots: [],
-    stakeGraphDots: []
+    stakeGraphDots: [],
+    dividentsPool: 0
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -18,6 +19,11 @@ export default (state = initialState, { type, payload }) => {
                 graphDots: auctionDots,
                 stakeGraphDots
             };
+        case 'GRAPH:SET_DIVIDENTS_POOL':
+            return {
+                ...state,
+                dividentsPool: payload
+            }
         default:
             return state
     }

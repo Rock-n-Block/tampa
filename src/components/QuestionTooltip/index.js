@@ -10,7 +10,7 @@ const QuestionTooltip = ({ tooltipText, parent, isDarkTheme }) => {
     return (
         <Tooltip
             placement="bottom"
-            title={<span dangerouslySetInnerHTML={{ __html: tooltipText }}></span>}
+            title={<span className="quest-tooltip__text" dangerouslySetInnerHTML={{ __html: tooltipText }}></span>}
             className="quest-tooltip"
             getPopupContainer={() => document.getElementById(parent)}
         >

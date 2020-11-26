@@ -5,7 +5,7 @@ import { RowItemTooltip, QuestionTooltip } from '../../components';
 
 import './StakeInfo.scss'
 
-const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, totalTimeBonus, totalValueBonus, isActiveStakes, totalBonusShares, totalPaidAmount, isDarkTheme }) => {
+const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, isActiveStakes, totalBonusShares, totalPaidAmount, isDarkTheme }) => {
     return (
         <div className="container s-info">
             <div className="s-info__title">My {isActiveStakes ? 'active' : 'ended'} stakes summary info</div>
@@ -42,7 +42,7 @@ const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, t
                         }
                     </div>
                 </div>
-                {isActiveStakes && <div className="s-info__item">
+                {/* {isActiveStakes && <div className="s-info__item">
                     <div className="s-info__item-head">
                         <RowItemTooltip tooltipText={totalTimeBonus} parent="s-info__content">{totalTimeBonus}</RowItemTooltip>
                     </div>
@@ -53,7 +53,7 @@ const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, t
                         <RowItemTooltip tooltipText={totalValueBonus} parent="s-info__content">{totalValueBonus}</RowItemTooltip>
                     </div>
                     <div className="s-info__item-subhead">Total<br /> value bonus</div>
-                </div>}
+                </div>} */}
             </div>
         </div>
     );

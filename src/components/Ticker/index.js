@@ -10,8 +10,8 @@ const TickerComponent = () => {
 
     React.useEffect(() => {
 
-        console.log(moment().day(), 'moment().day()')
-        setOddDay(!!(moment().day() % 2))
+        console.log(moment.utc().day(), 'moment().day()')
+        setOddDay(!!(moment.utc().day() % 2))
     }, [])
 
     return (

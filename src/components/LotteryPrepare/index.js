@@ -15,7 +15,7 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
         <div className="container lottery" id="lottery">
             <h1 className="lottery__title">lottery
                     <QuestionTooltip isDarkTheme={isDarkTheme} parent="lottery"
-                    tooltipText="The lottery pool is 2.5% of all ETH that enters the daily Auction Lobby.<br><br>f the winner of the lottery sends a video confirmation within 7 days to the address, he will additionally receive 2.5% ETH<br><br>The name of the winner will be revealed on the next day by the first person to enter the auction at 2-00 UTC or later."
+                    tooltipText="The lottery pool is 2.5% of all ETH that enters the daily Auction Lobby.<br><br>If the winner of the lottery sends a video confirmation within 7 days to the address, he will additionally receive 2.5% ETH<br><br>The name of the winner will be revealed on the next day by the first person to enter the auction at 2-00 UTC or later."
 
                 />
             </h1>

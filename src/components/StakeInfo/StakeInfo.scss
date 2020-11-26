@@ -16,10 +16,10 @@
   &__content {
     padding: 25px 20px 20px;
     display: grid;
-    grid-template-columns: 110px 110px 120px 140px 120px 150px;
+    grid-template-columns: 110px repeat(3, 228px);
     grid-column-gap: 15px;
     &--ended {
-      grid-template-columns: 110px repeat(4, 162px);
+      grid-template-columns: 110px repeat(3, 228px);
     }
   }
   &__item {

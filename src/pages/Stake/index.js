@@ -14,14 +14,11 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
 
     const [walletBalance, setWalletBalance] = useState(0)
     const [startDay, setStartDay] = useState(0)
-    const [dividentsPool, setDividentsPool] = useState(0)
     const [totalInterests, setTotalInterests] = useState(0)
     const [totalStaked, setTotalStaked] = useState(0)
     const [totalShares, setTotalShares] = useState(0)
     const [totalBonusShares, setTotalBonusShares] = useState(0)
     const [totalDividents, setTotalDividents] = useState(0)
-    const [totalTimeBonus, setTotalTimeBonus] = useState(0)
-    const [totalValueBonus, setTotalValueBonus] = useState(0)
     const [totalPaidAmount, setTotalPaidAmount] = useState(0)
 
     const [activeStakes, setActiveStakes] = useState([])
@@ -95,7 +92,6 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                     return Promise.all([...promises])
                 })
                 .then(async result => {
-                    console.log('start')
                     const activeStakesArray = []
                     let newTotalShares = new BigNumber(0)
                     let newTotalDividents = new BigNumber(0)
@@ -125,11 +121,13 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                             stakeReturn: 0
                         }
 
-                        const unstakeParams = await contractService.getUnstakeParams(userAddress, i, stake.stakeId)
+                        if (isActive) {
+                            const unstakeParams = await contractService.getUnstakeParams(userAddress, i, stake.stakeId)
 
-                        activeStakesItem.penalti = unstakeParams.cappedPenalty
-                        activeStakesItem.penaltiDividents = unstakeParams.dividends
-                        activeStakesItem.stakeReturn = new BigNumber(unstakeParams.stakeReturn).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                            activeStakesItem.penalti = unstakeParams.cappedPenalty
+                            activeStakesItem.penaltiDividents = unstakeParams.dividends
+                            activeStakesItem.stakeReturn = new BigNumber(unstakeParams.stakeReturn).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                        }
 
                         activeStakesItem.start = await contractService.getDayUnixTime(stake.lockedDay)
 
@@ -154,9 +152,9 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
 
                         newTotalInterests = newTotalInterests.plus(activeStakesItem.interest)
 
-                        newTotalBonusShares = newTotalBonusShares.plus(activeStakesItem.interest).plus(activeStakesItem.bonusday)
-
                         activeStakesItem.interest = new BigNumber(activeStakesItem.interest).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+
+                        newTotalBonusShares = newTotalBonusShares.plus(activeStakesItem.interest).plus(activeStakesItem.bonusday)
 
                         activeStakesItem.currentValue = BigNumber.sum(activeStakesItem.interest, activeStakesItem.shares).toFixed()
 
@@ -184,7 +182,12 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         })
     }
 
-    const graphData = useSelector(({ graph }) => graph.stakeGraphDots)
+    const { graphData, dividentsPool } = useSelector(({ graph }) => {
+        return {
+            graphData: graph.stakeGraphDots,
+            dividentsPool: graph.dividentsPool
+        }
+    })
 
     const getGraphDots = () => {
         if (!graphData.length && userAddress && startDay) {
@@ -195,26 +198,30 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                         day: 0,
                         value: 0
                     }
-                    for (let i = auctionObj[1]; i < startDay; i++) {
+                    for (let i = auctionObj[1]; i <= startDay; i++) {
                         let value = await contractService.xfLobby(i)
+                        value = new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
                         const graphDot = {
                             day: i,
-                            value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                            value
                         }
 
-                        if (+value !== 0 && i !== 0) {
+                        let dividentsPool = 0
+
+                        if (+value !== 0 && i !== 0 && i !== startDay) {
                             graphDots.push(graphDot)
                         }
 
                         if (i === startDay) {
-                            debugger
-                            setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
+                            dividentsPool = value
+
+                            dispatch(graphActions.setDividentsPool(dividentsPool))
                         }
                         if (i === 0) {
                             zeroDay = {
                                 day: 0,
-                                value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                                value
                             }
                         }
                     }
@@ -231,7 +238,10 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         setIsActiveStakes(isActive)
         setActiveStakes([])
         contractService.balanceOf(userAddress)
-            .then(res => setWalletBalance(res))
+            .then(res => {
+                console.log(res, 'balance')
+                setWalletBalance(res)
+            })
             .catch(err => console.log(err))
 
         contractService.checkAllowance(userAddress)
@@ -249,21 +259,14 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                     .then(result => {
 
                         let newTotalStaked = 0;
-                        let newTotalTimeBonus = new BigNumber(0);
-                        let newTotalValueBonus = new BigNumber(0);
 
                         result.map(item => {
                             newTotalStaked = +newTotalStaked + +item.stakedSuns
-
-                            newTotalTimeBonus = newTotalTimeBonus.plus(calcLBP(item.stakedSuns, item.stakedDays))
-                            newTotalValueBonus = newTotalValueBonus.plus(calcBPB(item.stakedSuns))
                         })
 
                         newTotalStaked = BigNumber((newTotalStaked) / Math.pow(10, decimals.TAMPA)).toString()
 
                         setTotalStaked(newTotalStaked)
-                        setTotalTimeBonus(newTotalTimeBonus.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
-                        setTotalValueBonus(newTotalValueBonus.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
 
 
                     })
@@ -345,8 +348,6 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                     totalShares={totalShares}
                     totalInterests={totalInterests}
                     totalDividents={totalDividents}
-                    totalTimeBonus={totalTimeBonus}
-                    totalValueBonus={totalValueBonus}
                     isActiveStakes={isActiveStakes}
                     totalBonusShares={totalBonusShares}
                     totalPaidAmount={totalPaidAmount}

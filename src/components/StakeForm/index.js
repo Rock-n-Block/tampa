@@ -74,7 +74,7 @@ At the end of every day, a daily stake pool of Jackpot tokens will be calculated
                 </div>
                 <div className="s-form__box">
                     {isTokenApproved ?
-                        <button className="s-form__btn btn" onClick={onStake} disabled={!amount || !days}>STAKE</button> :
+                        <button className="s-form__btn btn" onClick={onStake} disabled={!amount || !days || amount < 0 || days < 0 || amount > walletBalance}>STAKE</button> :
                         <button className="s-form__btn btn" onClick={handleApproveToken} disabled={isTokenApproving}>
                             {isTokenApproving && <img src={Spiner} alt="" />}
                             <span>{isTokenApproving ? 'Waiting' : 'Approve'}</span>
@@ -143,7 +143,7 @@ At the end of every day, a daily stake pool of Jackpot tokens will be calculated
                     <div className="s-form__info-item">
                         <span>{Math.floor(days / 5)}</span>
                         <span>bonus day
-                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="For starting a stake you get a bonus reward for your stake which is based on the amount and time that you are staking." />
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="Every stake will get a bonus day every 5 days that it has been active, stakes get 2X interest on bonus days. Example: creating a stake at day 4 for 15 days gives this stake 3 bonus at days 10,15, and day 20 etc." />
                         </span>
                     </div>
                 </div>

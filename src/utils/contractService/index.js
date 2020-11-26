@@ -108,7 +108,7 @@ class ContractService {
         return new Promise((resolve, reject) => {
             return this.tampaContract.methods.balanceOf(address).call()
                 .then(res => {
-                    resolve(BigNumber(res / Math.pow(10, decimals.TAMPA)).toFixed(0))
+                    resolve(BigNumber(res / Math.pow(10, decimals.TAMPA)).toFixed())
                 })
                 .catch(err => {
                     reject(err)

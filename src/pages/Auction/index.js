@@ -19,7 +19,6 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
     const [participation, setParticipation] = useState(0)
     const [totalReceive, setTotalReceive] = useState(0)
     const [totalEntry, setTotalEntry] = useState(0)
-    const [dividentsPool, setDividentsPool] = useState(0)
     const [averageRate, setAverageRate] = useState(0)
     const [ethBalance, setEthBalance] = useState(0)
 
@@ -32,7 +31,12 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
 
     const [isAuctionRefreshing, setAuctionRefreshing] = useState(false)
 
-    const graphData = useSelector(({ graph }) => graph.graphDots)
+    const { graphData, dividentsPool } = useSelector(({ graph }) => {
+        return {
+            graphData: graph.stakeGraphDots,
+            dividentsPool: graph.dividentsPool
+        }
+    })
 
     const getAuctionPool = (day) => {
         let result = 0;
@@ -224,25 +228,30 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
                         day: 0,
                         value: 0
                     }
-                    for (let i = auctionObj[1]; i < +currentDays; i++) {
+                    for (let i = +auctionObj[1]; i <= +currentDays; i++) {
                         let value = await contractService.xfLobby(i)
+                        value = new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
                         const graphDot = {
                             day: i,
-                            value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                            value
                         }
 
-                        if (+value !== 0 && i !== 0) {
+                        let dividentsPool = 0
+
+                        if (+value !== 0 && i !== 0 && i !== currentDays) {
                             graphDots.push(graphDot)
                         }
 
-                        if (i === currentDays) {
-                            setDividentsPool(new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
+                        if (i === +currentDays) {
+                            dividentsPool = value
+
+                            dispatch(graphActions.setDividentsPool(dividentsPool))
                         }
                         if (i === 0) {
                             zeroDay = {
                                 day: 0,
-                                value: new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                                value
                             }
                         }
                     }
