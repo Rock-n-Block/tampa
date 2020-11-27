@@ -12,8 +12,10 @@ export default (state = initialState, { type, payload }) => {
             const auctionDots = [...payload]
             if (payload.length > 7) {
                 stakeGraphDots = payload.splice(-7)
+                stakeGraphDots.unshift(zeroDot)
+            } else {
+                stakeGraphDots = [...payload]
             }
-            stakeGraphDots.unshift(zeroDot)
             return {
                 ...state,
                 graphDots: auctionDots,

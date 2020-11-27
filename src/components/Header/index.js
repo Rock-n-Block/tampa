@@ -42,7 +42,6 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
     const getDate = () => {
         contractService.currentDay()
             .then(day => {
-                window.moment = moment
                 contractService.getDayUnixTime(day)
                     .then(date => {
                         const interval = setInterval(() => {
@@ -54,7 +53,6 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                             if (seconds === 0 || seconds < 0) {
                                 clearInterval(secondInterval)
                                 clearInterval(interval)
-
                                 getDate()
                             }
 

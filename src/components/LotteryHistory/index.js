@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import './LotteryHistory.scss'
 
-const LotteryHistory = ({ data, handleLotteryWithdraw }) => {
+const LotteryHistory = ({ data, handleLotteryWithdraw, userAddress }) => {
 
     const dateFormat = (date) => {
         return format(new Date(date * 1000), 'dd.MM.Y')
@@ -21,13 +21,13 @@ const LotteryHistory = ({ data, handleLotteryWithdraw }) => {
                 {data &&
                     data.map((item, index) => {
                         return <div key={index} className={classNames('container l-history__row l-history__row-content', {
-                            'active': item.isMe
+                            'active': item.winner.toLowerCase() === userAddress.toLowerCase()
                         })}>
                             <div className="l-history__row-item">{dateFormat(+item.date)}</div>
                             <div className="l-history__row-item">{item.amount}</div>
                             <div className="l-history__row-item">
                                 {
-                                    item.isMe ?
+                                    item.winner.toLowerCase() === userAddress.toLowerCase() ?
                                         <div className="l-history__win">
                                             <span>YOU WIN</span>
                                             <button onClick={() => handleLotteryWithdraw(item.day)} className="btn btn--withdraw l-history__win-btn">WITHDRAW</button>

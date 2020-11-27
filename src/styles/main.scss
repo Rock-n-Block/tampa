@@ -49,6 +49,11 @@ h1 {
 input {
   outline: none !important;
   box-shadow: none !important;
+  &:focus {
+    &::placeholder {
+      color: transparent !important;
+    }
+  }
 }
 .ant-input-number {
   border: none !important;

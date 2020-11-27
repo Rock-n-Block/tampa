@@ -5,14 +5,25 @@ import moment from 'moment';
 
 import './Ticker.scss'
 
-const TickerComponent = () => {
+const TickerComponent = ({ contractService }) => {
     const [isOddDay, setOddDay] = React.useState(false)
 
     React.useEffect(() => {
+        // setOddDay(!!(moment.utc().day() % 2))
 
-        console.log(moment.utc().day(), 'moment().day()')
-        setOddDay(!!(moment.utc().day() % 2))
-    }, [])
+        if (contractService) {
+
+            contractService.currentDay()
+                .then(day => {
+                    contractService.globwhatDayIsItTodayals(day)
+                        .then(res => {
+                            setOddDay(!!!(res % 2))
+                        })
+                        .catch(err => console.log(err))
+                })
+                .catch(err => console.log(err))
+        }
+    }, [contractService])
 
     return (
         <div className="ticker-box">

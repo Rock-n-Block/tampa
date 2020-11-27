@@ -59,7 +59,7 @@ function App() {
     })}>
       <Header isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />
       <div className="row">
-        <Ticker />
+        <Ticker contractService={contractService} />
 
         <Route exact path="/" render={() => <StakePage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />
         <Route path="/auction" render={() => <AuctionPage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />

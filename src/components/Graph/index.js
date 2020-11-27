@@ -3,6 +3,7 @@ import {
     ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid
 } from 'recharts';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import { QuestionTooltip } from '../../components';
 
@@ -36,43 +37,47 @@ const Graph = ({ dividentsPool, isDarkTheme, data, to }) => {
                     {!data.length && <div className="s-graph__loader">
                         {isDarkTheme ? <img src={refreshDarkImg} alt="" className="s-graph__loader-img" /> : <img src={refreshImg} alt="" className="s-graph__loader-img" />}
                     </div>}
-                    <ResponsiveContainer width="100%" height={400}>
-                        <LineChart data={data} syncId="test">
-                            <CartesianGrid stroke={isDarkTheme ? '#252253' : '#FCFCFF'} fill={isDarkTheme ? '#363362' : '#F8F7FD'} strokeWidth="10" />
-                            <XAxis
-                                type="number"
-                                dataKey="day"
-                                axisLine={false}
-                                tickLine={false}
-                                stroke={isDarkTheme ? '#53B9EA' : "#DB4848"}
-                            >
-                            </XAxis>
-                            <Tooltip
-                                content={({ payload }) => <div className="s-graph__tooltip">
-                                    <div className="s-graph__tooltip-circle"></div>
-                                    <div className="s-graph__tooltip-value">{payload[0] && payload[0].value}</div>
-                                </div>}
-                                contentStyle={{ borderRadius: '14px' }}
+                    {<div className={classNames({
+                        'invisible': !data.length
+                    })}>
+                        <ResponsiveContainer width="100%" height={400}>
+                            <LineChart data={data} syncId="test">
+                                <CartesianGrid stroke={isDarkTheme ? '#252253' : '#FCFCFF'} fill={isDarkTheme ? '#363362' : '#F8F7FD'} strokeWidth="10" />
+                                <XAxis
+                                    type="number"
+                                    dataKey="day"
+                                    axisLine={false}
+                                    tickLine={false}
+                                    stroke={isDarkTheme ? '#53B9EA' : "#DB4848"}
+                                >
+                                </XAxis>
+                                <Tooltip
+                                    content={({ payload }) => <div className="s-graph__tooltip">
+                                        <div className="s-graph__tooltip-circle"></div>
+                                        <div className="s-graph__tooltip-value">{payload[0] && payload[0].value}</div>
+                                    </div>}
+                                    contentStyle={{ borderRadius: '14px' }}
 
-                            />
-                            <YAxis
-                                type="number"
-                                dataKey="value"
-                                tickLine={false}
-                                stroke={isDarkTheme ? '#53B9EA' : "#DB4848"}
-                            >
-                            </YAxis>
-                            <Line
-                                key="value"
-                                type="monotone"
-                                dataKey="value"
-                                stroke={isDarkTheme ? '#53B9EA' : "#DF5D5D"}
-                                strokeWidth="6"
-                                dot={false}
-                            >
-                            </Line>
-                        </LineChart>
-                    </ResponsiveContainer>
+                                />
+                                <YAxis
+                                    type="number"
+                                    dataKey="value"
+                                    tickLine={false}
+                                    stroke={isDarkTheme ? '#53B9EA' : "#DB4848"}
+                                >
+                                </YAxis>
+                                <Line
+                                    key="value"
+                                    type="monotone"
+                                    dataKey="value"
+                                    stroke={isDarkTheme ? '#53B9EA' : "#DF5D5D"}
+                                    strokeWidth="6"
+                                    dot={false}
+                                >
+                                </Line>
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>}
                 </div>
             </div>
         </>

@@ -10,6 +10,18 @@ class ContractService {
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
 
+    globwhatDayIsItTodayals = (day) => {
+        return this.tampaContract.methods.whatDayIsItToday(day).call()
+    }
+
+    globals = () => {
+        return this.tampaContract.methods.globals().call()
+    }
+
+    waasLobby = (day) => {
+        return this.tampaContract.methods.waasLobby(day).call()
+    }
+
     defaultReferrerAddr = () => {
         return this.tampaContract.methods.defaultReferrerAddr().call()
     }
@@ -139,7 +151,7 @@ class ContractService {
         return this.metamaskService.getEthBalance(address)
     }
 
-    createTokenTransaction = ({ data, address, swapMethod, contractName, callback, withdraw, stake, auction }) => {
+    createTokenTransaction = ({ data, address, swapMethod, contractName, callback, withdraw, stake, auction, isEth, errCallback }) => {
         this.metamaskService.createTokenTransaction({
             data,
             tokenAddress: ContractDetails[contractName].ADDRESS,
@@ -149,7 +161,9 @@ class ContractService {
             callback,
             withdraw,
             stake,
-            auction
+            auction,
+            isEth,
+            errCallback
         })
     }
 

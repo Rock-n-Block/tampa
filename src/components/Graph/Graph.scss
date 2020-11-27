@@ -4,6 +4,9 @@
   margin-top: 40px;
   padding: 30px 40px;
   text-transform: uppercase;
+  .invisible {
+    opacity: 0;
+  }
   &__loader {
     position: absolute;
     width: 100%;

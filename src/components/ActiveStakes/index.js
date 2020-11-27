@@ -142,11 +142,14 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
             >
                 <div className="stakes__modal">
                     <div className="stakes__modal-title">Attention!</div>
-                    {activeStake.stake && <div className="stakes__modal-text">
-                        {/* {isEarlyUnstake ? 'Early unstake! You will get 931,33 ETH, 401,31 EHT will be peranized!' : 'Later unstake! You will get 931.33 J, 401.31 J will be penalized!'} */}
-                        {`tokens return: ${activeStake.stake.stakeReturn}, penalti: ${activeStake.stake.penalti}, dividents: ${activeStake.stake.penaltiDividents}`}
-                        {isEarlyUnstake ? ' ,early' : 'later'}
-                    </div>}
+                    {activeStake.stake &&
+                        <div className="stakes__modal-text">
+                            {isEarlyUnstake ? 'Early unstake!' : 'Late unstake!'}
+                            {` You will get ${activeStake.stake.stakeReturn} J, ${activeStake.stake.penalti} j will be penalized!`}
+                            <br></br>
+                            {`Your dividends in eth ${activeStake.stake.penaltiDividents}.`}
+                        </div>
+                    }
                     <div className="stakes__modal-btns">
                         <button className="stakes__modal-btn stakes__modal-btn--cancel btn btn--withdraw" onClick={() => setVisibleModal(false)}>CLOSE</button>
                         <button className="stakes__modal-btn btn btn--withdraw" onClick={() => { handleWithdraw(activeStake.index, activeStake.stakeId); setVisibleModal(false) }}>OK</button>

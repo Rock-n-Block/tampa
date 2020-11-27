@@ -2,6 +2,7 @@
 .stakes {
   padding: 20px 30px 30px;
   position: relative;
+  min-height: 230px;
   &__wrapper {
     display: flex;
     align-items: center;
@@ -19,6 +20,7 @@
       margin: 13px 0 30px;
       color: $black;
       font-size: 18px;
+      text-transform: uppercase;
       line-height: 22px;
     }
     &-btns {

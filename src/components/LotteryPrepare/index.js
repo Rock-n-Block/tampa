@@ -10,7 +10,7 @@ import tampaDarkImg from '../../assets/img/eth.svg';
 import ruleSImg from '../../assets/img/rule-s.svg';
 import ruleFImg from '../../assets/img/rule-f.svg';
 
-const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isParticipant }) => {
+const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isParticipant, isOddDay }) => {
     return (
         <div className="container lottery" id="lottery">
             <h1 className="lottery__title">lottery
@@ -25,14 +25,13 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
             </div>
             <div className="lottery__list">
                 <div className="lottery__list-head">WHAT YOU NEED TO DO TO BECOME A PARTICIPANT IN THE LOTTERY:</div>
-                <div className="lottery__list-item">1. enter the auction for the current day at the first hour</div>
+                <div className="lottery__list-item">enter the auction for the current day at the first hour</div>
                 <div className="lottery__list-subitem">
                     - Tuesday, Thursday, Saturday, for each 1 ETH you put in during the 1st hour of the auction lobby you get 1 chance to win the JACKPOT.
                 </div>
                 <div className="lottery__list-subitem">
                     - Monday, Wednesday, Friday, Sunday: everyone who buys in the first hour of the auction lobby gets a chance to win the JACKPOT.
                 </div>
-                <div className="lottery__list-item">2. active staking made for at least 5 days</div>
             </div>
             <div className="container lottery__content">
                 <div className="lottery__info">
@@ -49,7 +48,8 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
                         </div>
                     </div>
                 </div>
-                <LotteryProgress userAddress={userAddress} segments={lotteryPercents} />
+                {isOddDay && lotteryPercents && Object.keys(lotteryPercents).length && <LotteryProgress userAddress={userAddress} segments={lotteryPercents} />}
+                {!isOddDay && <div className="lottery__info-progress">Today one chance for every who entry the auction.</div>}
             </div>
         </div>
     );

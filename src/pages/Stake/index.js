@@ -21,6 +21,8 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     const [totalDividents, setTotalDividents] = useState(0)
     const [totalPaidAmount, setTotalPaidAmount] = useState(0)
 
+    const [shareRate, setShareRate] = useState(0)
+
     const [activeStakes, setActiveStakes] = useState([])
     const [activeStakesRefreshing, setActiveStakesRefreshing] = useState([])
 
@@ -40,10 +42,10 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
 
     const calcBPB = (firstArg) => {
         const amount = new BigNumber(firstArg).multipliedBy(new BigNumber(10).pow(decimals.TAMPA))
-        const multi = BigNumber(7).multipliedBy(new BigNumber(10).pow(24))
+        const multi = BigNumber(7).multipliedBy(new BigNumber(10).pow(14))
 
-        return +firstArg === 0 ? 0 : amount.multipliedBy(BigNumber.min(multi, amount).dividedBy(BigNumber(7).multipliedBy(new BigNumber(10).pow(25))))
-        // amountToStake * (min{7 * 10^24; amountToStake} / 7 * 10^25)
+        return +firstArg === 0 ? 0 : amount.multipliedBy(BigNumber.min(multi, amount).dividedBy(BigNumber(7).multipliedBy(new BigNumber(10).pow(15))))
+        // amountToStake * (min{7 * 10^14; amountToStake} / 7 * 10^15)
     }
 
     const calcStakeProgress = (start, end) => {
@@ -124,8 +126,8 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                         if (isActive) {
                             const unstakeParams = await contractService.getUnstakeParams(userAddress, i, stake.stakeId)
 
-                            activeStakesItem.penalti = unstakeParams.cappedPenalty
-                            activeStakesItem.penaltiDividents = unstakeParams.dividends
+                            activeStakesItem.penalti = new BigNumber(unstakeParams.cappedPenalty).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                            activeStakesItem.penaltiDividents = new BigNumber(unstakeParams.dividends).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
                             activeStakesItem.stakeReturn = new BigNumber(unstakeParams.stakeReturn).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
                         }
 
@@ -146,7 +148,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
 
                         newTotalDividents = newTotalDividents.plus(activeStakesItem.dividents)
 
-                        activeStakesItem.dividents = new BigNumber(activeStakesItem.dividents).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                        activeStakesItem.dividents = new BigNumber(activeStakesItem.dividents).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
 
                         activeStakesItem.interest = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewards')
 
@@ -156,7 +158,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
 
                         newTotalBonusShares = newTotalBonusShares.plus(activeStakesItem.interest).plus(activeStakesItem.bonusday)
 
-                        activeStakesItem.currentValue = BigNumber.sum(activeStakesItem.interest, activeStakesItem.shares).toFixed()
+                        activeStakesItem.currentValue = BigNumber.sum(activeStakesItem.interest, activeStakesItem.staked).toFixed()
 
                         newTotalShares = newTotalShares.plus(activeStakesItem.shares)
 
@@ -169,7 +171,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                     }
                     setActiveStakesRefreshing(false)
                     setTotalShares(newTotalShares.toFixed())
-                    setTotalDividents(newTotalDividents.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
+                    setTotalDividents(newTotalDividents.dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed())
                     setTotalInterests(newTotalInterests.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                     setTotalBonusShares(newTotalBonusShares.toFixed())
                     setTotalPaidAmount(newTotalPaidAmount.toFixed())
@@ -200,7 +202,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                     }
                     for (let i = auctionObj[1]; i <= startDay; i++) {
                         let value = await contractService.xfLobby(i)
-                        value = new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                        value = new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
 
                         const graphDot = {
                             day: i,
@@ -238,15 +240,14 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         setIsActiveStakes(isActive)
         setActiveStakes([])
         contractService.balanceOf(userAddress)
-            .then(res => {
-                console.log(res, 'balance')
-                setWalletBalance(res)
-            })
+            .then(res => setWalletBalance(res))
             .catch(err => console.log(err))
 
         contractService.checkAllowance(userAddress)
             .then(res => setIsTokenApproved(res))
             .catch(err => setIsTokenApproved(err))
+
+        contractService.globals().then(res => setShareRate(res[2])).catch(err => console.log(err))
 
         contractService.currentDay()
             .then(res => {
@@ -264,7 +265,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                             newTotalStaked = +newTotalStaked + +item.stakedSuns
                         })
 
-                        newTotalStaked = BigNumber((newTotalStaked) / Math.pow(10, decimals.TAMPA)).toString()
+                        newTotalStaked = BigNumber((newTotalStaked) / Math.pow(10, decimals.TAMPA)).toFixed()
 
                         setTotalStaked(newTotalStaked)
 
@@ -338,6 +339,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                     handleStake={handleStake}
                     calcLBP={calcLBP}
                     calcBPB={calcBPB}
+                    shareRate={shareRate}
                 />
                 <Graph to="/auction" dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} data={graphData} />
                 <ReferrerLink userAddress={userAddress} isDarkTheme={isDarkTheme} />

@@ -38,22 +38,6 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
         }
     })
 
-    const getAuctionPool = (day) => {
-        let result = 0;
-        if (day >= 0 && day <= 365) {
-            result = new BigNumber(5)
-                .multipliedBy(new BigNumber(10).pow(6))
-                .multipliedBy(new BigNumber(10).pow(18))
-                .minus(new BigNumber(day).multipliedBy(new BigNumber(10958904109589041095890)));
-            // 5 * 10^6 * 10^18 - ((enterDay - 1) * 1095890410958)
-        } else {
-            result = new BigNumber(1).multipliedBy(new BigNumber(10).pow(6)).multipliedBy(new BigNumber(10).pow(18));
-            // 1 * 10^6 * 10^18
-        }
-
-        return result.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
-    }
-
     const calcReceived = async (day, memberEntry, currentRawAmount, pool) => {
 
         const dailyEntryCurrentDay = await contractService.xfLobby(day)
@@ -84,6 +68,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
         const startPoint = +days - (page - 1) * 5
         const endPoint = +startPoint - 5 < +auctionObj[1] ? +auctionObj[1] : +startPoint - 5
 
+
         for (let i = startPoint; i >= endPoint; i--) {
             let currentRawAmount = new BigNumber(0);
 
@@ -103,18 +88,20 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
                 status: 'Active'
             }
 
-            auctionRow.pool = getAuctionPool(i)
+            auctionRow.pool = await contractService.waasLobby(i)
 
-            for (let j = +memberObj.headIndex; j < +memberObj.tailIndex; j++) {
+            auctionRow.pool = new BigNumber(auctionRow.pool).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+
+            for (let j = 0; j < +memberObj.tailIndex; j++) {
                 memberEntry = await contractService.xfLobbyEntry(userAddress, i, j)
 
-                currentRawAmount = currentRawAmount.plus(new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)))
+                currentRawAmount = currentRawAmount.plus(new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)))
             }
 
 
             const received = await calcReceived(i, memberEntry, currentRawAmount, auctionRow.pool)
 
-            auctionRow.received = new BigNumber(received).multipliedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+            auctionRow.received = new BigNumber(received).multipliedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
 
             auctionRow.day = await contractService.getDayUnixTime(i)
 
@@ -124,15 +111,15 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
 
             const dailyEntry = await contractService.xfLobby(i)
 
-            auctionRow.dailyEntry = new BigNumber(dailyEntry).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+            auctionRow.dailyEntry = new BigNumber(dailyEntry).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
 
             auctionRow.status = memberObj.headIndex < memberObj.tailIndex
 
             auctionRow.eth = +auctionRow.dailyEntry !== 0 ? new BigNumber(auctionRow.pool).dividedBy(auctionRow.dailyEntry).toFixed() : 0
 
             newAuctionsRows.push(auctionRow)
-            setAuctionsRows(newAuctionsRows)
         }
+        setAuctionsRows(newAuctionsRows)
         setAuctionRefreshing(false)
     }, [currentPage, userAddress, contractService])
 
@@ -143,6 +130,11 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
             .then(days => {
                 setCurrentDays(days)
 
+                contractService.getEthBalance(userAddress)
+                    .then(balance => {
+                        setEthBalance(new BigNumber(balance).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed())
+                    })
+                    .catch(err => console.log(err))
 
                 contractService.getFirstAuction()
                     .then(async res => {
@@ -154,6 +146,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
                         let rawAmount = new BigNumber(0);
                         let newParticipation = 0
                         let newTotalReceive = new BigNumber(0)
+                        let totalLotteryEntryes = 0;
 
                         for (let i = res[0] ? +res[1] : days; i <= days; i++) {
                             let currentRawAmount = new BigNumber(0);
@@ -161,40 +154,42 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
                             const memberObj = await contractService.xfLobbyMembers(i, userAddress)
                             let memberEntry = {}
 
-                            const pool = getAuctionPool(i)
-
-                            for (let j = +memberObj.headIndex; j < +memberObj.tailIndex; j++) {
+                            for (let j = 0; j < +memberObj.tailIndex; j++) {
+                                totalLotteryEntryes++
                                 memberEntry = await contractService.xfLobbyEntry(userAddress, i, j)
-                                currentRawAmount = currentRawAmount.plus(new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.TAMPA)))
+                                currentRawAmount = currentRawAmount.plus(new BigNumber(memberEntry.rawAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)))
                             }
-                            rawAmount = rawAmount.plus(currentRawAmount)
+                            if (+currentRawAmount.toFixed() > 0) {
 
-                            let received = await calcReceived(i, memberEntry, currentRawAmount, pool)
+                                let pool = await contractService.waasLobby(i)
 
-                            received = new BigNumber(received).multipliedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                                pool = new BigNumber(pool).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
-                            newTotalReceive = newTotalReceive.plus(received)
+                                rawAmount = rawAmount.plus(currentRawAmount)
+
+                                let received = await calcReceived(i, memberEntry, currentRawAmount, pool)
+
+                                received = new BigNumber(received).multipliedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
+
+                                newTotalReceive = newTotalReceive.plus(received)
 
 
-                            if (+memberObj.tailIndex > 0) {
-                                newParticipation++
+                                if (+memberObj.tailIndex > 0) {
+                                    newParticipation++
 
-                                const dailyEntry = await contractService.xfLobby(i)
+                                    const dailyEntry = await contractService.xfLobby(i)
 
-                                newAverageRate = newAverageRate.plus(new BigNumber(pool).dividedBy(new BigNumber(dailyEntry).dividedBy(new BigNumber(10).pow(decimals.TAMPA))))
+                                    newAverageRate = newAverageRate.plus(new BigNumber(pool).dividedBy(new BigNumber(dailyEntry).dividedBy(new BigNumber(10).pow(decimals.ETH))))
+                                }
                             }
                         }
+                        newAverageRate = newAverageRate.dividedBy(totalLotteryEntryes)
 
                         setTotalReceive(newTotalReceive.toFixed())
                         setAverageRate(newAverageRate.toFixed())
                         setTotalEntry(rawAmount.toFixed())
                         setParticipation(newParticipation)
 
-                        contractService.getEthBalance(userAddress)
-                            .then(balance => {
-                                setEthBalance(new BigNumber(balance).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toString())
-                            })
-                            .catch(err => console.log(err))
 
                         setIsSummaryBetsLoading(false)
                     })
@@ -230,7 +225,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
                     }
                     for (let i = +auctionObj[1]; i <= +currentDays; i++) {
                         let value = await contractService.xfLobby(i)
-                        value = new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
+                        value = new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
 
                         const graphDot = {
                             day: i,
@@ -274,6 +269,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
             swapMethod: 'xfLobbyEnter',
             contractName: 'TAMPA',
             stake: false,
+            isEth: true,
             auction: true,
             callback: () => getData()
         })

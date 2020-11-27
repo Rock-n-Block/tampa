@@ -138,10 +138,10 @@ class MetamaskService {
         });
     }
 
-    getContributeTransaction({ data, tokenAddress, walletAddress, method, contractName, withdraw, stake, auction, callback }) {
+    getContributeTransaction({ data, tokenAddress, walletAddress, method, contractName, withdraw, stake, auction, callback, isEth, errCallback }) {
 
         const transactionData = withdraw ? data : new BigNumber(data.amount)
-            .times(Math.pow(10, tokensDecimal[contractName]))
+            .times(Math.pow(10, tokensDecimal[isEth ? 'ETH' : contractName]))
             .toString(10);
 
         const depositMethod = this.getMethodInterface(
@@ -163,7 +163,8 @@ class MetamaskService {
                     value: auction ? transactionData : ''
                 },
                 'metamask',
-                callback
+                callback,
+                errCallback
             );
         };
         return {
@@ -174,8 +175,8 @@ class MetamaskService {
     }
 
 
-    createTokenTransaction = ({ data, tokenAddress, walletAddress, method, contractName, callback, withdraw, stake, auction }) => {
-        const contributeData = this.getContributeTransaction({ data, tokenAddress, walletAddress, method, contractName, withdraw, stake, auction, callback });
+    createTokenTransaction = ({ data, tokenAddress, walletAddress, method, contractName, callback, withdraw, stake, auction, isEth, errCallback }) => {
+        const contributeData = this.getContributeTransaction({ data, tokenAddress, walletAddress, method, contractName, withdraw, stake, auction, callback, isEth, errCallback });
 
         let transaction = {}
 
@@ -275,7 +276,7 @@ class MetamaskService {
 
 
 
-    sendTransaction(transactionConfig, provider, callback) {
+    sendTransaction(transactionConfig, provider, callback, errCallback) {
         if (provider) {
             this.Web3Provider.eth.setProvider(this.providers[provider]);
         }
@@ -315,9 +316,9 @@ class MetamaskService {
                         }
                     },
                     (err) => {
-                        if (callback) {
+                        if (errCallback) {
                             setTimeout(() => {
-                                callback(false)
+                                errCallback(false)
                             }, 1000)
                         }
                     },

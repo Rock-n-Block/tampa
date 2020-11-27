@@ -1,7 +1,7 @@
 @import '../../styles/vars';
 
 .lottery {
-  padding: 40px 0px;
+  padding: 40px 0px 0;
   margin-bottom: 40px;
   text-transform: uppercase;
   &__title {
@@ -50,6 +50,10 @@
   }
   &__info {
     display: flex;
+    &-progress {
+      margin-top: 20px;
+      text-align: center;
+    }
     &-item {
       border: 2px solid #e8f1f9;
       width: 100%;

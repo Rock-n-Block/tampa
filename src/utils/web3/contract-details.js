@@ -1,6 +1,6 @@
 export default {
     TAMPA: {
-        ADDRESS: '0x54417deA0344Da8b15AE76f13f2b0E3365dB70AF',
+        ADDRESS: '0xd18513457743aa51C6859de21d1DBf4b5f84A088',
         ABI: [
             {
                 "inputs": [
@@ -460,6 +460,57 @@ export default {
                 "inputs": [
 
                 ],
+                "name": "LAUNCH_TIME",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+
+                ],
+                "name": "LOTERY_ENTRY_TIME",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+
+                ],
+                "name": "ROUND_TIME",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+
+                ],
                 "name": "allocatedSupply",
                 "outputs": [
                     {
@@ -749,6 +800,23 @@ export default {
                     }
                 ],
                 "name": "dayChanceCount",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+
+                ],
+                "name": "dayNumberBegin",
                 "outputs": [
                     {
                         "internalType": "uint256",
@@ -1614,6 +1682,48 @@ export default {
                 ],
                 "payable": false,
                 "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "enterDay",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "waasLobby",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_waasLobby",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "pure",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "day",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "whatDayIsItToday",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
                 "type": "function"
             },
             {

@@ -94,7 +94,7 @@ export default class AuctionLobby extends React.PureComponent {
                                                     <img src={ethImg} alt="" />
                                                     <span>ETH</span>
                                                 </div>
-                                                <button onClick={() => { this.props.handleEnterAuction(this.state.auctionValue); this.setState({ auctionValue: '' }) }} className="a-lobby__popover-btn btn">send</button>
+                                                <button onClick={() => { this.props.handleEnterAuction(this.state.auctionValue); this.setState({ auctionValue: '' }) }} className="a-lobby__popover-btn btn" disabled={!this.state.auctionValue || this.state.auctionValue <= 0}>send</button>
                                                 <div className="a-lobby__popover-text">Your balance: {this.props.ethBalance} <span onClick={() => this.setState({ auctionValue: this.props.ethBalance })}>MAX</span></div>
                                             </div>
                                         } >

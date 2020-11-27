@@ -11,7 +11,7 @@ import tampaImg from '../../assets/img/tampa.svg';
 import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 import Spiner from '../../assets/img/oval.svg';
 
-const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTokenApproving, handleApproveToken, handleStake, calcLBP, calcBPB }) => {
+const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTokenApproving, handleApproveToken, handleStake, calcLBP, calcBPB, shareRate }) => {
     const [amount, setAmount] = React.useState('')
     const [days, setDays] = React.useState('')
 
@@ -39,8 +39,8 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
     React.useEffect(() => {
         const calclbp = calcLBP(amount, days)
         const calcbpb = calcBPB(amount)
-        setTimeBonus(calclbp ? calclbp.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed() : 0)
-        setValueBonus(calcbpb ? calcbpb.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed() : 0)
+        setTimeBonus(calclbp ? calclbp.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed(8) : 0)
+        setValueBonus(calcbpb ? calcbpb.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed(8) : 0)
     }, [amount, days])
 
     return (
@@ -50,7 +50,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                     <div className="s-form__title">
                         <h1>Stake</h1>
                         <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="You can stake your Jackpot token for a fixed number of days to earn interest on them. Make sure to stake more than 5 days to be eligible to get bonus days reward and participation in the lucky draw.
-At the end of every day, a daily stake pool of Jackpot tokens will be calculated and it will be shared and allocate to all the open stakes between all the open stakes based on their staked tokens amount which will be available for users to withdraw when the stake ends." />
+<br><br>At the end of every day, a daily stake pool of Jackpot tokens will be calculated and it will be shared and allocate to all the open stakes between all the open stakes based on their staked tokens amount which will be available for users to withdraw when the stake ends." />
                     </div>
                     <div className="s-form__balance">
                         Your balance: {walletBalance} <span onClick={handleSendMax}>MAX</span>
@@ -114,7 +114,7 @@ At the end of every day, a daily stake pool of Jackpot tokens will be calculated
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
                                 <span>
-                                    <RowItemTooltip tooltipText={amount ? new BigNumber(timeBonus).plus(valueBonus).toFixed() : 0} parent="stakes">{amount ? new BigNumber(timeBonus).plus(valueBonus).toFixed() : 0}</RowItemTooltip>
+                                    <RowItemTooltip tooltipText={amount ? new BigNumber(timeBonus).plus(valueBonus).toFixed(8) : 0} parent="stakes">{amount ? new BigNumber(timeBonus).plus(valueBonus).toFixed(8) : 0}</RowItemTooltip>
                                 </span>
                                 <span>Total</span>
                             </div>
@@ -132,9 +132,9 @@ At the end of every day, a daily stake pool of Jackpot tokens will be calculated
                         <div className="s-form__bonus-item">
                             <div className="s-form__info-item">
                                 <span>
-                                    <RowItemTooltip tooltipText={valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toFixed() : 0} parent="stakes">{valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).toFixed() : 0}</RowItemTooltip>
+                                    <RowItemTooltip tooltipText={valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).multipliedBy(new BigNumber(10).pow(5)).dividedBy(shareRate).toFixed(8) : 0} parent="stakes">{valueBonus && amount ? new BigNumber(timeBonus).plus(valueBonus).plus(amount).multipliedBy(new BigNumber(10).pow(5)).dividedBy(shareRate).toFixed(8) : 0}</RowItemTooltip>
                                 </span>
-                                <span>Effective Jackpot</span>
+                                <span>shares</span>
                             </div>
                         </div>
                     </div>
@@ -143,7 +143,7 @@ At the end of every day, a daily stake pool of Jackpot tokens will be calculated
                     <div className="s-form__info-item">
                         <span>{Math.floor(days / 5)}</span>
                         <span>bonus day
-                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="Every stake will get a bonus day every 5 days that it has been active, stakes get 2X interest on bonus days. Example: creating a stake at day 4 for 15 days gives this stake 3 bonus at days 10,15, and day 20 etc." />
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="Every stake will get a bonus day every 5 days that it has been active, stakes get 2X interest on bonus days. <br><br>Example: creating a stake at day 4 for 15 days gives this stake 3 bonus at days 10,15, and day 20 etc." />
                         </span>
                     </div>
                 </div>

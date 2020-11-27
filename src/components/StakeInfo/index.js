@@ -29,7 +29,7 @@ const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, i
                         <RowItemTooltip tooltipText={totalDividents} parent="s-info__content">{totalDividents}</RowItemTooltip>
                     </div>
                     <div className="s-info__item-subhead">Total eth dividends
-                            <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-info__content" tooltipText="One of the benefits of Staking J is ETH dividends. At the end of each day, a ETH dividends pool will be calculated and allocated to all the open stakes based on their stake amount. The ETH dividends pool comes from the total daily entry of the auction lobby the only way to receive ETH Dividends is having open stakes<br> After you exit your stakes you will receive your ETH dividends" />
+                            <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-info__content" tooltipText="One of the benefits of Staking J is ETH dividends. At the end of each day, a ETH dividends pool will be calculated and allocated to all the open stakes based on their stake amount.<br><br> The ETH dividends pool comes from the total daily entry of the auction lobby the only way to receive ETH Dividends is having open stakes.<br><br> After you exit your stakes you will receive your ETH dividends." />
                     </div>
                 </div>
                 <div className="s-info__item">

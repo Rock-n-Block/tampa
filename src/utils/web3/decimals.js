@@ -1,3 +1,4 @@
 export default {
-    TAMPA: 18
+    TAMPA: 8,
+    ETH: 18
 }
