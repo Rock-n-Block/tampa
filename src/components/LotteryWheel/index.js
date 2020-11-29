@@ -9,8 +9,6 @@ import lotteryPlayingAudio from '../../assets/mp3/test.mp3';
 
 const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted }) => {
 
-    const [lottery, setLottery] = React.useState(null)
-
     const container = React.useRef()
     const audioEnd = React.useRef()
     const playingAudio = React.useRef()
@@ -22,7 +20,6 @@ const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted }) => {
         }
         params.data = data;
         const lottery = new lotteryWheel(params);
-        setLottery(lottery)
         lottery.start();
 
         if (lotteryWinner) {

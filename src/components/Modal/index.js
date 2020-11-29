@@ -11,10 +11,11 @@ import './Modal.scss'
 const ModalComponent = () => {
     const dispatch = useDispatch();
 
-    const { isOpen, errorMsg } = useSelector((state) => {
+    const { isOpen, errorMsg, isDarkTheme } = useSelector((state) => {
         return {
             isOpen: state.modal.isOpen,
-            errorMsg: state.user.errorMsg
+            errorMsg: state.user.errorMsg,
+            isDarkTheme: state.theme.isDarkTheme
         }
     })
 
@@ -28,6 +29,7 @@ const ModalComponent = () => {
             onOk={handleOk}
             centered={true}
             onCancel={handleOk}
+            className={isDarkTheme && 'darktheme'}
             footer={[
                 <button key="submit" type="primary" className="btn" onClick={handleOk}>
                     Ok

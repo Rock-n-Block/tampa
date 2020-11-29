@@ -16,10 +16,10 @@
     &-btn {
       padding: 7px 0 !important;
       width: 86px !important;
+      margin-left: 60px;
     }
     span {
       color: $red;
-      margin-right: 60px;
     }
   }
   &__row {
@@ -34,8 +34,10 @@
     &-item {
       text-align: center;
 
-      text-overflow: ellipsis;
-      overflow: hidden;
+      &-address {
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
     }
     &-head {
       font-size: 13px;

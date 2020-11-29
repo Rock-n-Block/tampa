@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import { LotteryWheel, RowItemTooltip } from '../../components';
+import { LotteryWheel } from '../../components';
 
 import './LotteryActive.scss'
 import tampaImg from '../../assets/img/eth.svg';

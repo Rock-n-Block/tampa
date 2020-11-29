@@ -54,8 +54,11 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
             stakeId
         })
 
+        const seconds = moment.utc(stake.start * 1000).diff(moment.utc(), 'seconds')
+
+        console.log(seconds, 'seconds')
         // if (diffDays < 0 || diffDays >= 14) {
-        if (diffDays < 0 || diffDays >= 10) {
+        if ((diffDays < 0 || diffDays >= 10) && seconds <= 0) {
             setVisibleModal(true)
         } else {
             handleWithdraw(index, stakeId)
@@ -137,6 +140,7 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                 onCancel={() => setVisibleModal(false)}
                 footer={false}
                 closable={false}
+                className={isDarkTheme && 'darktheme'}
                 centered={true}
                 width={510}
             >

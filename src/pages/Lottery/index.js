@@ -29,7 +29,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
 
     const getWinners = React.useCallback(async (days) => {
         const newWinners = []
-        for (let i = 0; i <= days; i++) {
+        for (let i = days; i >= 0; i--) {
             const winner = await contractService.winners(i)
 
             if (winner.who !== '0x0000000000000000000000000000000000000000') {
@@ -37,7 +37,8 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                     day: i,
                     date: '20.10.2020',
                     amount: new BigNumber(winner.totalAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed(),
-                    winner: winner.who
+                    winner: winner.who,
+                    isWithdrawed: +winner.restAmount
                 }
 
                 winnerObj.date = await contractService.getDayUnixTime(i)
@@ -75,6 +76,24 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
             withdraw: true,
             callback: () => getWinners(currentDay)
         })
+    }
+
+    const getWinner = (day) => {
+        if (isLotteryStarted) {
+            contractService.winners(day - 1)
+                .then(res => {
+                    console.log(res, 'winner')
+
+                    if (res.who !== '0x0000000000000000000000000000000000000000') {
+                        setLotteryWinner({
+                            who: res.who,
+                            isMe: res.who.toLowerCase() === userAddress.toLowerCase(),
+                            totalAmount: new BigNumber(res.totalAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed(),
+                        })
+                    }
+                })
+                .catch(err => console.log(err))
+        }
     }
 
     const getData = React.useCallback(() => {
@@ -123,7 +142,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                 contractService.globwhatDayIsItTodayals(days)
                     .then(res => {
                         setOddDay(!!!(res % 2))
-                        if (res % 2) {
+                        if (!(res % 2)) {
                             getMembersPromises(days)
                                 .then(result => {
                                     const members = {}
@@ -144,7 +163,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                                         }
                                     })
                                     for (let key in members) {
-                                        members[key] = members[key] ? members[key] * 100 / allChancesCount : 0
+                                        members[key] = members[key] ? (members[key] * 100 / allChancesCount).toFixed(2) : 0
                                     }
                                     setLotteryPercents(members)
                                 })
@@ -153,22 +172,10 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                     })
                     .catch(err => console.log(err))
 
-
-
-                // для победителя и участников лотереи брать currentDay - 1
-                contractService.winners(days - 1)
-                    .then(res => {
-                        console.log(res, 'winner')
-
-                        if (res.who !== '0x0000000000000000000000000000000000000000') {
-                            setLotteryWinner({
-                                who: res.who,
-                                isMe: res.who.toLowerCase() === userAddress.toLowerCase(),
-                                totalAmount: new BigNumber(res.totalAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed(),
-                            })
-                        }
-                    })
-                    .catch(err => console.log(err))
+                getWinner(days)
+                setTimeout(() => {
+                    getWinner(days)
+                }, 60000)
             })
             .catch(err => console.log(err))
     }, [contractService, getWinners])

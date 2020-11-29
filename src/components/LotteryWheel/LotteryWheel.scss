@@ -90,6 +90,10 @@
 
 .darktheme {
   .l-wheel {
+    .lottery-container:after {
+      color: white;
+      background: $blue;
+    }
     .lottery-end {
       &::after {
         background: linear-gradient(
@@ -103,6 +107,7 @@
       }
     }
     .lottery-item {
+      color: white;
       &_text {
         &.winner {
           color: $blue;

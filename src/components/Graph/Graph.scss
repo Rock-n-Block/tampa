@@ -99,5 +99,10 @@
         width: max-content;
       }
     }
+    &__tooltip {
+      &-circle {
+        background: $blue;
+      }
+    }
   }
 }

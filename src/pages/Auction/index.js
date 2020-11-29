@@ -33,7 +33,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
 
     const { graphData, dividentsPool } = useSelector(({ graph }) => {
         return {
-            graphData: graph.stakeGraphDots,
+            graphData: graph.graphDots,
             dividentsPool: graph.dividentsPool
         }
     })

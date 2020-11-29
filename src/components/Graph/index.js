@@ -44,10 +44,14 @@ const Graph = ({ dividentsPool, isDarkTheme, data, to }) => {
                             <LineChart data={data} syncId="test">
                                 <CartesianGrid stroke={isDarkTheme ? '#252253' : '#FCFCFF'} fill={isDarkTheme ? '#363362' : '#F8F7FD'} strokeWidth="10" />
                                 <XAxis
-                                    type="number"
+                                    // type="number"
                                     dataKey="day"
+                                    // tickCount={8}
+                                    // tickSize={1}
+                                    // minTickGap={1}
                                     axisLine={false}
                                     tickLine={false}
+                                    // interval='preserveStart'
                                     stroke={isDarkTheme ? '#53B9EA' : "#DB4848"}
                                 >
                                 </XAxis>

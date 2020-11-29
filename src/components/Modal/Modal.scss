@@ -3,6 +3,7 @@
   padding-bottom: 0 !important;
   &-content {
     color: $black;
+    font-family: BM;
     background: linear-gradient(
         190.57deg,
         rgba(255, 255, 255, 0.56) 19.25%,
@@ -41,4 +42,17 @@
     display: block;
     margin: 0 auto;
   }
+}
+.darktheme {
+  .ant-modal {
+    &-content {
+      color: white !important;
+      background: $box-bg-dark #282656 !important;
+      box-shadow: $box-shadow-dark !important;
+      border: none !important;
+    }
+  }
+}
+.ant-modal.darktheme {
+  background: transparent !important;
 }

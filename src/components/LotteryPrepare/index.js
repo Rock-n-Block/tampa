@@ -48,7 +48,7 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
                         </div>
                     </div>
                 </div>
-                {isOddDay && lotteryPercents && Object.keys(lotteryPercents).length && <LotteryProgress userAddress={userAddress} segments={lotteryPercents} />}
+                {isOddDay && lotteryPercents && Object.keys(lotteryPercents).length ? <LotteryProgress userAddress={userAddress} segments={lotteryPercents} /> : ''}
                 {!isOddDay && <div className="lottery__info-progress">Today one chance for every who entry the auction.</div>}
             </div>
         </div>

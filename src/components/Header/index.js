@@ -1,12 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { intervalToDuration } from 'date-fns'
 import { Switch } from 'antd';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
-
-import ContractService from '../../utils/contractService';
 
 import { themeActions } from '../../redux/actions';
 
@@ -44,6 +41,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
             .then(day => {
                 contractService.getDayUnixTime(day)
                     .then(date => {
+                        console.log(1)
                         const interval = setInterval(() => {
                             let lotteryDateStart = moment.utc(date * 1000).add(10, 'minutes')
                             let dateNow = moment.utc()
@@ -53,6 +51,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                             if (seconds === 0 || seconds < 0) {
                                 clearInterval(secondInterval)
                                 clearInterval(interval)
+                                setTimeUntil('00:00:00')
                                 getDate()
                             }
 
@@ -100,7 +99,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                     </div>
                     <div className="header__right m-h">
                         <div className="header__time">
-                            Day ends in: <span>{timeUntil}</span>
+                            auction ends in: <span>{timeUntil}</span>
                         </div>
                         <div className={classNames('header__theme', {
                             active: !isDarkTheme

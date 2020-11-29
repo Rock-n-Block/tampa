@@ -30,9 +30,9 @@ const LotteryHistory = ({ data, handleLotteryWithdraw, userAddress }) => {
                                     item.winner.toLowerCase() === userAddress.toLowerCase() ?
                                         <div className="l-history__win">
                                             <span>YOU WIN</span>
-                                            <button onClick={() => handleLotteryWithdraw(item.day)} className="btn btn--withdraw l-history__win-btn">WITHDRAW</button>
+                                            {item.isWithdrawed ? <button onClick={() => handleLotteryWithdraw(item.day)} className="btn btn--withdraw l-history__win-btn">WITHDRAW</button> : ''}
                                         </div>
-                                        : item.winner
+                                        : <div className="l-history__row-item-address">{item.winner}</div>
                                 }
                             </div>
                         </div>

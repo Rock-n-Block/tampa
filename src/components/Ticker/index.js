@@ -1,15 +1,13 @@
 
 import React from 'react';
 import Ticker from 'react-ticker'
-import moment from 'moment';
 
 import './Ticker.scss'
 
 const TickerComponent = ({ contractService }) => {
-    const [isOddDay, setOddDay] = React.useState(false)
+    const [isOddDay, setOddDay] = React.useState(null)
 
     React.useEffect(() => {
-        // setOddDay(!!(moment.utc().day() % 2))
 
         if (contractService) {
 
@@ -17,7 +15,7 @@ const TickerComponent = ({ contractService }) => {
                 .then(day => {
                     contractService.globwhatDayIsItTodayals(day)
                         .then(res => {
-                            setOddDay(!!!(res % 2))
+                            setOddDay(!!(res % 2))
                         })
                         .catch(err => console.log(err))
                 })
@@ -27,13 +25,13 @@ const TickerComponent = ({ contractService }) => {
 
     return (
         <div className="ticker-box">
-            <Ticker offset="80">
+            {isOddDay !== null && <Ticker offset="80">
                 {({ index }) => (
                     <>
                         <div key={index}>{isOddDay ? 'Today one chance for every who entry the auction.' : 'Today one chance per every 1 ETH in the entry in the auction.'}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                     </>
                 )}
-            </Ticker>
+            </Ticker>}
         </div>
     );
 }
