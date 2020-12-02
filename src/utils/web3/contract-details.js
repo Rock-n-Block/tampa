@@ -1,6 +1,6 @@
 export default {
     TAMPA: {
-        ADDRESS: '0xac1C5981891Fc1b5704F7557E192C949FD475224',
+        ADDRESS: '0x6c7e52988da4925d893105B01c3D9f8Db302A545',
         ABI: [
             {
                 "inputs": [
@@ -1246,6 +1246,23 @@ export default {
             {
                 "constant": true,
                 "inputs": [
+
+                ],
+                "name": "lastEndedLoteryDayWithWinner",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
                     {
                         "internalType": "uint256",
                         "name": "",
@@ -1284,6 +1301,23 @@ export default {
                     }
                 ],
                 "name": "loteryCountLen",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+
+                ],
+                "name": "loteryDayWaitingForWinner",
                 "outputs": [
                     {
                         "internalType": "uint256",
@@ -1929,32 +1963,6 @@ export default {
                         "internalType": "uint256[2]",
                         "name": "words",
                         "type": "uint256[2]"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "beginDay",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "endDay",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "xfLobbyRange",
-                "outputs": [
-                    {
-                        "internalType": "uint256[]",
-                        "name": "list",
-                        "type": "uint256[]"
                     }
                 ],
                 "payable": false,

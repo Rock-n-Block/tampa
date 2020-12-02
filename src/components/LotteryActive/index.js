@@ -7,16 +7,16 @@ import './LotteryActive.scss'
 import tampaImg from '../../assets/img/eth.svg';
 import tampaDarkImg from '../../assets/img/eth.svg';
 
-const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotteryStarted, amountOfDraw }) => {
+const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotteryStarted, amountOfDraw, isSlowShow }) => {
     return (
         <div className="container lottery-a" id="lottery-a">
             <h1 className="lottery-a__title">today's lottery</h1>
-            {(lotteryMembers || (lotteryWinner && lotteryWinner.who)) && <LotteryWheel lotteryWinner={lotteryWinner && lotteryWinner.who} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />}
+            {(lotteryMembers || (lotteryWinner && lotteryWinner.who)) && <LotteryWheel isSlowShow={isSlowShow} lotteryWinner={lotteryWinner && lotteryWinner.who} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />}
             <div className="lottery__content container">
                 <div className="lottery__info-item lottery-a__info-item">
                     <div className="lottery__info-head">{lotteryWinner && lotteryWinner.isMe ? 'you win' : 'winner'}</div>
                     <div className="lottery__info-head lottery-a__info-head">
-                        {lotteryWinner && lotteryWinner.who}
+                        {(lotteryMembers) && lotteryWinner && lotteryWinner.who}
                     </div>
                 </div>
                 <div className="lottery__info lottery-a__info">

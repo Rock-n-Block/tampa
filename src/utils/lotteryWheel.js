@@ -49,12 +49,11 @@ export default class Lottery {
     }
 
     setWinner(winner) {
-        debugger
         this.winner = winner
     }
 
     showWinner(winner) {
-        this.playingAudio.pause()
+        // this.playingAudio.pause()
         clearInterval(this.interval)
         const item = document.querySelectorAll('.lottery-item')[5].querySelector('.lottery-item_text')
 
@@ -64,7 +63,7 @@ export default class Lottery {
     }
 
     start() {
-        this.playingAudio.play()
+        // this.playingAudio.play()
         let firstItem;
         const getFirstItemProperties = () => {
             firstItem = this.listItems.children[0];
@@ -95,16 +94,18 @@ export default class Lottery {
                 textElement.style.transform = 'scale(' + scaleValue + ')';
                 textElement.style.opacity = scaleValue;
                 if (textElement.textContent === this.winner) {
-                    this.speed += 0.05
+                    this.speed += 0.0005
                     clearInterval(this.interval)
                     this.interval = setInterval(animate, this.speed);
                     if (el.offsetTop - +(this.Boxheight - el.offsetTop - el.offsetHeight).toFixed(0) < 5) {
+                        console.log(el)
+                        clearInterval(this.interval)
                         this.playingAudio.pause()
                         el.classList.add('winner')
                         this.audioEnd.play()
                         this.container.classList.add('lottery-end')
                         this.callback()
-                        clearInterval(this.interval)
+                        break;
                     }
                 }
             }

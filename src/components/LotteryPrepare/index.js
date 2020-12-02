@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import { LotteryProgress, QuestionTooltip } from '../../components';
+import { LotteryProgress } from '../../components';
 
 import './Lottery.scss'
 
@@ -14,10 +14,6 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
     return (
         <div className="container lottery" id="lottery">
             <h1 className="lottery__title">lottery
-                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="lottery"
-                    tooltipText="The lottery pool is 2.5% of all ETH that enters the daily Auction Lobby.<br><br>If the winner of the lottery sends a video confirmation within 7 days to the address, he will additionally receive 2.5% ETH<br><br>The name of the winner will be revealed on the next day by the first person to enter the auction at 2-00 UTC or later."
-
-                />
             </h1>
             <div className="lottery__rule">
                 {isParticipant ? <img src={ruleSImg} alt="" /> : <img src={ruleFImg} alt="" />}
@@ -49,7 +45,7 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
                     </div>
                 </div>
                 {isOddDay && lotteryPercents && Object.keys(lotteryPercents).length ? <LotteryProgress userAddress={userAddress} segments={lotteryPercents} /> : ''}
-                {!isOddDay && <div className="lottery__info-progress">Today one chance for every who entry the auction.</div>}
+                {!isOddDay && <div className="lottery__info-progress">Everyone has an equal chance of winning</div>}
             </div>
         </div>
     );

@@ -183,7 +183,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
                                 }
                             }
                         }
-                        newAverageRate = newAverageRate.dividedBy(totalLotteryEntryes)
+                        newAverageRate = totalLotteryEntryes === 0 ? 0 : newAverageRate.dividedBy(totalLotteryEntryes)
 
                         setTotalReceive(newTotalReceive.toFixed())
                         setAverageRate(newAverageRate.toFixed())

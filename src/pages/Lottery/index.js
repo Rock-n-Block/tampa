@@ -1,10 +1,9 @@
 import BigNumber from 'bignumber.js';
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import { isAfter } from 'date-fns';
 import moment from 'moment';
 
-import { LotteryPrepare, LotteryHistory, LotteryActive } from '../../components';
+import { LotteryPrepare, LotteryHistory, LotteryActive, QuestionTooltip } from '../../components';
 import decimals from '../../utils/web3/decimals';
 
 import './Lottery.scss'
@@ -26,6 +25,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
     const [lotteryWinner, setLotteryWinner] = useState(null)
     const [lotteryMembers, setLotteryMembers] = useState(null)
     const [isLotteryStarted, setLotteryStarted] = useState(false)
+    const [isSlowShow, setSlowShow] = useState(false)
 
     const getWinners = React.useCallback(async (days) => {
         const newWinners = []
@@ -78,22 +78,27 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
         })
     }
 
-    const getWinner = (day) => {
-        if (isLotteryStarted) {
-            contractService.winners(day - 1)
-                .then(res => {
-                    console.log(res, 'winner')
+    const getWinner = (day, interval, isSlow) => {
+        contractService.winners(+day)
+            .then(res => {
+                console.log(res, 'winner', day)
 
-                    if (res.who !== '0x0000000000000000000000000000000000000000') {
-                        setLotteryWinner({
-                            who: res.who,
-                            isMe: res.who.toLowerCase() === userAddress.toLowerCase(),
-                            totalAmount: new BigNumber(res.totalAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed(),
-                        })
+                if (res.who !== '0x0000000000000000000000000000000000000000') {
+
+                    if (interval) {
+                        clearInterval(interval)
+                        setSlowShow(true)
                     }
-                })
-                .catch(err => console.log(err))
-        }
+                    setLotteryWinner({
+                        who: res.who,
+                        isMe: res.who.toLowerCase() === userAddress.toLowerCase(),
+                        totalAmount: new BigNumber(res.totalAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed(),
+                    })
+
+                    getWinners(currentDay)
+                }
+            })
+            .catch(err => console.log(err))
     }
 
     const getData = React.useCallback(() => {
@@ -103,14 +108,28 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                 setCurrentDay(days)
                 getWinners(days)
 
+                contractService.loteryDayWaitingForWinner()
+                    .then(day => {
+                        contractService.getDayUnixTime(day)
+                            .then(date => {
+                                let lotteryDateStart = moment.utc(date * 1000)
+                                let dateNow = moment.utc()
 
-                contractService.getDayUnixTime(days - 1)
-                    .then(date => {
-                        let lotteryDateStart = moment.utc(date * 1000)
-                        let dateNow = moment.utc()
+                                const isStarted = dateNow.isAfter(lotteryDateStart)
 
-                        setLotteryStarted(dateNow.isAfter(lotteryDateStart))
+                                setLotteryStarted(isStarted)
+
+                                if (isStarted) {
+
+                                    getWinner(day)
+
+                                    const interval = setInterval(() => {
+                                        getWinner(day, interval, true)
+                                    }, 6000)
+                                }
+                            })
                     })
+                    .catch(err => console.log(err))
 
                 contractService.xfLobby(days)
                     .then(amount => {
@@ -142,52 +161,53 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                 contractService.globwhatDayIsItTodayals(days)
                     .then(res => {
                         setOddDay(!!!(res % 2))
-                        if (!(res % 2)) {
-                            getMembersPromises(days)
-                                .then(result => {
-                                    const members = {}
-                                    let allChancesCount = 0;
-                                    console.log(result, 'members')
+                        getMembersPromises(days)
+                            .then(result => {
+                                const members = {}
+                                let allChancesCount = 0;
+                                console.log(result, 'members')
 
-                                    result.forEach(member => {
-                                        if (members[member.who]) {
-                                            members[member.who] += +member.chanceCount
-                                        } else {
-                                            members[member.who] = +member.chanceCount
-                                        }
-
-                                        allChancesCount += +member.chanceCount
-
-                                        if (member.who.toLowerCase() === userAddress.toLowerCase()) {
-                                            setParticipant(true)
-                                        }
-                                    })
-                                    for (let key in members) {
-                                        members[key] = members[key] ? (members[key] * 100 / allChancesCount).toFixed(2) : 0
+                                result.forEach(member => {
+                                    if (members[member.who]) {
+                                        members[member.who] += +member.chanceCount
+                                    } else {
+                                        members[member.who] = +member.chanceCount
                                     }
-                                    setLotteryPercents(members)
+
+                                    allChancesCount += +member.chanceCount
+
+                                    if (member.who.toLowerCase() === userAddress.toLowerCase()) {
+                                        setParticipant(true)
+                                    }
                                 })
-                                .catch(err => console.log(err))
-                        }
+                                for (let key in members) {
+                                    members[key] = members[key] ? (members[key] * 100 / allChancesCount).toFixed(2) : 0
+                                }
+                                if (!(res % 2)) {
+                                    setLotteryPercents(members)
+                                }
+                            })
+                            .catch(err => console.log(err))
                     })
                     .catch(err => console.log(err))
 
-                getWinner(days)
-                setTimeout(() => {
-                    getWinner(days)
-                }, 60000)
+                // getWinner(days - 1)
+                // setInterval(() => {
+                //     getWinner(days - 1)
+                // }, 60000)
+
             })
             .catch(err => console.log(err))
-    }, [contractService, getWinners])
+    }, [contractService, getWinners, userAddress])
 
     React.useEffect(() => {
         if (userAddress && contractService) {
-            getData()
+            getData(userAddress)
         }
     }, [userAddress, getData, contractService])
 
     return (
-        <div className="p-lottery">
+        <div className="p-lottery" id="p-lottery">
             <div className="row row--md">
                 <div className="p-lottery__nav container">
                     <div className="nav">
@@ -199,6 +219,10 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                             })
                         }
                     </div>
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="p-lottery"
+                        tooltipText="The lottery pool is 2.5% of all ETH that enters the daily Auction Lobby.<br><br>Send a video confirmation of winning the lottery by the link and get bonus 2.5%<br><br>The name of the winner will be revealed on the next day by the first person to enter the auction at 2-00 UTC or later."
+
+                    />
                 </div>
                 {activeTab === 1 && <LotteryPrepare
                     amountOfDraw={amountOfDrawTomorrow}
@@ -208,7 +232,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                     isDarkTheme={isDarkTheme}
                     isOddDay={isOddDay}
                 />}
-                {activeTab === 0 && <LotteryActive amountOfDraw={amountOfDraw} handleLotteryWithdraw={handleLotteryWithdraw} lotteryWinner={lotteryWinner} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />}
+                {activeTab === 0 && <LotteryActive isSlowShow={isSlowShow} amountOfDraw={amountOfDraw} handleLotteryWithdraw={handleLotteryWithdraw} lotteryWinner={lotteryWinner} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />}
                 <LotteryHistory userAddress={userAddress} data={lotteryHistoryItems} handleLotteryWithdraw={handleLotteryWithdraw} />
             </div>
         </div>

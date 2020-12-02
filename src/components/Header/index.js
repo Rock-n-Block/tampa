@@ -41,9 +41,9 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
             .then(day => {
                 contractService.getDayUnixTime(day)
                     .then(date => {
-                        console.log(1)
                         const interval = setInterval(() => {
-                            let lotteryDateStart = moment.utc(date * 1000).add(10, 'minutes')
+                            let lotteryDateStart = moment.utc(date * 1000).add(1, 'days')
+                            // let lotteryDateStart = moment.utc(date * 1000).add(10, 'minutes')
                             let dateNow = moment.utc()
 
                             const seconds = lotteryDateStart.diff(dateNow, 'seconds')

@@ -36,15 +36,15 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
     const onWithdrawClick = (stake, index, stakeId, end) => {
         const endDay = moment.utc(end * 1000)
 
-        // const diffDays = moment.utc().diff(endDay, 'days')
-        const diffDays = moment.utc().diff(endDay, 'minutes')
+        const diffDays = moment.utc().diff(endDay, 'days')
+        // const diffDays = moment.utc().diff(endDay, 'minutes')
 
         console.log(diffDays, 'diffDays')
 
         if (diffDays < 0) {
             setEarlyUnstake(true)
-            // } else if (diffDays >= 14) {
-        } else if (diffDays >= 10) {
+        } else if (diffDays >= 14) {
+            // } else if (diffDays >= 10) {
             setEarlyUnstake(false)
         }
 
@@ -57,8 +57,8 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
         const seconds = moment.utc(stake.start * 1000).diff(moment.utc(), 'seconds')
 
         console.log(seconds, 'seconds')
-        // if (diffDays < 0 || diffDays >= 14) {
-        if ((diffDays < 0 || diffDays >= 10) && seconds <= 0) {
+        if ((diffDays < 0 || diffDays >= 14) && seconds <= 0) {
+            // if ((diffDays < 0 || diffDays >= 10) && seconds <= 0) {
             setVisibleModal(true)
         } else {
             handleWithdraw(index, stakeId)
