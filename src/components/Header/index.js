@@ -89,7 +89,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                 <div className="header__content">
                     <div className="header__left">
                         <NavLink to="/">
-                            {isDarkTheme ? <img src={logoImgDark} alt="" /> : <img src={logoImg} alt="" />}
+                            {isDarkTheme ? <img src={logoImgDark} alt="" className="header__logo" /> : <img src={logoImg} alt="" className="header__logo" />}
                         </NavLink>
                         <div className="header__nav m-h">
                             <NavLink exact className="header__nav-item" to="/" activeClassName="header__nav-item--active">Stake</NavLink>

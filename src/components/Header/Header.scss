@@ -9,6 +9,10 @@
   font-size: 15px;
   line-height: 18px;
   width: 100%;
+  @media screen and (max-width: 991px) {
+    top: 0;
+    padding: 17px 0;
+  }
   &.active {
     background: linear-gradient(
         190.57deg,
@@ -25,16 +29,33 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    @media screen and (max-width: 991px) {
+      justify-content: center;
+    }
   }
   &__left,
   &__right {
     display: flex;
     align-items: center;
   }
+  &__right {
+    margin-top: -3px;
+  }
+  &__logo {
+    @media screen and (max-width: 1279px) {
+      width: 110px;
+    }
+    @media screen and (max-width: 991px) {
+      width: 95px;
+    }
+  }
   &__nav {
     display: flex;
     margin-left: 80px;
     align-items: center;
+    @media screen and (max-width: 1279px) {
+      margin-left: 30px;
+    }
     &-item {
       font-family: BR;
       transition: 0.3s;
@@ -45,6 +66,9 @@
       border-bottom: 3px solid transparent;
       & + & {
         margin-left: 18px;
+        @media screen and (max-width: 1279px) {
+          margin-left: 10px;
+        }
       }
       &--active {
         font-family: BB;
@@ -70,6 +94,9 @@
     display: flex;
     align-items: center;
     font-family: BR;
+    @media screen and (max-width: 1279px) {
+      margin: 0 15px;
+    }
     span {
       text-transform: uppercase;
       color: rgba(0, 0, 0, 0.3);
