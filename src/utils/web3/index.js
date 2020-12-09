@@ -6,113 +6,37 @@ import BigNumber from "bignumber.js"
 
 const IS_PRODUCTION = false;
 
-const WEB3_CONSTANTS = {
-    kovan: {
-        WEB3_PROVIDER: 'https://kovan.infura.io/v3/d53dc6a18ce94162ac4821a9c5ff06f2'
-    }
-};
-
-
-const networks = {
-    production: 'mainnet',
-    testnet: 'kovan'
-};
-
 class MetamaskService {
 
-    metaMaskWeb3;
-    providers;
-    Web3Provider;
-
     constructor() {
-        // this.providers.infura = new Web3.providers.HttpProvider(
-        //     WEB3_CONSTANTS[networks[IS_PRODUCTION ? 'mainnet' : 'testnet']].WEB3_PROVIDER
-        // );
-        this.providers = {};
-        this.providers.metamask = Web3.givenProvider;
+        this.binance = window.BinanceChain
+        this.Web3Provider = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
 
-        this.metaMaskWeb3 = window['ethereum'];
-        this.Web3Provider = new Web3(this.providers.metamask);
-        window.web34 = this.Web3Provider
+        this.binance.on('chainChanged', () => window.location.reload());
+        this.binance.on('accountsChanged', () => window.location.reload());
     }
 
     getEthBalance = (address) => {
         return this.Web3Provider.eth.getBalance(address)
     }
-
-    getAccounts = () => {
+    getAccounts() {
         return new Promise((resolve, reject) => {
-            const onAuth = (address) => {
+            const net = IS_PRODUCTION ? 'binance smart chain' : 'binance smart chain test'
+            const usedNet = IS_PRODUCTION ? '0x38' : '0x61'
+            const netVersion = this.binance.chainId
 
-                this.Web3Provider.setProvider(this.providers.metamask);
-                resolve({
-                    address,
-                    network: net,
-                    errorCode: 0,
-                    errorMsg: ''
-                })
-            };
-
-            const onError = (errorParams) => {
-                this.Web3Provider.setProvider(this.providers.metamask);
-                reject(errorParams)
-            };
-            const usedNetworkVersion = IS_PRODUCTION ? 1 : 42;
-            const net = usedNetworkVersion === 1 ? 'mainnet' : 'kovan';
-            const isValidMetaMaskNetwork = () => {
-                const networkVersion = Number((this.metaMaskWeb3.networkVersion));
-                if (usedNetworkVersion !== networkVersion) {
-                    onError({
-                        errorCode: 2,
-                        errorMsg: 'Please choose ' + net + ' network in Metamask.'
-                    })
-                    return false
-                }
-                return true;
-            };
-
-
-            if (this.metaMaskWeb3 && this.metaMaskWeb3.isMetaMask) {
-                isValidMetaMaskNetwork()
-                this.metaMaskWeb3.on('accountsChanged', (accounts) => {
-                    if (isValidMetaMaskNetwork()) {
-                        if (accounts.length) {
-                            onAuth(accounts[0]);
-                        } else {
-                            onError({
-                                errorCode: 3,
-                                errorMsg: 'Not authorized'
-                            });
-                        }
-                    }
-                });
-                this.metaMaskWeb3.on('chainChanged', () => {
-                    window.location.reload();
-                });
-
-                if (!this.metaMaskWeb3.selectedAddress) {
-                    this.metaMaskWeb3.enable().catch(() => {
-                        onError({
-                            errorCode: 3,
-                            errorMsg: 'Not authorized'
-                        });
-                    });
-                } else {
-                    if (this.metaMaskWeb3.selectedAddress) {
-                        onAuth(this.metaMaskWeb3.selectedAddress);
-                    } else {
-                        onError({
-                            errorCode: 3,
-                            errorMsg: 'Not authorized'
-                        });
-                    }
-                }
+            if (netVersion === usedNet) {
+                this.binance.request({ method: 'eth_requestAccounts' })
+                    .then(account => resolve({
+                        address: account[0]
+                    }))
+                    .catch(_ => reject({ errorMsg: 'Not authorized' }))
             } else {
-                onError({
-                    errorCode: 1,
-                    errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
-                });
+                reject({
+                    errorMsg: 'Please choose ' + net + ' network in binance wallet.'
+                })
             }
+
         })
     }
 
@@ -154,15 +78,20 @@ class MetamaskService {
             stake ? [transactionData, ...data.other] : [...data.other]
         );
 
+        const transactionObj =
+        {
+            from: walletAddress,
+            to: tokenAddress,
+            data: depositSignature,
+        }
+
+        if (auction) {
+            transactionObj.value = transactionData
+        }
+
         const contributeTransaction = () => {
             return this.sendTransaction(
-                {
-                    from: walletAddress,
-                    to: tokenAddress,
-                    data: depositSignature,
-                    value: auction ? transactionData : ''
-                },
-                'metamask',
+                transactionObj,
                 callback,
                 errCallback
             );
@@ -211,7 +140,7 @@ class MetamaskService {
             approveMethod,
             [
                 tokenAddress,
-                new BigNumber(90071992.5474099)
+                new BigNumber(10)
                     .times(Math.pow(10, Math.max(decemals, 7)))
                     .toString(10),
             ]
@@ -225,7 +154,6 @@ class MetamaskService {
                     to: ContractDetails[contractName].ADDRESS,
                     data: approveSignature,
                 },
-                'metamask',
                 callback
             );
         };
@@ -275,60 +203,21 @@ class MetamaskService {
     }
 
 
-
-    sendTransaction(transactionConfig, provider, callback, errCallback) {
-        if (provider) {
-            this.Web3Provider.eth.setProvider(this.providers[provider]);
-        }
-        return new Promise((resolve, reject) => {
-
-            this.Web3Provider.eth
-                .sendTransaction(transactionConfig, (err, response) => {
-                    if (!err) {
-                        const trxSubscription = setInterval(() => {
-                            this.Web3Provider.eth.getTransactionReceipt(
-                                response,
-                                (error, transaction) => {
-                                    if (transaction) {
-                                        if (transaction.status) {
-                                            resolve(transaction);
-                                        } else {
-                                            reject(err);
-                                        }
-                                        clearInterval(trxSubscription);
-                                    }
-                                    if (error) {
-                                        clearInterval(trxSubscription);
-                                    }
-                                },
-                            );
-                        }, 1000);
-                    } else {
-                        reject(err);
-                    }
-                })
-                .then(
-                    (result) => {
-                        if (callback) {
-                            setTimeout(() => {
-                                callback(true)
-                            }, 1000)
-                        }
-                    },
-                    (err) => {
-                        if (errCallback) {
-                            setTimeout(() => {
-                                errCallback(false)
-                            }, 1000)
-                        }
-                    },
-                )
-                .finally(() => {
-                    if (provider) {
-                        this.Web3Provider.eth.setProvider(this.providers.metamask);
-                    }
-                });
-        });
+    sendTransaction(transactionConfig, callback, errCallback) {
+        this.binance
+            .request({
+                method: 'eth_sendTransaction',
+                params: [transactionConfig]
+            })
+            .then(_ => {
+                if (callback) {
+                    setTimeout(() => callback(true), 5000)
+                }
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+                callback(false)
+            });
     }
 
 }

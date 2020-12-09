@@ -22,11 +22,14 @@ function App() {
 
   React.useEffect(() => {
     let counter = 0;
-    const metamask = new MetamaskService()
 
     const interval = setInterval(() => {
       counter += 10;
-      if (window['ethereum'] && window['ethereum'].isMetaMask) {
+      if (window.BinanceChain) {
+        const metamask = new MetamaskService()
+        const contractService = new ContractService()
+
+        setContractService(contractService)
         clearInterval(interval)
 
         metamask.getAccounts().then(res => {
@@ -46,12 +49,6 @@ function App() {
       }
     }, 10)
   }, [dispatch])
-
-  React.useEffect(() => {
-    const contractService = new ContractService()
-
-    setContractService(contractService)
-  }, [])
 
   return (
     <div className={classNames('tampa', {
