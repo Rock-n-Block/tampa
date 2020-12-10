@@ -27,6 +27,8 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
     const [isLotteryStarted, setLotteryStarted] = useState(false)
     const [isSlowShow, setSlowShow] = useState(false)
 
+    const [winnerInterval, setWinnerInterval] = useState(null)
+
     const getWinners = React.useCallback(async (days) => {
         const newWinners = []
         for (let i = days; i >= 0; i--) {
@@ -126,6 +128,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                                     const interval = setInterval(() => {
                                         getWinner(day, interval, true)
                                     }, 6000)
+                                    setWinnerInterval(interval)
                                 }
                             })
                     })
@@ -203,6 +206,9 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
     React.useEffect(() => {
         if (userAddress && contractService) {
             getData(userAddress)
+        }
+        return () => {
+            clearInterval(winnerInterval)
         }
     }, [userAddress, getData, contractService])
 
