@@ -86,7 +86,7 @@ class MetamaskService {
         }
 
         if (auction) {
-            transactionObj.value = transactionData
+            transactionObj.value = '0x' + (+transactionData).toString(16)
         }
 
         const contributeTransaction = () => {
