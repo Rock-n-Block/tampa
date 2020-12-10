@@ -1,4 +1,7 @@
 .p-lottery {
+  @media screen and (max-width: 991px) {
+    margin: 0 -10px;
+  }
   &__nav {
     margin-bottom: 10px;
     display: flex;

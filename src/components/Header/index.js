@@ -20,6 +20,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
 
     const [timeUntil, setTimeUntil] = React.useState('00:00:00')
     const [isHeaderActive, setIsHeaderActive] = React.useState(false)
+    const [isMenuActive, setIsMenuActive] = React.useState(false)
 
     const handleThemeChange = (value) => {
         dispatch(themeActions.toggleTheme(!value))
@@ -63,6 +64,11 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
             })
     }
 
+    const onMenuLinkClick = () => {
+        setIsMenuActive(false)
+        window.scrollTo(0, 0)
+    }
+
     React.useEffect(() => {
         if (contractService) {
 
@@ -83,7 +89,8 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
 
     return (
         <header className={classNames('header', {
-            'active': isHeaderActive
+            'active': isHeaderActive,
+            'menu-shown': isMenuActive
         })}>
             <div className="row">
                 <div className="header__content">
@@ -113,6 +120,38 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                             <span>{userAddress}</span>
                         </div>
                         }
+                    </div>
+
+                    <div className="m-menu-btn-wrapper" onClick={() => setIsMenuActive(!isMenuActive)}>
+                        <span className="m-menu-btn"></span>
+                    </div>
+
+                    <div className="m-menu">
+                        <div className="m-menu__top">
+                            <div className="header__nav">
+                                <NavLink exact className="header__nav-item" to="/" activeClassName="header__nav-item--active" onClick={onMenuLinkClick}>Stake</NavLink>
+                                <NavLink className="header__nav-item" to="/auction" activeClassName="header__nav-item--active" onClick={onMenuLinkClick}>Auction</NavLink>
+                                <NavLink className="header__nav-item" to="/lottery" activeClassName="header__nav-item--active" onClick={onMenuLinkClick}>lottery</NavLink>
+                            </div>
+
+                            {userAddress && <div className="header__metamask">
+                                <img src={MetamaskImg} alt="" />
+                                <span>{userAddress}</span>
+                            </div>
+                            }
+                        </div>
+                        <div className="m-menu__bottom">
+                            <div className="header__time">
+                                auction ends in: <span>{timeUntil}</span>
+                            </div>
+                            <div className={classNames('header__theme', {
+                                active: !isDarkTheme
+                            })}>
+                                <span>night</span>
+                                <Switch defaultChecked={!isDarkTheme} size="big" onChange={handleThemeChange} />
+                                <span>Light</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
