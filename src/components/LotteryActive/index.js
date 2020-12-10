@@ -13,7 +13,7 @@ const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotterySt
             <h1 className="lottery-a__title">today's lottery</h1>
             {(lotteryMembers || (lotteryWinner && lotteryWinner.who)) && <LotteryWheel isSlowShow={isSlowShow} lotteryWinner={lotteryWinner && lotteryWinner.who} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />}
             <div className="lottery__content container">
-                <div className="lottery__info-item lottery-a__info-item">
+                <div className="lottery__info-item lottery-a__info-item lottery-a__info-item--winner">
                     <div className="lottery__info-head">{lotteryWinner && lotteryWinner.isMe ? 'you win' : 'winner'}</div>
                     <div className="lottery__info-head lottery-a__info-head">
                         {(lotteryMembers) && lotteryWinner && lotteryWinner.who}

@@ -5,6 +5,17 @@
     align-items: center;
     justify-content: center;
     padding: 20px 0;
+    @media screen and (max-width: 991px) {
+      margin-bottom: 30px;
+      padding: 0;
+      background: none !important;
+      box-shadow: none !important;
+    }
+    &-item {
+      @media screen and (max-width: 991px) {
+        padding: 9px 15px 8px !important;
+      }
+    }
   }
 }
 
