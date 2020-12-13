@@ -33,7 +33,7 @@
     grid-template-columns: 1fr 190px 190px 190px;
     grid-column-gap: 20px;
     @media screen and (max-width: 991px) {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, 50%);
       grid-column-gap: 0;
       grid-row-gap: 40px;
       padding: 0;
@@ -86,20 +86,24 @@
       }
     }
     &:nth-child(2) {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      @media screen and (max-width: 991px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
     }
     &:nth-child(n+3) {
-      &:after {
-        content: '';
-        position: absolute;
-        top: -20px;
-        left: 0;
-        display: block;
-        width: 100%;
-        height: 1px;
-        background: rgba(0, 0, 0, 0.1);
+      @media screen and (max-width: 991px) {
+        &:after {
+          content: '';
+          position: absolute;
+          top: -20px;
+          left: 0;
+          display: block;
+          width: 100%;
+          height: 1px;
+          background: rgba(0, 0, 0, 0.1);
+        }
       }
     }
     &-progress {
@@ -143,6 +147,10 @@
       color: $blue;
     }
     &__item {
+      &:before,
+      &:after {
+        background-color: $gray;
+      }
       &-progress {
         color: white;
       }

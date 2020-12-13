@@ -49,13 +49,31 @@
       font-size: 14px !important;
     }
   }
+  &__list {
+    @media screen and (max-width: 991px) {
+      display: flex;
+      margin: 15px -10px 0;
+      padding: 0 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      &:after {
+        content: '';
+        min-width: 10px;
+      }
+    }
+  }
   &__row {
     transition: 0.3s;
     border: 3px solid transparent;
     grid-template-columns: 70px 100px 100px 100px 100px 100px 80px !important;
     @media screen and (max-width: 991px) {
+      display: flex !important;
+      flex-direction: column;
+      flex-shrink: 0;
+      width: 160px;
+      padding: 20px 20px 15px !important;
       &.t-row__head {
-        display: none;
+        display: none !important;
       }
     }
     &.active {
@@ -69,6 +87,22 @@
         #ffe6e6;
     }
     &-item {
+      @media screen and (max-width: 991px) {
+        width: 100%;
+        &:after {
+          content: attr(data-name);
+          display: block;
+          font-size: 12px;
+          line-height: 15px;
+          opacity: 0.5;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        & + & {
+          margin-top: 15px;
+        }
+      }
       span {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -131,6 +165,10 @@
     }
   }
   .ant-popover {
+    @media screen and (max-width: 991px) {
+      left: 50% !important;
+      transform: translateX(-50%);
+    }
     &-arrow {
       background: linear-gradient(
           190.57deg,
@@ -145,6 +183,9 @@
       top: 0 !important;
       width: 25px !important;
       height: 25px !important;
+      @media screen and (max-width: 991px) {
+        display: none;
+      }
     }
     &-inner {
       width: 290px !important;
@@ -167,6 +208,9 @@
     margin-top: 50px;
     display: flex;
     justify-content: center;
+    @media screen and (max-width: 991px) {
+      margin-top: 30px;
+    }
     .ant-pagination {
       width: fit-content !important;
       &-prev,

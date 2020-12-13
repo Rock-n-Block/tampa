@@ -175,9 +175,6 @@
       padding: 20px;
       transform: translateY(0);
     }
-    @media screen and (max-width: 991px) {
-      margin-top: 10px;
-    }
     &-day {
       border-top: 1px solid rgba(68, 68, 68, 0.1);
       margin-top: 20px;
@@ -251,7 +248,7 @@
       }
     }
     &__content {
-      border-color: transparent;
+      border-color: #282458;
     }
     &__input {
       &-head {
@@ -293,6 +290,9 @@
           background: $gray;
           opacity: 1;
         }
+      }
+      &-day {
+        border-color: $gray;
       }
       &-item {
         border-color: $gray;

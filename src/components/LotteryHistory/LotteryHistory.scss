@@ -22,13 +22,34 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    @media screen and (max-width: 991px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
     &-btn {
-      padding: 7px 0 !important;
       width: 86px !important;
       margin-left: 60px;
+      @media screen and (max-width: 991px) {
+        width: 100% !important;
+        margin-left: 0;
+        margin-top: 15px;
+      }
     }
     span {
       color: $red;
+    }
+  }
+  &__list {
+    @media screen and (max-width: 991px) {
+      display: flex;
+      margin: 15px -10px 0;
+      padding: 0 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      &:after {
+        content: '';
+        min-width: 10px;
+      }
     }
   }
   &__row {
@@ -40,8 +61,35 @@
     font-family: BR;
     font-size: 15px;
     line-height: 28px;
+    @media screen and (max-width: 991px) {
+      display: flex !important;
+      flex-direction: column;
+      flex-shrink: 0;
+      width: 160px;
+      padding: 20px 20px 15px !important;
+      &.t-row__head {
+        display: none !important;
+      }
+    }
     &-item {
       text-align: center;
+      @media screen and (max-width: 991px) {
+        width: 100%;
+        text-align: left;
+        &:after {
+          content: attr(data-name);
+          display: block;
+          font-size: 12px;
+          line-height: 15px;
+          opacity: 0.5;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        & + & {
+          margin-top: 15px;
+        }
+      }
 
       &-address {
         text-overflow: ellipsis;
@@ -54,7 +102,7 @@
       line-height: 15px;
       margin-bottom: -5px;
       @media screen and (max-width: 991px) {
-        display: none;
+        display: none !important;
       }
     }
     &-content {

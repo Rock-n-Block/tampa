@@ -47,6 +47,9 @@
   }
   &__content {
     position: relative;
+    @media screen and (max-width: 991px) {
+      margin-left: -20px;
+    }
   }
   &__text {
     font-size: 18px;
