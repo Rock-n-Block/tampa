@@ -59,8 +59,10 @@ class MetamaskService {
             };
             const usedNetworkVersion = IS_PRODUCTION ? 1 : 42;
             const net = usedNetworkVersion === 1 ? 'mainnet' : 'kovan';
-            const isValidMetaMaskNetwork = () => {
-                const networkVersion = Number((this.metaMaskWeb3.networkVersion));
+
+            const isValidMetaMaskNetwork = async () => {
+                const networkVersion = Number((this.metaMaskWeb3.networkVersion)) ||
+                await this.metaMaskWeb3.request({ method: 'eth_chainId' });
                 if (usedNetworkVersion !== networkVersion) {
                     onError({
                         errorCode: 2,
