@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { Pagination } from 'antd';
 
 import { RowItemTooltip, AuctionRowLoading } from '../../components';
+import {dateFormat} from "../../utils/prettifiers";
 
 import './AuctionLobby.scss'
 
@@ -22,7 +23,6 @@ export default class AuctionLobby extends React.PureComponent {
         }
 
         this.handlePopoverVisibleChange = this.handlePopoverVisibleChange.bind(this)
-        this.dateFormat = this.dateFormat.bind(this)
     }
 
     handlePopoverVisibleChange = (value, index) => {
@@ -35,10 +35,6 @@ export default class AuctionLobby extends React.PureComponent {
                 activeRow: null
             })
         }
-    }
-
-    dateFormat = (date) => {
-        return format(new Date(date * 1000), 'dd.MM.Y')
     }
 
     render() {
@@ -64,7 +60,7 @@ export default class AuctionLobby extends React.PureComponent {
                             return <div key={index} className={classNames('container a-lobby__row t-row t-row__content', {
                                 'active': index === this.state.activeRow
                             })}>
-                                <div className="a-lobby__row-item">{this.dateFormat(+item.day)}</div>
+                                <div className="a-lobby__row-item">{dateFormat(+item.day)}</div>
                                 <div className="a-lobby__row-item">
                                     <RowItemTooltip tooltipText={item.pool} parent="a-lobby">{item.pool}</RowItemTooltip>
                                 </div>
