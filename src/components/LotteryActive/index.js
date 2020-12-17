@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 import { LotteryWheel } from '../../components';
+import {dateFormat} from '../../utils/prettifiers';
 
 import './LotteryActive.scss'
 import tampaImg from '../../assets/img/eth.svg';
@@ -22,7 +23,9 @@ const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotterySt
                 <div className="lottery__info lottery-a__info">
                     <div className="container lottery__info-item lottery-a__info-item">
                         <div className="lottery__info-head">lottery pool from</div>
-                        <div className="lottery__info-content lottery__info-date">{moment.utc().add(1, 'days').format('DD.MM.YYYY')}</div>
+                        <div className="lottery__info-content lottery__info-date">
+                            {dateFormat(moment.utc().add(1, 'days') / 1000)}
+                        </div>
                     </div>
                     <div className="container lottery__info-item lottery-a__info-item">
                         <div className="lottery__info-head">Amount of the draw</div>

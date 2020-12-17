@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 import { LotteryProgress } from '../../components';
+import {dateFormat} from '../../utils/prettifiers';
 
 import './Lottery.scss'
 
@@ -33,7 +34,9 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
                 <div className="lottery__info">
                     <div className="container lottery__info-item">
                         <div className="lottery__info-head">lottery pool from</div>
-                        <div className="lottery__info-content lottery__info-date">{moment.utc().format('DD.MM.YYYY')}</div>
+                        <div className="lottery__info-content lottery__info-date">
+                            {dateFormat(moment.utc().add(1, 'days') / 1000)}
+                        </div>
                     </div>
                     <div className="container lottery__info-item">
                         <div className="lottery__info-head">Amount of the draw</div>
