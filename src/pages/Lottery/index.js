@@ -14,6 +14,9 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
     const [activeTab, setActiveTab] = useState(0)
     const [currentDay, setCurrentDay] = useState(null)
     const [isParticipant, setParticipant] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageCount, setPageCount] = useState(4)
+    const [lotteryRows, setLotteryRows] = useState([])
 
     const [amountOfDraw, setAmountOfDraw] = useState(0)
     const [amountOfDrawTomorrow, setAmountOfDrawTomorrow] = useState(0)
@@ -29,26 +32,47 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
 
     const [winnerInterval, setWinnerInterval] = useState(null)
 
+    const handleChangePage = (page) => {
+        setCurrentPage(page)
+        getRows(page, lotteryHistoryItems)
+    }
+
     const getWinners = React.useCallback(async (days) => {
-        const newWinners = []
-        for (let i = days; i >= 0; i--) {
-            const winner = await contractService.winners(i)
+        try {
+            const newWinners = []
+            for (let i = days; i >= 0; i--) {
+                const winner = await contractService.winners(i)
 
-            if (winner.who !== '0x0000000000000000000000000000000000000000') {
-                const winnerObj = {
-                    day: i,
-                    date: '20.10.2020',
-                    amount: new BigNumber(winner.totalAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed(),
-                    winner: winner.who,
-                    isWithdrawed: +winner.restAmount
+                if (winner.who !== '0x0000000000000000000000000000000000000000') {
+                    const winnerObj = {
+                        day: i,
+                        date: '20.10.2020',
+                        amount: new BigNumber(winner.totalAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed(),
+                        winner: winner.who,
+                        isWithdrawed: +winner.restAmount
+                    }
+
+                    winnerObj.date = await contractService.getDayUnixTime(i)
+                    newWinners.push(winnerObj)
                 }
-
-                winnerObj.date = await contractService.getDayUnixTime(i)
-                newWinners.push(winnerObj)
             }
+            setLotteryHistoryItems(newWinners)
+        } catch (e) {
+            console.error(e);
         }
-        setLotteryHistoryItems(newWinners)
     }, [contractService])
+
+    const getRows = React.useCallback(async (page = 1, winners = []) => {
+        try {
+            let newLotteryRows = [];
+            const itemsFrom = 10 * (page - 1)
+            const itemsTo = 10 * (page)
+            newLotteryRows = winners.slice(itemsFrom,itemsTo)
+            setLotteryRows(newLotteryRows)
+        } catch (e) {
+            console.error(e);
+        }
+    }, [])
 
     const getMembersPromises = day => {
         return new Promise((resolve, _) => {
@@ -238,8 +262,24 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                     isDarkTheme={isDarkTheme}
                     isOddDay={isOddDay}
                 />}
-                {activeTab === 0 && <LotteryActive isSlowShow={isSlowShow} amountOfDraw={amountOfDraw} handleLotteryWithdraw={handleLotteryWithdraw} lotteryWinner={lotteryWinner} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />}
-                <LotteryHistory userAddress={userAddress} data={lotteryHistoryItems} handleLotteryWithdraw={handleLotteryWithdraw} />
+                {activeTab === 0 &&
+                <LotteryActive
+                isSlowShow={isSlowShow}
+                amountOfDraw={amountOfDraw}
+                handleLotteryWithdraw={handleLotteryWithdraw}
+                lotteryWinner={lotteryWinner}
+                lotteryMembers={lotteryMembers}
+                isLotteryStarted={isLotteryStarted}
+                />
+                }
+                <LotteryHistory
+                userAddress={userAddress}
+                data={lotteryRows}
+                handleLotteryWithdraw={handleLotteryWithdraw}
+                currentPage={currentPage}
+                pageCount={pageCount}
+                handleChangePage={handleChangePage}
+                />
             </div>
         </div>
     );
