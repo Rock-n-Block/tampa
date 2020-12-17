@@ -1,6 +1,8 @@
 export default {
     TAMPA: {
         ADDRESS: '0x6c7e52988da4925d893105B01c3D9f8Db302A545',
+        SYMBOL: 'J',
+        DECIMALS: 8,
         ABI: [
             {
                 "inputs": [

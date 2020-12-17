@@ -13,7 +13,7 @@ import logoImg from '../../assets/img/logo.svg';
 import logoImgDark from '../../assets/img/logo-d.svg';
 import MetamaskImg from '../../assets/img/metamask.svg';
 
-const Header = ({ isDarkTheme, userAddress, contractService }) => {
+const Header = ({ isDarkTheme, userAddress, contractService, walletService }) => {
     const dispatch = useDispatch()
 
     const [secondInterval, setSecondInterval] = React.useState(null)
@@ -35,6 +35,14 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
         const sec = seconds - (minutes * 60) - (hours * 3600)
 
         setTimeUntil(`${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${sec < 10 ? '0' + sec : sec}`)
+    }
+
+    const addToken = () => {
+        try {
+            walletService.addToken()
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     const getDate = () => {
@@ -102,6 +110,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                             <NavLink exact className="header__nav-item" to="/" activeClassName="header__nav-item--active">Stake</NavLink>
                             <NavLink className="header__nav-item" to="/auction" activeClassName="header__nav-item--active">Auction</NavLink>
                             <NavLink className="header__nav-item" to="/lottery" activeClassName="header__nav-item--active">lottery</NavLink>
+                            <div className="header__nav-item" onClick={addToken}>Add token</div>
                         </div>
                     </div>
                     <div className="header__right m-h">

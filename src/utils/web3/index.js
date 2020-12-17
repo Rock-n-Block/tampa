@@ -333,6 +333,27 @@ class MetamaskService {
         });
     }
 
+
+    async addToken() {
+        try {
+            const wasAdded = await this.metaMaskWeb3.request({
+                method: "wallet_watchAsset",
+                params: {
+                    type: "ERC20",
+                    options: {
+                        address: ContractDetails['TAMPA'].ADDRESS,
+                        symbol: ContractDetails['TAMPA'].SYMBOL,
+                        decimals: ContractDetails['TAMPA'].DECIMALS,
+                    },
+                },
+            });
+            if (wasAdded) {
+                console.log("Complete");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 export default MetamaskService;

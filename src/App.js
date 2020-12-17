@@ -13,6 +13,7 @@ import './styles/main.scss'
 
 function App() {
   const [contractService, setContractService] = React.useState(null)
+  const [walletService, setWalletService] = React.useState(null)
   const dispatch = useDispatch()
   const { isDarkTheme, userAddress } = useSelector(({ theme, user }) => ({
     isDarkTheme: theme.isDarkTheme,
@@ -49,15 +50,16 @@ function App() {
 
   React.useEffect(() => {
     const contractService = new ContractService()
-
+    const metamask = new MetamaskService()
     setContractService(contractService)
+    setWalletService(metamask)
   }, [])
 
   return (
     <div className={classNames('tampa', {
       'darktheme': isDarkTheme
     })}>
-      <Header isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />
+      <Header isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} walletService={walletService} />
       <div className="row">
         <Ticker contractService={contractService} />
 
