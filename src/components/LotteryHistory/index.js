@@ -3,12 +3,10 @@ import { format } from 'date-fns';
 import classNames from 'classnames';
 
 import './LotteryHistory.scss'
+import {dateFormat} from "../../utils/prettifiers";
 
 const LotteryHistory = ({ data, handleLotteryWithdraw, userAddress }) => {
 
-    const dateFormat = (date) => {
-        return format(new Date(date * 1000), 'dd.MM.Y')
-    }
     return (
         <div className="container l-history">
             <div className="l-history__title">history</div>

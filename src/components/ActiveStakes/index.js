@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import moment from 'moment';
 
 import { RowItemTooltip, AuctionRowLoading, QuestionTooltip } from '../../components';
+import {dateFormat} from "../../utils/prettifiers";
 
 import './ActiveStakes.scss'
 
@@ -18,10 +19,6 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
     const [activeStake, setActiveStake] = React.useState({})
     const [isVisibleModal, setVisibleModal] = React.useState(false)
     const [isEarlyUnstake, setEarlyUnstake] = React.useState(null)
-
-    const dateFormat = (date) => {
-        return format(new Date(date * 1000), 'dd.MM.Y')
-    }
 
     const handleRefresh = () => {
         if (!isRefreshingStates) handleRefreshActiveStakes(!!!activeTab)
