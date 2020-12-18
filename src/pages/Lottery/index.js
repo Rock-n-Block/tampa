@@ -54,6 +54,8 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
             }
             setLotteryHistoryItems(newWinners)
             getRows(1, newWinners)
+            const newPageCount = Math.ceil(newWinners.length / 6)
+            setPageCount(newPageCount)
         } catch (e) {
             console.error(e);
         }
