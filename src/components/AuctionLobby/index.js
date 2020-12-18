@@ -81,7 +81,7 @@ export default class AuctionLobby extends React.PureComponent {
                                         {item.state && <Popover
                                             getPopupContainer={() => document.getElementById(`a-lobby`)}
                                             onVisibleChange={(value) => this.handlePopoverVisibleChange(value, index)}
-                                            placement="bottom"
+                                            placement="top"
                                             trigger="click"
                                             content={
                                                 <div className="a-lobby__popover">

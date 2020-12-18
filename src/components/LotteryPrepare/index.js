@@ -35,7 +35,7 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
                     <div className="container lottery__info-item">
                         <div className="lottery__info-head">lottery pool from</div>
                         <div className="lottery__info-content lottery__info-date">
-                            {dateFormat(moment.utc().add(1, 'days') / 1000)}
+                            {dateFormat(moment.utc() / 1000)}
                         </div>
                     </div>
                     <div className="container lottery__info-item">
