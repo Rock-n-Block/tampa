@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import { LotteryPrepare, LotteryHistory, LotteryActive, QuestionTooltip } from '../../components';
 import decimals from '../../utils/web3/decimals';
-import {confetti} from '../../utils/confetti';
 
 import './Lottery.scss'
 
@@ -265,8 +264,6 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                 pageCount={pageCount}
                 handleChangePage={handleChangePage}
                 />
-
-                <button>It's time for Confetti!</button>
             </div>
         </div>
     );
