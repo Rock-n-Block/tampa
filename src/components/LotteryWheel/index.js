@@ -6,6 +6,7 @@ import './LotteryWheel.scss'
 
 import lotteryEndAudio from '../../assets/mp3/click_wheel.mp3';
 import lotteryPlayingAudio from '../../assets/mp3/test.mp3';
+import {confetti} from "../../utils/confetti";
 
 const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted, isSlowShow }) => {
     const [lottery, setLottery] = React.useState(null)
@@ -45,8 +46,8 @@ const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted, isSlowS
             if (isSlowShow) {
                 lottery.setWinner(lotteryWinner)
             } else {
-
                 lottery.showWinner(lotteryWinner);
+                confetti(60 * 1000);
             }
         }
     }, [lottery, lotteryWinner])
