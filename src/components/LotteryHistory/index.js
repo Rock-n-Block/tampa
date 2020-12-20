@@ -45,7 +45,7 @@ const LotteryHistory = ({ data, handleLotteryWithdraw, userAddress, pageCount, c
             </div>
             {pageCount > 1 &&
             <div className="a-lobby__pages">
-                <Pagination current={currentPage} onChange={handleChangePage} total={pageCount * 10} />
+                <Pagination current={currentPage} onChange={handleChangePage} total={pageCount} />
             </div>
             }
         </>

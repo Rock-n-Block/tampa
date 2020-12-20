@@ -47,7 +47,7 @@ const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted, isSlowS
                 lottery.setWinner(lotteryWinner)
             } else {
                 lottery.showWinner(lotteryWinner);
-                confetti(60 * 1000);
+                // confetti(60 * 1000);
             }
         }
     }, [lottery, lotteryWinner])

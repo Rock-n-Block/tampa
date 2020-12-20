@@ -15,7 +15,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
     const [currentDay, setCurrentDay] = useState(null)
     const [isParticipant, setParticipant] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
-    const [pageCount, setPageCount] = useState(4)
+    const [pageCount, setPageCount] = useState()
     const [lotteryRows, setLotteryRows] = useState([])
 
     const [amountOfDraw, setAmountOfDraw] = useState(0)
