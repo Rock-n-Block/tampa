@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import Confetti from 'react-confetti';
 
 import { LotteryWheel } from '../../components';
 import {dateFormat} from "../../utils/prettifiers";
@@ -9,9 +10,28 @@ import tampaImg from '../../assets/img/eth.svg';
 import tampaDarkImg from '../../assets/img/eth.svg';
 
 const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotteryStarted, amountOfDraw, isSlowShow }) => {
+    const [isConfettiShown, setIsConfettiShown] = React.useState(false);
+
+    React.useEffect(() => {
+        if (isConfettiShown) {
+            setTimeout(() => {
+                setIsConfettiShown(false);
+            },60 * 1000)
+        }
+    }, [isConfettiShown]);
+
+    React.useEffect(() => {
+        if (lotteryWinner && lotteryWinner.who) setIsConfettiShown(true);
+    }, [lotteryWinner]);
     return (
         <div className="container lottery-a" id="lottery-a">
             <h1 className="lottery-a__title">today's lottery</h1>
+            {(lotteryWinner && lotteryWinner.who && isConfettiShown) &&
+            <Confetti
+            width={window.innerWidth}
+            height={window.innerHeight}
+            />
+            }
             {(lotteryMembers || (lotteryWinner && lotteryWinner.who)) && <LotteryWheel isSlowShow={isSlowShow} lotteryWinner={lotteryWinner && lotteryWinner.who} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />}
             <div className="lottery__content container">
                 <div className="lottery__info-item lottery-a__info-item">
