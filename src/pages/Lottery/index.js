@@ -66,7 +66,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
             let newLotteryRows = [];
             const itemsFrom = 6 * (page - 1)
             const itemsTo = 6 * (page)
-            newLotteryRows = winners.slice(itemsFrom,itemsTo)
+            newLotteryRows = winners.slice(itemsFrom, itemsTo)
             setLotteryRows([...newLotteryRows])
         } catch (e) {
             console.error(e);
@@ -132,8 +132,9 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                 setCurrentDay(days)
                 getWinners(days)
 
-                contractService.loteryDayWaitingForWinner()
-                    .then(day => {
+                Promise.all([contractService.loteryDayWaitingForWinner(), contractService.loteryDayWaitingForWinnerNew()])
+                    .then(lotteryDays => {
+                        const day = +lotteryDays[1] < +days ? lotteryDays[1] : lotteryDays[0]
                         contractService.getDayUnixTime(day)
                             .then(date => {
                                 let lotteryDateStart = moment.utc(date * 1000)
@@ -249,22 +250,22 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                     />
                 </div>
                 {activeTab === 1 &&
-                <LotteryPrepare
-                amountOfDraw={amountOfDrawTomorrow}
-                userAddress={userAddress}
-                lotteryPercents={lotteryPercents}
-                isParticipant={isParticipant}
-                isDarkTheme={isDarkTheme}
-                isOddDay={isOddDay}
-                />}
+                    <LotteryPrepare
+                        amountOfDraw={amountOfDrawTomorrow}
+                        userAddress={userAddress}
+                        lotteryPercents={lotteryPercents}
+                        isParticipant={isParticipant}
+                        isDarkTheme={isDarkTheme}
+                        isOddDay={isOddDay}
+                    />}
                 {activeTab === 0 && <LotteryActive isSlowShow={isSlowShow} amountOfDraw={amountOfDraw} handleLotteryWithdraw={handleLotteryWithdraw} lotteryWinner={lotteryWinner} lotteryMembers={lotteryMembers} isLotteryStarted={isLotteryStarted} />}
                 <LotteryHistory
-                userAddress={userAddress}
-                data={lotteryRows}
-                handleLotteryWithdraw={handleLotteryWithdraw}
-                currentPage={currentPage}
-                pageCount={pageCount}
-                handleChangePage={handleChangePage}
+                    userAddress={userAddress}
+                    data={lotteryRows}
+                    handleLotteryWithdraw={handleLotteryWithdraw}
+                    currentPage={currentPage}
+                    pageCount={pageCount}
+                    handleChangePage={handleChangePage}
                 />
             </div>
         </div>
