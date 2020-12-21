@@ -92,7 +92,7 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                     <div className="stakes__row-head-item">Staked</div>
                     <div className="stakes__row-head-item">Shares</div>
                     <div className="stakes__row-head-item">BonusDay Rewards</div>
-                    <div className="stakes__row-head-item">eth Dividends Rewards</div>
+                    <div className="stakes__row-head-item">BNB Dividends Rewards</div>
                     <div className="stakes__row-head-item stakes__red">Interest</div>
                     <div className="stakes__row-head-item">{!activeTab ? 'Current Value' : 'paid amount'}</div>
                 </div>

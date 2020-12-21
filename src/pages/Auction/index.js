@@ -313,14 +313,14 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
             <div className="row row--lg">
                 <h1 className="auction__title">Auction
                     <QuestionTooltip isDarkTheme={isDarkTheme} parent="auction"
-                        tooltipText="Auction lobbies are Daily Auctions that offer J tokens for ETH based on the J and ETH pool at the end of the day.<br>
+                        tooltipText="Auction lobbies are Daily Auctions that offer J tokens for BNB based on the J and BNB pool at the end of the day.<br>
 
 The J token pool in the lobby will start at 5 million TMP per day and decrease to 1 million over the next 365 days. Starting from day 366, the auction pool will be equal to 1 million J tokens per day.<br><br>
 
 Lobbies are daily and restart every day at 01:00 UTC.<br>
 Enter the auction in the first hour to participate in the lottery.<br><br>
 
-Auction lobbies are another way to buy J tokens that might be more profitable than purchasing on exchanges. Plus the ETH spent is rewarded back to Stakers."
+Auction lobbies are another way to buy J tokens that might be more profitable than purchasing on exchanges. Plus the BNB spent is rewarded back to Stakers."
 
                     />
                 </h1>

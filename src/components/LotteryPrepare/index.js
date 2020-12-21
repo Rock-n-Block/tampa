@@ -24,7 +24,7 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
                 <div className="lottery__list-head">WHAT YOU NEED TO DO TO BECOME A PARTICIPANT IN THE LOTTERY:</div>
                 <div className="lottery__list-item">enter the auction for the current day at the first hour</div>
                 <div className="lottery__list-subitem">
-                    - Tuesday, Thursday, Saturday, for each 1 ETH you put in during the 1st hour of the auction lobby you get 1 chance to win the JACKPOT.
+                    - Tuesday, Thursday, Saturday, for each 1 BNB you put in during the 1st hour of the auction lobby you get 1 chance to win the JACKPOT.
                 </div>
                 <div className="lottery__list-subitem">
                     - Monday, Wednesday, Friday, Sunday: everyone who buys in the first hour of the auction lobby gets a chance to win the JACKPOT.
@@ -43,7 +43,7 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
                         <div className="lottery__info-content">{amountOfDraw}</div>
                         <div className="lottery__info-wrapper">
                             {isDarkTheme ? <img src={tampaDarkImg} alt="" /> : <img src={tampaImg} alt="" />}
-                            <span>eth</span>
+                            <span>BNB</span>
                         </div>
                     </div>
                 </div>

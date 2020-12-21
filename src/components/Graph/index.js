@@ -10,8 +10,8 @@ import { QuestionTooltip } from '../../components';
 import './Graph.scss'
 
 import arrowImg from '../../assets/img/arrow.svg';
-import ethImg from '../../assets/img/eth-r.svg';
-import ethImgDark from '../../assets/img/eth-b.svg';
+import ethImg from '../../assets/img/binance-red.svg';
+import ethImgDark from '../../assets/img/binance.svg';
 import refreshImg from '../../assets/img/refresh.svg';
 import refreshDarkImg from '../../assets/img/refresh-dark.svg';
 
@@ -21,14 +21,14 @@ const Graph = ({ dividentsPool, isDarkTheme, data, to }) => {
             <div className="container s-graph" id="s-graph">
                 <div className="s-graph__head">
                     <div className="s-graph__wrapper">
-                        <div className="s-graph__text">ETH DIVIDENDS HISTORY</div>
+                        <div className="s-graph__text">BNB DIVIDENDS HISTORY</div>
                         {to && <Link to={to}><button className="s-graph__btn btn btn--md"><img src={arrowImg} alt="" /></button></Link>}
                     </div>
                     <div className="">
                         <div className="s-graph__text">
                             {dividentsPool}
                             {isDarkTheme ? <img src={ethImgDark} alt="" /> : <img src={ethImg} alt="" />}
-                            <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-graph" tooltipText="- 90% of all ETH that enters the daily Auction Lobby is pooled and distributed back out to Stakers. <br>- 5% of ETH is allocated to the lottery pool. <br>- the other 5% ETH reserve for promotion and platform development costs." />
+                            <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-graph" tooltipText="- 90% of all BNB that enters the daily Auction Lobby is pooled and distributed back out to Stakers. <br>- 5% of BNB is allocated to the lottery pool. <br>- the other 5% BNB reserve for promotion and platform development costs." />
                         </div>
                         <div className="s-graph__text--black">Current Dividends Pool </div>
                     </div>

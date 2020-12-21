@@ -28,7 +28,7 @@ const TickerComponent = ({ contractService }) => {
             {isOddDay !== null && <Ticker offset="80">
                 {({ index }) => (
                     <>
-                        <div key={index}>{isOddDay ? 'Today, an even chance of winning in the lottery for everyone who entry the auction in first hour.' : 'Today, one chance for every 1 ETH to winning in the lottery for everyone, who entry the auction in first hour.'}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div key={index}>{isOddDay ? 'Today, an even chance of winning in the lottery for everyone who entry the auction in first hour.' : 'Today, one chance for every 1 BNB to winning in the lottery for everyone, who entry the auction in first hour.'}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                     </>
                 )}
             </Ticker>}

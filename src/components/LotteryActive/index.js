@@ -6,8 +6,8 @@ import { LotteryWheel } from '../../components';
 import {dateFormat} from "../../utils/prettifiers";
 
 import './LotteryActive.scss'
-import tampaImg from '../../assets/img/eth.svg';
-import tampaDarkImg from '../../assets/img/eth.svg';
+import tampaImg from '../../assets/img/binance.svg';
+import tampaDarkImg from '../../assets/img/binance.svg';
 
 const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotteryStarted, amountOfDraw, isSlowShow }) => {
     const [isConfettiShown, setIsConfettiShown] = React.useState(false);
@@ -52,7 +52,7 @@ const LotteryActive = ({ isDarkTheme, lotteryWinner, lotteryMembers, isLotterySt
                         <div className="lottery__info-content">{amountOfDraw}</div>
                         <div className="lottery__info-wrapper">
                             {isDarkTheme ? <img src={tampaDarkImg} alt="" /> : <img src={tampaImg} alt="" />}
-                            <span>eth</span>
+                            <span>BNB</span>
                         </div>
                     </div>
                 </div>

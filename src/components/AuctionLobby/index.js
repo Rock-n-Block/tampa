@@ -11,7 +11,7 @@ import './AuctionLobby.scss'
 
 import refreshImg from '../../assets/img/refresh.svg';
 import refreshDarkImg from '../../assets/img/refresh-dark.svg';
-import ethImg from '../../assets/img/eth.svg';
+import ethImg from '../../assets/img/binance.svg';
 
 export default class AuctionLobby extends React.PureComponent {
     constructor(props) {
@@ -50,7 +50,7 @@ export default class AuctionLobby extends React.PureComponent {
                     <div className="a-lobby__row t-row t-row__head">
                         <div className="a-lobby__row-head-item">Day</div>
                         <div className="a-lobby__row-head-item">Jackpot Pool</div>
-                        <div className="a-lobby__row-head-item">eth \ Jackpot</div>
+                        <div className="a-lobby__row-head-item">BNB \ Jackpot</div>
                         <div className="a-lobby__row-head-item">Jackpot Received</div>
                         <div className="a-lobby__row-head-item">Your Entry</div>
                         <div className="a-lobby__row-head-item">Daily Entry</div>
@@ -88,7 +88,7 @@ export default class AuctionLobby extends React.PureComponent {
                                                 <InputNumber value={this.state.auctionValue} onChange={value => this.setState({ auctionValue: value })} placeholder="0,0" type="number" className="a-lobby__popover-input" />
                                                 <div className="a-lobby__popover-eth">
                                                     <img src={ethImg} alt="" />
-                                                    <span>ETH</span>
+                                                    <span>BNB</span>
                                                 </div>
                                                 <button onClick={() => { this.props.handleEnterAuction(this.state.auctionValue); this.setState({ auctionValue: '' }) }} className="a-lobby__popover-btn btn" disabled={!this.state.auctionValue || this.state.auctionValue <= 0}>send</button>
                                                 <div className="a-lobby__popover-text">Your balance: {this.props.ethBalance} <span onClick={() => this.setState({ auctionValue: this.props.ethBalance })}>MAX</span></div>

@@ -250,7 +250,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                         }
                     </div>
                     <QuestionTooltip isDarkTheme={isDarkTheme} parent="p-lottery"
-                        tooltipText="The lottery pool is 2.5% of all ETH that enters the daily Auction Lobby.<br><br>Send a video confirmation of winning the lottery by the link and get bonus 2.5%<br><br>The name of the winner will be revealed on the next day by the first person to enter the auction at 2-00 UTC or later."
+                        tooltipText="The lottery pool is 2.5% of all BNB that enters the daily Auction Lobby.<br><br>Send a video confirmation of winning the lottery by the link and get bonus 2.5%<br><br>The name of the winner will be revealed on the next day by the first person to enter the auction at 2-00 UTC or later."
 
                     />
                 </div>

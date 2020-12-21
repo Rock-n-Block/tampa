@@ -33,7 +33,7 @@ const SummaryBets = ({ isDarkTheme, currentDays, participation, totalReceive, to
                     <div className="s-bets__item-head">
                         <RowItemTooltip tooltipText={averageRate} parent="s-bets">{averageRate}</RowItemTooltip>
                     </div>
-                    <div className="s-bets__item-content">average rate eth \ Jackpot</div>
+                    <div className="s-bets__item-content">average rate BNB \ Jackpot</div>
                 </div>
             </div>
         </div>
