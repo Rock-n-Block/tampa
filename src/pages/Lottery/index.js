@@ -15,7 +15,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
     const [currentDay, setCurrentDay] = useState(null)
     const [isParticipant, setParticipant] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
-    const [pageCount, setPageCount] = useState(4)
+    const [pageCount, setPageCount] = useState(1)
     const [lotteryRows, setLotteryRows] = useState([])
 
     const [amountOfDraw, setAmountOfDraw] = useState(0)
@@ -65,8 +65,8 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
     const getRows = React.useCallback(async (page = 1, winners = []) => {
         try {
             let newLotteryRows = [];
-            const itemsFrom = 10 * (page - 1)
-            const itemsTo = 10 * (page)
+            const itemsFrom = 6 * (page - 1)
+            const itemsTo = 6 * (page)
             newLotteryRows = winners.slice(itemsFrom,itemsTo)
             setLotteryRows(newLotteryRows)
         } catch (e) {
