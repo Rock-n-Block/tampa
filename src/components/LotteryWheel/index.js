@@ -6,7 +6,7 @@ import './LotteryWheel.scss'
 
 import lotteryEndAudio from '../../assets/mp3/click_wheel.mp3';
 import lotteryPlayingAudio from '../../assets/mp3/test.mp3';
-import {confetti} from "../../utils/confetti";
+import { confetti } from "../../utils/confetti";
 
 const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted, isSlowShow }) => {
     const [lottery, setLottery] = React.useState(null)
@@ -19,12 +19,12 @@ const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted, isSlowS
         const data = [];
         const length = params.lotteryMembers.length >= 30 ? params.lotteryMembers.length : 30;
         for (let k = 0; k < length; k++) {
-            data.push(...params.lotteryMembers);
-            if (params.lotteryMembers.length < 30) {
+            if (data.length < 30) {
                 for (let i = 0; i < 20; i++) {
                     data.push('0x' + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16) + Math.floor(Math.random() * 16).toString(16));
                 }
             }
+            data.push(...params.lotteryMembers);
         }
         params.data = data;
         const lottery = new lotteryWheel(params);
@@ -36,19 +36,17 @@ const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted, isSlowS
                 lottery.showWinner(lotteryWinner);
             }, 0)
         }
-        // setTimeout(() => {
-        //     lottery.setWinner('0x00000020')
-        // }, 10000)
     }
 
     React.useEffect(() => {
         if (lottery && lotteryWinner) {
-            if (isSlowShow) {
-                lottery.setWinner(lotteryWinner)
-            } else {
-                lottery.showWinner(lotteryWinner);
-                // confetti(60 * 1000);
-            }
+
+            lottery.setWinner(lotteryWinner)
+            // if (isSlowShow) {
+            //     lottery.setWinner(lotteryWinner)
+            // } else {
+            //     lottery.showWinner(lotteryWinner);
+            // }
         }
     }, [lottery, lotteryWinner])
 
