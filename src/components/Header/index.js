@@ -110,10 +110,10 @@ const Header = ({ isDarkTheme, userAddress, contractService, walletService }) =>
                             <NavLink exact className="header__nav-item" to="/" activeClassName="header__nav-item--active">Stake</NavLink>
                             <NavLink className="header__nav-item" to="/auction" activeClassName="header__nav-item--active">Auction</NavLink>
                             <NavLink className="header__nav-item" to="/lottery" activeClassName="header__nav-item--active">lottery</NavLink>
-                            <div className="header__nav-item" onClick={addToken}>Add token</div>
                         </div>
                     </div>
                     <div className="header__right m-h">
+                        <div className="header__token" onClick={addToken}>Add token</div>
                         <div className="header__time">
                             auction ends in: <span>{timeUntil}</span>
                         </div>
