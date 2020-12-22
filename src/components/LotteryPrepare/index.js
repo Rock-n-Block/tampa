@@ -6,8 +6,8 @@ import {dateFormat} from "../../utils/prettifiers";
 
 import './Lottery.scss'
 
-import tampaImg from '../../assets/img/eth.svg';
-import tampaDarkImg from '../../assets/img/eth.svg';
+import tampaImg from '../../assets/img/binance.svg';
+import tampaDarkImg from '../../assets/img/binance.svg';
 import ruleSImg from '../../assets/img/rule-s.svg';
 import ruleFImg from '../../assets/img/rule-f.svg';
 
