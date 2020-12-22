@@ -9,11 +9,12 @@ const IS_PRODUCTION = false;
 class MetamaskService {
 
     constructor() {
-        this.binance = window.BinanceChain
-        this.Web3Provider = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
-
-        this.binance.on('chainChanged', () => window.location.reload());
-        this.binance.on('accountsChanged', () => window.location.reload());
+        this.wallet = window.ethereum
+        this.providers = {};
+        this.providers.metamask = Web3.givenProvider;
+        this.Web3Provider = new Web3(this.providers.metamask);
+        this.wallet.on('chainChanged', () => window.location.reload());
+        this.wallet.on('accountsChanged', () => window.location.reload());
     }
 
     getEthBalance = (address) => {
@@ -23,17 +24,17 @@ class MetamaskService {
         return new Promise((resolve, reject) => {
             const net = IS_PRODUCTION ? 'binance smart chain' : 'binance smart chain test'
             const usedNet = IS_PRODUCTION ? '0x38' : '0x61'
-            const netVersion = this.binance.chainId
+            const netVersion = this.wallet.chainId
 
             if (netVersion === usedNet) {
-                this.binance.request({ method: 'eth_requestAccounts' })
+                this.wallet.request({ method: 'eth_requestAccounts' })
                     .then(account => resolve({
                         address: account[0]
                     }))
                     .catch(_ => reject({ errorMsg: 'Not authorized' }))
             } else {
                 reject({
-                    errorMsg: 'Please choose ' + net + ' network in binance wallet.'
+                    errorMsg: 'Please choose ' + net + ' network in metamask wallet.'
                 })
             }
 
@@ -204,7 +205,7 @@ class MetamaskService {
 
 
     sendTransaction(transactionConfig, callback, errCallback) {
-        this.binance
+        this.wallet
             .request({
                 method: 'eth_sendTransaction',
                 params: [transactionConfig]
