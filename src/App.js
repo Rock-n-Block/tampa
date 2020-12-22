@@ -25,7 +25,7 @@ function App() {
 
     const interval = setInterval(() => {
       counter += 10;
-      if (window.BinanceChain) {
+      if (window.ethereum) {
         const metamask = new MetamaskService()
         const contractService = new ContractService()
 
