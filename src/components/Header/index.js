@@ -25,6 +25,11 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
         dispatch(themeActions.toggleTheme(!value))
     }
 
+    const copyTokenAddress = () => {
+        const address = contractService.getContractAddress()
+        navigator.clipboard.writeText(address)
+    }
+
     const timeCounter = (seconds) => {
 
         const hours = Math.floor(seconds / 3600)
@@ -42,8 +47,8 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                 contractService.getDayUnixTime(day)
                     .then(date => {
                         const interval = setInterval(() => {
-                            let lotteryDateStart = moment.utc(date * 1000).add(1, 'days')
-                            // let lotteryDateStart = moment.utc(date * 1000).add(10, 'minutes')
+                            // let lotteryDateStart = moment.utc(date * 1000).add(1, 'days')
+                            let lotteryDateStart = moment.utc(date * 1000).add(10, 'minutes')
                             let dateNow = moment.utc()
 
                             const seconds = lotteryDateStart.diff(dateNow, 'seconds')
@@ -98,6 +103,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                         </div>
                     </div>
                     <div className="header__right m-h">
+                        <div className="header__token" onClick={copyTokenAddress}>Copy address</div>
                         <div className="header__time">
                             auction ends in: <span>{timeUntil}</span>
                         </div>
