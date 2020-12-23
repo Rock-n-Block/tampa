@@ -1,7 +1,8 @@
 import Web3 from 'web3';
 import ContractDetails from './contract-details';
 import tokensDecimal from './decimals';
-import BigNumber from "bignumber.js"
+import BigNumber from "bignumber.js";
+import {isEqual} from 'lodash/lang';
 
 
 const IS_PRODUCTION = false;
@@ -34,6 +35,20 @@ class MetamaskService {
         this.metaMaskWeb3 = window['ethereum'];
         this.Web3Provider = new Web3(this.providers.metamask);
         window.web34 = this.Web3Provider
+        this.metaMaskWeb3.on('chainChanged', (newChain) => {
+            const chainId = localStorage.getItem('chainId')
+            if (String(chainId) !== String(newChain)) {
+                localStorage.setItem('chainId',newChain)
+                window.location.reload()
+            }
+        });
+        this.metaMaskWeb3.on('accountsChanged', (newAccounts) => {
+            const accounts = JSON.parse(localStorage.getItem('accounts'))
+            if (!isEqual(accounts.accounts,newAccounts)) {
+                localStorage.setItem('accounts',JSON.stringify({accounts:newAccounts}))
+                window.location.reload()
+            }
+        });
     }
 
     getEthBalance = (address) => {
