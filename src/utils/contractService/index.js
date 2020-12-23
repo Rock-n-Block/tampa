@@ -5,8 +5,8 @@ import BigNumber from "bignumber.js"
 
 class ContractService {
 
-    constructor() {
-        this.metamaskService = new MetamaskService()
+    constructor(walletService) {
+        this.metamaskService = walletService
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
 

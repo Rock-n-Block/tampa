@@ -1,7 +1,6 @@
 import React from 'react';
 
 import lotteryWheel from '../../utils/lotteryWheel';
-import {confetti} from "../../utils/confetti";
 
 import './LotteryWheel.scss'
 
@@ -47,7 +46,6 @@ const LotteryWheel = ({ lotteryWinner, lotteryMembers, isLotteryStarted, isSlowS
                 lottery.setWinner(lotteryWinner)
             } else {
                 lottery.showWinner(lotteryWinner);
-                confetti(60 * 1000);
             }
         }
     }, [lottery, lotteryWinner])

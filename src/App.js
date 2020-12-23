@@ -22,12 +22,12 @@ function App() {
 
   React.useEffect(() => {
     let counter = 0;
+    const metamask = new MetamaskService()
 
     const interval = setInterval(() => {
       counter += 10;
       if (window.ethereum) {
-        const metamask = new MetamaskService()
-        const contractService = new ContractService()
+        const contractService = new ContractService(metamask)
 
         setContractService(contractService)
         clearInterval(interval)
