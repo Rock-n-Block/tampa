@@ -10,6 +10,10 @@ class ContractService {
         this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
 
+    loteryDayWaitingForWinnerNew = () => {
+        return this.tampaContract.methods.loteryDayWaitingForWinnerNew().call()
+    }
+
     getContractAddress = () => {
         return ContractDetails.TAMPA.ADDRESS
     }

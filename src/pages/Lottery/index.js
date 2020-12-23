@@ -137,29 +137,30 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                 setCurrentDay(days)
                 getWinners(days)
 
-                contractService.loteryDayWaitingForWinner()
-                    .then(day => {
-                        contractService.getDayUnixTime(day)
-                            .then(date => {
-                                let lotteryDateStart = moment.utc(date * 1000)
-                                let dateNow = moment.utc()
+                Promise.all([contractService.loteryDayWaitingForWinner(), contractService.loteryDayWaitingForWinnerNew()])
+                .then(lotteryDays => {
+                    const day = +lotteryDays[1] < +days ? lotteryDays[1] : lotteryDays[0]
+                    contractService.getDayUnixTime(day)
+                    .then(date => {
+                        let lotteryDateStart = moment.utc(date * 1000)
+                        let dateNow = moment.utc()
 
-                                const isStarted = dateNow.isAfter(lotteryDateStart)
+                        const isStarted = dateNow.isAfter(lotteryDateStart)
 
-                                setLotteryStarted(isStarted)
+                        setLotteryStarted(isStarted)
 
-                                if (isStarted) {
+                        if (isStarted) {
 
-                                    getWinner(day)
+                            getWinner(day)
 
-                                    const interval = setInterval(() => {
-                                        getWinner(day, interval, true)
-                                    }, 6000)
-                                    setWinnerInterval(interval)
-                                }
-                            })
+                            const interval = setInterval(() => {
+                                getWinner(day, interval, true)
+                            }, 6000)
+                            setWinnerInterval(interval)
+                        }
                     })
-                    .catch(err => console.log(err))
+                })
+                .catch(err => console.log(err))
 
                 contractService.xfLobby(days)
                     .then(amount => {
