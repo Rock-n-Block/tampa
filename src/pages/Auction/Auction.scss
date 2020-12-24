@@ -1,4 +1,7 @@
 .auction {
+  @media screen and (max-width: 991px) {
+    margin: 0 -10px;
+  }
   padding-bottom: 200px;
   &__title {
     display: flex;
