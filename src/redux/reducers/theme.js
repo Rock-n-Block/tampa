@@ -1,5 +1,5 @@
 const initialState = {
-    isDarkTheme: window.localStorage.isDarkTheme || false
+    isDarkTheme: window.localStorage.isDarkTheme!==undefined ? window.localStorage.isDarkTheme : true
 }
 
 export default (state = initialState, { type, payload }) => {

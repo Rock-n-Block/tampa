@@ -44,7 +44,7 @@ class MetamaskService {
         });
         this.metaMaskWeb3.on('accountsChanged', (newAccounts) => {
             const accounts = JSON.parse(localStorage.getItem('accounts'))
-            if (!isEqual(accounts.accounts,newAccounts)) {
+            if (!accounts || !isEqual(accounts.accounts,newAccounts)) {
                 localStorage.setItem('accounts',JSON.stringify({accounts:newAccounts}))
                 window.location.reload()
             }

@@ -59,7 +59,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                 <div className="container s-form__content">
                     <div className="s-form__input-box">
                         <div className="s-form__input-head">Amount to Stake:</div>
-                        <InputNumber value={amount} onChange={handleChangeTokenAmount} className="s-form__input" placeholder="0,00" />
+                        <InputNumber value={amount} onChange={handleChangeTokenAmount} className="s-form__input" placeholder="0.00" />
                         <div className="s-form__img">
                             {isDarkTheme ? <img src={tampaDarkImg} alt="" /> : <img src={tampaImg} alt="" />}
                             <span>Jackpot</span>
