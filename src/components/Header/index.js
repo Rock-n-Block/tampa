@@ -150,6 +150,7 @@ const Header = ({ isDarkTheme, userAddress, contractService, walletService }) =>
                             }
                         </div>
                         <div className="m-menu__bottom">
+                            <div className="header__token" onClick={addToken}>Add token</div>
                             <div className="header__time">
                                 auction ends in: <span>{timeUntil}</span>
                             </div>
