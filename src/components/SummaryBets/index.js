@@ -15,7 +15,7 @@ const SummaryBets = ({ isDarkTheme, currentDays, participation, totalReceive, to
             <div className="container s-bets__content">
                 <div className="s-bets__item s-bets__item-progress">
                     <Progress strokeColor={{ '0%': isDarkTheme ? '#53B9EA' : '#E16B6C', '100%': isDarkTheme ? '#53B9EA' : '#E16B6C' }} type="circle" percent={participation / currentDays * 100} format={() => `${participation}/${currentDays}`} width={57} />
-                    <span>participation in auctions</span>
+                    <div className="s-bets__item-content">participation in auctions</div>
                 </div>
                 <div className="s-bets__item">
                     <div className="s-bets__item-head">
