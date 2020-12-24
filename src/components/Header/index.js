@@ -147,6 +147,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                             }
                         </div>
                         <div className="m-menu__bottom">
+                            <div className="header__token" onClick={copyTokenAddress}>Copy address</div>
                             <div className="header__time">
                                 auction ends in: <span>{timeUntil}</span>
                             </div>
