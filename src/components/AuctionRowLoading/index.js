@@ -5,10 +5,11 @@ const AuctionRowLoading = () => {
     return (
         <ContentLoader
             speed={2}
-            width={840}
+            width={'100%'}
             height={63}
             style={{ marginTop: '5px' }}
             viewBox="0 0 840 63"
+            preserveAspectRatio="none"
             backgroundColor="#f3f3f3"
             foregroundColor="#dedede"
         >

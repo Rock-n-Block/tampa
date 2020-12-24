@@ -3,6 +3,12 @@
   padding: 20px 30px 30px;
   position: relative;
   min-height: 230px;
+  @media screen and (max-width: 991px) {
+    min-height: unset;
+    padding: 0;
+    background: none !important;
+    box-shadow: none !important;
+  }
   &__wrapper {
     display: flex;
     align-items: center;
@@ -47,6 +53,10 @@
     cursor: pointer;
     transform: rotate(0);
     transition: 1s;
+    @media screen and (max-width: 991px) {
+      top: 5px;
+      right: 2px;
+    }
     &.refreshing {
       animation: rotate 1s linear infinite;
     }
@@ -54,6 +64,11 @@
   &__row {
     grid-template-columns: 75px 75px 75px 50px 50px 50px 55px 55px 55px 1fr !important;
     grid-column-gap: 20px !important;
+    @media screen and (max-width: 991px) {
+      &.t-row__head {
+        display: none;
+      }
+    }
     &--ended {
       grid-template-columns: 75px 75px repeat(6, 85px) !important;
     }
@@ -74,6 +89,9 @@
       cursor: pointer;
       padding: 9px 25px 8px;
       text-transform: uppercase;
+      @media screen and (max-width: 991px) {
+        padding: 9px 15px 8px;
+      }
       &.active {
         color: $red;
         background: #ffffff;
