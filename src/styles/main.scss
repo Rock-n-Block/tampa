@@ -222,6 +222,9 @@ input {
 
 .ant-tooltip {
   max-width: 400px !important;
+  @media screen and (max-width: 991px) {
+    max-width: 320px !important;
+  }
   &-inner {
     background: linear-gradient(
         190.57deg,
@@ -235,11 +238,17 @@ input {
     color: $black;
     width: max-content;
     max-width: 400px;
+    @media screen and (max-width: 991px) {
+      max-width: 320px;
+    }
   }
   &-arrow {
     width: 16px;
     height: 16px;
     top: -4.5px !important;
+    @media screen and (max-width: 991px) {
+      display: none;
+    }
     &-content {
       width: 16px;
       height: 16px;

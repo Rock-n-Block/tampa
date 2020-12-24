@@ -247,7 +247,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                     <div className="nav">
                         {
                             navItems.map((item, index) => {
-                                return <div key={index} onClick={() => { setActiveTab(index); getData() }} className={classNames('nav__item', {
+                                return <div key={index} onClick={() => { setActiveTab(index); getData() }} className={classNames('nav__item p-lottery__nav-item', {
                                     'active': activeTab === index
                                 })}>{item}</div>
                             })

@@ -2,6 +2,12 @@
 .lottery-a {
   margin-bottom: 40px;
   padding-top: 40px;
+  @media screen and (max-width: 991px) {
+    margin-bottom: 30px;
+    padding: 0;
+    background: none !important;
+    box-shadow: none !important;
+  }
   &__title {
     text-align: center;
   }
@@ -17,12 +23,27 @@
     margin-top: 15px;
     &-item {
       border-radius: 12px;
+      &--winner {
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        @media screen and (max-width: 991px) {
+          .lottery__info-head {
+            font-size: 24px;
+            line-height: 29px;
+            color: $red;
+          }
+        }
+      }
     }
     &-head {
       margin-top: 15px;
       font-size: 24px;
       line-height: 29px;
       color: $red;
+      @media screen and (max-width: 991px) {
+        margin-top: 10px;
+      }
     }
   }
 }
