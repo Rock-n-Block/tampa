@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { Pagination } from 'antd';
 
 import { RowItemTooltip, AuctionRowLoading } from '../../components';
-import {dateFormat} from "../../utils/prettifiers";
+import { dateFormat, formatNumberWithCommas } from "../../utils/prettifiers";
 
 import './AuctionLobby.scss'
 
@@ -61,9 +61,9 @@ export default class AuctionLobby extends React.PureComponent {
                             return <div key={index} className={classNames('container a-lobby__row t-row t-row__content', {
                                 'active': index === this.state.activeRow
                             })}>
-                                <div className="a-lobby__row-item" data-name="Day">{this.dateFormat(+item.day)}</div>
+                                <div className="a-lobby__row-item" data-name="Day">{dateFormat(+item.day)}</div>
                                 <div className="a-lobby__row-item" data-name="Jackpot Pool">
-                                    <RowItemTooltip tooltipText={item.pool} parent="a-lobby">{item.pool}</RowItemTooltip>
+                                    <RowItemTooltip tooltipText={formatNumberWithCommas(item.pool)} parent="a-lobby">{formatNumberWithCommas(item.pool)}</RowItemTooltip>
                                 </div>
                                 <div className="a-lobby__row-item" data-name="eth \ Jackpot">
                                     <RowItemTooltip tooltipText={item.eth} parent="a-lobby">{item.eth}</RowItemTooltip>
@@ -81,12 +81,12 @@ export default class AuctionLobby extends React.PureComponent {
                                     {item.state && <Popover
                                     getPopupContainer={() => document.getElementById(`a-lobby`)}
                                     onVisibleChange={(value) => this.handlePopoverVisibleChange(value, index)}
-                                    placement="bottom"
+                                    placement="top"
                                     trigger="click"
                                     content={
                                         <div className="a-lobby__popover">
                                             <div className="a-lobby__popover-text">enter the auction:</div>
-                                            <InputNumber value={this.state.auctionValue} onChange={value => this.setState({ auctionValue: value })} placeholder="0,0" type="number" className="a-lobby__popover-input" />
+                                            <InputNumber value={this.state.auctionValue} onChange={value => this.setState({ auctionValue: value })} placeholder="0.0" type="number" className="a-lobby__popover-input" />
                                             <div className="a-lobby__popover-eth">
                                                 <img src={ethImg} alt="" />
                                                 <span>ETH</span>

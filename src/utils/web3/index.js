@@ -26,7 +26,7 @@ class MetamaskService {
         this.wallet.on('accountsChanged', (newAccounts) => {
             console.log('accountsChanged')
             const accounts = JSON.parse(localStorage.getItem('accounts'))
-            if (!isEqual(accounts.accounts,newAccounts)) {
+            if (!accounts || !isEqual(accounts.accounts,newAccounts)) {
                 console.log('accounts not equal',accounts,newAccounts)
                 localStorage.setItem('accounts',JSON.stringify({accounts:newAccounts}))
                 window.location.reload()

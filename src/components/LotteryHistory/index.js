@@ -1,8 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
-import {Pagination} from "antd";
+import { Pagination } from "antd";
 
-import {dateFormat} from "../../utils/prettifiers";
+import { dateFormat, formatNumberWithCommas } from "../../utils/prettifiers";
 
 import './LotteryHistory.scss'
 
@@ -25,7 +25,12 @@ const LotteryHistory = ({ data, handleLotteryWithdraw, userAddress, pageCount, c
                                     'active': item.winner.toLowerCase() === userAddress.toLowerCase()
                                 })}>
                                     <div className="l-history__row-item" data-name="data">{dateFormat(+item.date)}</div>
-                                    <div className="l-history__row-item" data-name="amount">{item.amount}</div>
+                                    <div
+                                    className="l-history__row-item"
+                                    data-name="amount"
+                                    >
+                                        {formatNumberWithCommas(item.amount)}
+                                    </div>
                                     <div className="l-history__row-item" data-name={item.winner.toLowerCase() === userAddress.toLowerCase() ? '' : 'winner'}>
                                         {
                                             item.winner.toLowerCase() === userAddress.toLowerCase() ?
