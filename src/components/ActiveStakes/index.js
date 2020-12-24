@@ -96,39 +96,40 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                     <div className="stakes__row-head-item stakes__red">Interest</div>
                     <div className="stakes__row-head-item">{!activeTab ? 'Current Value' : 'paid amount'}</div>
                 </div>
-                {activeStakes.length ?
+                <div className="stakes__list">
+                    {activeStakes.length ?
                     activeStakes.map((item, index) => {
                         return <div key={index} className={classNames("container stakes__row t-row t-row__content", {
                             'stakes__row--ended': item.isEnded
                         })}>
-                            <div className="stakes__row-item">{dateFormat(+item.start)}</div>
-                            <div className="stakes__row-item">{dateFormat(+item.end)}</div>
-                            {!item.isEnded && <div className="stakes__row-item">
+                            <div className="stakes__row-item" data-name="Start">{dateFormat(+item.start)}</div>
+                            <div className="stakes__row-item" data-name="End">{dateFormat(+item.end)}</div>
+                            {!item.isEnded && <div className="stakes__row-item" data-name="Progress">
                                 {item.progress}%
-                        </div>}
-                            <div className="stakes__row-item">
+                            </div>}
+                            <div className="stakes__row-item" data-name="Staked">
                                 <RowItemTooltip tooltipText={item.staked} parent="stakes">{item.staked}</RowItemTooltip>
                             </div>
-                            <div className="stakes__row-item">
+                            <div className="stakes__row-item" data-name="Shares">
                                 <RowItemTooltip tooltipText={item.shares} parent="stakes">{item.shares}</RowItemTooltip>
                             </div>
-                            <div className="stakes__row-item">
+                            <div className="stakes__row-item" data-name="BonusDay Rewards">
                                 <RowItemTooltip tooltipText={item.bonusday} parent="stakes">{item.bonusday}</RowItemTooltip>
                             </div>
-                            <div className="stakes__row-item">
+                            <div className="stakes__row-item" data-name="eth Dividends Rewards">
                                 <RowItemTooltip tooltipText={item.dividents} parent="stakes">{item.dividents}</RowItemTooltip>
                             </div>
-                            <div className="stakes__row-item stakes__red">
+                            <div className="stakes__row-item stakes__red" data-name="Interest">
                                 <RowItemTooltip tooltipText={item.interest} parent="stakes">{item.interest}</RowItemTooltip>
                             </div>
-                            <div className="stakes__row-item">
+                            <div className="stakes__row-item" data-name={!activeTab ? 'Current Value' : 'paid amount'}>
                                 <RowItemTooltip tooltipText={!activeTab ? item.currentValue : item.paidAmount} parent="stakes">{!activeTab ? item.currentValue : item.paidAmount}</RowItemTooltip>
                             </div>
                             {!item.isEnded && <button onClick={() => onWithdrawClick(item, +item.index, +item.stakeId, +item.end)} className="stakes__btn btn btn--withdraw">withdraw</button>}
                         </div>
                     }) : ''
-
-                }
+                    }
+                </div>
                 {isRefreshingStates && <AuctionRowLoading />}
             </div>
             <Modal

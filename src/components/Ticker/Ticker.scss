@@ -9,6 +9,11 @@
     border-radius: 0;
   }
 }
+.ticker {
+  &__element {
+    white-space: nowrap;
+  }
+}
 
 .darktheme {
   .ticker-box {

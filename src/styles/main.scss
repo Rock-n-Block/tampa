@@ -152,8 +152,16 @@ input {
     font-size: 15px;
     line-height: 28px;
     align-items: center;
+    @media screen and (max-width: 991px) {
+      align-items: flex-start;
+      text-align: left;
+    }
     & + & {
       margin-top: 5px;
+      @media screen and (max-width: 991px) {
+        margin-top: 0;
+        margin-left: 5px;
+      }
     }
   }
   .active {
