@@ -4,8 +4,9 @@ import BigNumber from 'bignumber.js';
 
 import { RowItemTooltip, QuestionTooltip } from '../../components';
 import decimals from '../../utils/web3/decimals';
+import { formatNumberWithCommas } from '../../utils/prettifiers';
 
-import './StakeForm.scss'
+import './StakeForm.scss';
 
 import tampaImg from '../../assets/img/tampa.svg';
 import tampaDarkImg from '../../assets/img/tampa-dark.svg';
@@ -53,7 +54,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
 <br><br>At the end of every day, a daily stake pool of Jackpot tokens will be calculated and it will be shared and allocate to all the open stakes between all the open stakes based on their staked tokens amount which will be available for users to withdraw when the stake ends." />
                     </div>
                     <div className="s-form__balance">
-                        Your balance: {walletBalance} <span onClick={handleSendMax}>MAX</span>
+                        Your balance: {formatNumberWithCommas(walletBalance)} <span onClick={handleSendMax}>MAX</span>
                     </div>
                 </div>
                 <div className="container s-form__content">

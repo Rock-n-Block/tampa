@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import moment from 'moment';
 
 import { RowItemTooltip, AuctionRowLoading, QuestionTooltip } from '../../components';
-import {dateFormat} from "../../utils/prettifiers";
+import { dateFormat, formatNumberWithCommas } from "../../utils/prettifiers";
 
 import './ActiveStakes.scss'
 
@@ -105,14 +105,20 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                             })}>
                                 <div className="stakes__row-item" data-name="Start">{dateFormat(+item.start)}</div>
                                 <div className="stakes__row-item" data-name="End">{dateFormat(+item.end)}</div>
-                                {!item.isEnded && <div className="stakes__row-item" data-name="Progress">
+                                {!item.isEnded &&
+                                <div className="stakes__row-item" data-name="Progress">
                                     {item.progress}%
-                            </div>}
+                                </div>
+                                }
                                 <div className="stakes__row-item" data-name="Staked">
-                                    <RowItemTooltip tooltipText={item.staked} parent="stakes">{item.staked}</RowItemTooltip>
+                                    <RowItemTooltip tooltipText={formatNumberWithCommas(item.staked)} parent="stakes">
+                                        {formatNumberWithCommas(item.staked)}
+                                    </RowItemTooltip>
                                 </div>
                                 <div className="stakes__row-item" data-name="Shares">
-                                    <RowItemTooltip tooltipText={item.shares} parent="stakes">{item.shares}</RowItemTooltip>
+                                    <RowItemTooltip tooltipText={formatNumberWithCommas(item.shares)} parent="stakes">
+                                        {formatNumberWithCommas(item.shares)}
+                                    </RowItemTooltip>
                                 </div>
                                 <div className="stakes__row-item" data-name="BonusDay Rewards">
                                     <RowItemTooltip tooltipText={item.bonusday} parent="stakes">{item.bonusday}</RowItemTooltip>
@@ -121,10 +127,24 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                                     <RowItemTooltip tooltipText={item.dividents} parent="stakes">{item.dividents}</RowItemTooltip>
                                 </div>
                                 <div className="stakes__row-item stakes__red" data-name="Interest">
-                                    <RowItemTooltip tooltipText={item.interest} parent="stakes">{item.interest}</RowItemTooltip>
+                                    <RowItemTooltip tooltipText={formatNumberWithCommas(item.interest)} parent="stakes">
+                                        {formatNumberWithCommas(item.interest)}
+                                    </RowItemTooltip>
                                 </div>
                                 <div className="stakes__row-item" data-name={!activeTab ? 'Current Value' : 'paid amount'}>
-                                    <RowItemTooltip tooltipText={!activeTab ? item.currentValue : item.paidAmount} parent="stakes">{!activeTab ? item.currentValue : item.paidAmount}</RowItemTooltip>
+                                    <RowItemTooltip
+                                    tooltipText={
+                                        !activeTab ?
+                                        formatNumberWithCommas(item.currentValue) :
+                                        formatNumberWithCommas(item.paidAmount)
+                                    }
+                                    parent="stakes"
+                                    >
+                                        {!activeTab ?
+                                        formatNumberWithCommas(item.currentValue) :
+                                        formatNumberWithCommas(item.paidAmount)
+                                        }
+                                    </RowItemTooltip>
                                 </div>
                                 {!item.isEnded && <button onClick={() => onWithdrawClick(item, +item.index, +item.stakeId, +item.end)} className="stakes__btn btn btn--withdraw">withdraw</button>}
                             </div>
