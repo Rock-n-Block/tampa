@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { RowItemTooltip, QuestionTooltip } from '../../components';
+import { formatNumberWithCommas } from '../../utils/prettifiers';
 
 import './StakeInfo.scss'
 
@@ -14,13 +15,31 @@ const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, i
             })} id="s-info__content">
                 <div className="s-info__item">
                     <div className="s-info__item-head">
-                        <RowItemTooltip tooltipText={totalStaked} parent="s-info__content">{totalStaked}</RowItemTooltip>
+                        <RowItemTooltip
+                        tooltipText={formatNumberWithCommas(totalStaked)}
+                        parent="s-info__content"
+                        >
+                            {formatNumberWithCommas(totalStaked)}
+                        </RowItemTooltip>
                     </div>
                     <div className="s-info__item-subhead">Total staked</div>
                 </div>
                 <div className="s-info__item">
                     <div className="s-info__item-head">
-                        <RowItemTooltip tooltipText={isActiveStakes ? totalShares : totalPaidAmount} parent="s-info__content">{isActiveStakes ? totalShares : totalPaidAmount}</RowItemTooltip>
+                        <RowItemTooltip
+                        tooltipText={
+                            isActiveStakes ?
+                            formatNumberWithCommas(totalShares) :
+                            formatNumberWithCommas(totalPaidAmount)
+                        }
+                        parent="s-info__content"
+                        >
+                            {
+                                isActiveStakes ?
+                                formatNumberWithCommas(totalShares) :
+                                formatNumberWithCommas(totalPaidAmount)
+                            }
+                        </RowItemTooltip>
                     </div>
                     <div className="s-info__item-subhead">{isActiveStakes ? 'Total shares' : 'total paid amount'}</div>
                 </div>
