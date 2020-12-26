@@ -5,9 +5,9 @@ import BigNumber from "bignumber.js"
 
 class ContractService {
 
-    constructor() {
-        this.metamaskService = new MetamaskService()
-        this.tampaContract = this.metamaskService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
+    constructor(walletService) {
+        this.walletService = walletService
+        this.tampaContract = this.walletService.getContract(ContractDetails.TAMPA.ABI, ContractDetails.TAMPA.ADDRESS)
     }
 
     loteryDayWaitingForWinnerNew = () => {
@@ -143,12 +143,12 @@ class ContractService {
         return this.tampaContract.methods.currentDay().call()
     }
     approveToken = (address, collback) => {
-        this.metamaskService.approveToken(address, ContractDetails.TAMPA.ADDRESS, collback, 'TAMPA', 18)
+        this.walletService.approveToken(address, ContractDetails.TAMPA.ADDRESS, collback, 'TAMPA', 18)
     }
 
     checkAllowance = (address) => {
         return new Promise((resolve, reject) => {
-            this.metamaskService.checkAllowance(address, ContractDetails.TAMPA.ADDRESS, 0, this.tampaContract)
+            this.walletService.checkAllowance(address, ContractDetails.TAMPA.ADDRESS, 0, this.tampaContract)
                 .then(() => {
                     resolve(true)
                 })
@@ -159,11 +159,11 @@ class ContractService {
     }
 
     getEthBalance = (address) => {
-        return this.metamaskService.getEthBalance(address)
+        return this.walletService.getEthBalance(address)
     }
 
     createTokenTransaction = ({ data, address, swapMethod, contractName, callback, withdraw, stake, auction, isEth, errCallback }) => {
-        this.metamaskService.createTokenTransaction({
+        this.walletService.createTokenTransaction({
             data,
             tokenAddress: ContractDetails[contractName].ADDRESS,
             walletAddress: address,

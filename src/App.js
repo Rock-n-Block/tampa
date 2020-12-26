@@ -20,25 +20,24 @@ function App() {
     userAddress: user.address
   }))
 
-
-  React.useEffect(() => {
+  const getData = () => {
     let counter = 0;
-    const metamask = new MetamaskService()
-
     const interval = setInterval(() => {
       counter += 10;
-      if (window['ethereum'] && window['ethereum'].isMetaMask) {
+      if (window.ethereum) {
+        const metamask = new MetamaskService()
+        const contractService = new ContractService(metamask)
+        setContractService(contractService)
+        setWalletService(metamask)
         clearInterval(interval)
-
         metamask.getAccounts().then(res => {
           dispatch(userActions.setUserData(res))
           dispatch(modalActions.toggleModal(false))
         }).catch(err => {
-
           dispatch(userActions.setUserData(err))
           dispatch(modalActions.toggleModal(true))
         })
-      } else if (counter > 3000) {
+      } else if (counter > 4000) {
         dispatch(userActions.setUserData({
           errorCode: 1,
           errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
@@ -46,14 +45,18 @@ function App() {
         dispatch(modalActions.toggleModal(true))
       }
     }, 10)
-  }, [dispatch])
+  }
+
 
   React.useEffect(() => {
-    const contractService = new ContractService()
-    const metamask = new MetamaskService()
-    setContractService(contractService)
-    setWalletService(metamask)
+    getData()
+  }, [dispatch])
+
+
+  React.useEffect(() => {
+    getData()
   }, [])
+
 
   return (
     <div className={classNames('tampa', {

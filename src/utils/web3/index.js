@@ -7,42 +7,41 @@ import {isEqual} from 'lodash/lang';
 
 const IS_PRODUCTION = false;
 
-const WEB3_CONSTANTS = {
-    kovan: {
-        WEB3_PROVIDER: 'https://kovan.infura.io/v3/d53dc6a18ce94162ac4821a9c5ff06f2'
-    }
-};
-
-
-const networks = {
-    production: 'mainnet',
-    testnet: 'kovan'
-};
 
 class MetamaskService {
 
-    metaMaskWeb3;
+    wallet;
     providers;
     Web3Provider;
 
     constructor() {
-        // this.providers.infura = new Web3.providers.HttpProvider(
-        //     WEB3_CONSTANTS[networks[IS_PRODUCTION ? 'mainnet' : 'testnet']].WEB3_PROVIDER
-        // );
         this.providers = {};
         this.providers.metamask = Web3.givenProvider;
-
-        this.metaMaskWeb3 = window['ethereum'];
+        this.wallet = window.ethereum;
         this.Web3Provider = new Web3(this.providers.metamask);
         window.web34 = this.Web3Provider
-        this.metaMaskWeb3.on('chainChanged', (newChain) => {
+        if (!window.ethereum) {
+            let countReloads = localStorage.getItem('countReloads')
+            if (!countReloads || countReloads < 2) {
+                if (!countReloads) {
+                    countReloads = 0;
+                } else {
+                    countReloads++
+                }
+                localStorage.setItem('countReloads',String(countReloads))
+                setTimeout(() => window.location.reload(),100)
+            }
+        } else {
+            localStorage.setItem('countReloads',String(0))
+        }
+        this.wallet.on('chainChanged', (newChain) => {
             const chainId = localStorage.getItem('chainId')
-            if (String(chainId) !== String(newChain)) {
+            if (chainId!=='null' || String(chainId) !== String(newChain)) {
                 localStorage.setItem('chainId',newChain)
                 window.location.reload()
             }
         });
-        this.metaMaskWeb3.on('accountsChanged', (newAccounts) => {
+        this.wallet.on('accountsChanged', (newAccounts) => {
             const accounts = JSON.parse(localStorage.getItem('accounts'))
             if (!accounts || !isEqual(accounts.accounts,newAccounts)) {
                 localStorage.setItem('accounts',JSON.stringify({accounts:newAccounts}))
@@ -55,80 +54,40 @@ class MetamaskService {
         return this.Web3Provider.eth.getBalance(address)
     }
 
-    getAccounts = () => {
+    getAccounts() {
         return new Promise((resolve, reject) => {
-            const onAuth = (address) => {
-
-                this.Web3Provider.setProvider(this.providers.metamask);
-                resolve({
-                    address,
-                    network: net,
-                    errorCode: 0,
-                    errorMsg: ''
-                })
-            };
-
-            const onError = (errorParams) => {
-                this.Web3Provider.setProvider(this.providers.metamask);
-                reject(errorParams)
-            };
-            const usedNetworkVersion = IS_PRODUCTION ? 1 : 42;
-            const net = usedNetworkVersion === 1 ? 'mainnet' : 'kovan';
-
-            const isValidMetaMaskNetwork = async () => {
-                const networkVersion = Number((this.metaMaskWeb3.networkVersion)) ||
-                await this.metaMaskWeb3.request({ method: 'eth_chainId' });
-                if (usedNetworkVersion !== networkVersion) {
-                    onError({
-                        errorCode: 2,
-                        errorMsg: 'Please choose ' + net + ' network in Metamask.'
-                    })
-                    return false
-                }
-                return true;
-            };
-
-
-            if (this.metaMaskWeb3 && this.metaMaskWeb3.isMetaMask) {
-                isValidMetaMaskNetwork()
-                this.metaMaskWeb3.on('accountsChanged', (accounts) => {
-                    if (isValidMetaMaskNetwork()) {
-                        if (accounts.length) {
-                            onAuth(accounts[0]);
-                        } else {
-                            onError({
-                                errorCode: 3,
-                                errorMsg: 'Not authorized'
-                            });
-                        }
-                    }
-                });
-                this.metaMaskWeb3.on('chainChanged', () => {
-                    window.location.reload();
-                });
-
-                if (!this.metaMaskWeb3.selectedAddress) {
-                    this.metaMaskWeb3.enable().catch(() => {
-                        onError({
-                            errorCode: 3,
-                            errorMsg: 'Not authorized'
-                        });
-                    });
-                } else {
-                    if (this.metaMaskWeb3.selectedAddress) {
-                        onAuth(this.metaMaskWeb3.selectedAddress);
+            const net = IS_PRODUCTION ? 'mainnet' : 'kovan';
+            const usedNet = IS_PRODUCTION ? '0x1' : '0x2a';
+            let netVersion = this.wallet.chainId
+            if (!netVersion) netVersion = localStorage.getItem('chainId')
+            if (!netVersion || netVersion==='null') {
+                this.wallet.request({ method: 'eth_chainId' })
+                .then(netVersion => {
+                    if (netVersion === usedNet) {
+                        this.wallet.request({ method: 'eth_requestAccounts' })
+                        .then(account => resolve({
+                            address: account[0]
+                        }))
+                        .catch(_ => reject({ errorMsg: 'Not authorized' }))
                     } else {
-                        onError({
-                            errorCode: 3,
-                            errorMsg: 'Not authorized'
-                        });
+                        reject({
+                            errorMsg: 'Please choose ' + net + ' network in metamask wallet'
+                        })
                     }
-                }
+                })
+                .catch(_ => reject({ errorMsg: 'Not authorized' }))
             } else {
-                onError({
-                    errorCode: 1,
-                    errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
-                });
+                if (netVersion === usedNet) {
+                    this.wallet.request({ method: 'eth_requestAccounts' })
+                    .then(account => resolve({
+                        address: account[0]
+                    }))
+                    .catch(_ => reject({ errorMsg: 'Not authorized' }))
+                } else {
+                    reject({
+                        errorMsg: 'Please choose ' + net + ' network in metamask wallet.'
+                    })
+                }
             }
         })
     }
@@ -351,7 +310,7 @@ class MetamaskService {
 
     async addToken() {
         try {
-            const wasAdded = await this.metaMaskWeb3.request({
+            const wasAdded = await this.wallet.request({
                 method: "wallet_watchAsset",
                 params: {
                     type: "ERC20",
