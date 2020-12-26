@@ -20,29 +20,16 @@ class MetamaskService {
         this.wallet = window.ethereum;
         this.Web3Provider = new Web3(this.providers.metamask);
         window.web34 = this.Web3Provider
-        if (!window.ethereum) {
-            let countReloads = localStorage.getItem('countReloads')
-            if (!countReloads || countReloads < 2) {
-                if (!countReloads) {
-                    countReloads = 0;
-                } else {
-                    countReloads++
-                }
-                localStorage.setItem('countReloads',String(countReloads))
-                setTimeout(() => window.location.reload(),100)
-            }
-        } else {
-            localStorage.setItem('countReloads',String(0))
-        }
         this.wallet.on('chainChanged', (newChain) => {
             const chainId = localStorage.getItem('chainId')
-            if (chainId!=='null' || String(chainId) !== String(newChain)) {
+            if (String(chainId) !== String(newChain)) {
                 localStorage.setItem('chainId',newChain)
                 window.location.reload()
             }
         });
         this.wallet.on('accountsChanged', (newAccounts) => {
             const accounts = JSON.parse(localStorage.getItem('accounts'))
+            console.log('accountsChanged',accounts)
             if (!accounts || !isEqual(accounts.accounts,newAccounts)) {
                 localStorage.setItem('accounts',JSON.stringify({accounts:newAccounts}))
                 window.location.reload()
@@ -59,7 +46,6 @@ class MetamaskService {
             const net = IS_PRODUCTION ? 'mainnet' : 'kovan';
             const usedNet = IS_PRODUCTION ? '0x1' : '0x2a';
             let netVersion = this.wallet.chainId
-            if (!netVersion) netVersion = localStorage.getItem('chainId')
             if (!netVersion || netVersion==='null') {
                 this.wallet.request({ method: 'eth_chainId' })
                 .then(netVersion => {
