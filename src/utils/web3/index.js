@@ -10,24 +10,36 @@ const IS_PRODUCTION = false;
 class MetamaskService {
 
     constructor() {
-        this.wallet = window.ethereum
+        this.wallet = window.ethereum;
         this.providers = {};
         this.providers.metamask = Web3.givenProvider;
         this.Web3Provider = new Web3(this.providers.metamask);
+        if (!window.ethereum) {
+            let countReloads = localStorage.getItem('countReloads')
+            if (!countReloads || countReloads < 2) {
+                if (!countReloads) {
+                    countReloads = 0;
+                } else {
+                    countReloads++
+                }
+                localStorage.setItem('countReloads',String(countReloads))
+                setTimeout(() => window.location.reload(),100)
+            }
+        }
         this.wallet.on('chainChanged', (newChain) => {
             const chainId = localStorage.getItem('chainId')
-            console.log('chainChanged')
-            if (String(chainId) !== String(newChain)) {
-                console.log('chains not equal',String(chainId),String(newChain))
+            // console.log('chainChanged')
+            if (!chainId || String(chainId) !== String(newChain)) {
+                // console.log('chains not equal',String(chainId),String(newChain))
                 localStorage.setItem('chainId',newChain)
                 window.location.reload()
             }
         });
         this.wallet.on('accountsChanged', (newAccounts) => {
-            console.log('accountsChanged')
+            // console.log('accountsChanged')
             const accounts = JSON.parse(localStorage.getItem('accounts'))
             if (!accounts || !isEqual(accounts.accounts,newAccounts)) {
-                console.log('accounts not equal',accounts,newAccounts)
+                // console.log('accounts not equal',accounts,newAccounts)
                 localStorage.setItem('accounts',JSON.stringify({accounts:newAccounts}))
                 window.location.reload()
             }
@@ -42,20 +54,37 @@ class MetamaskService {
         return new Promise((resolve, reject) => {
             const net = IS_PRODUCTION ? 'binance smart chain' : 'binance smart chain test'
             const usedNet = IS_PRODUCTION ? '0x38' : '0x61'
-            const netVersion = this.wallet.chainId
-
-            if (netVersion === usedNet) {
-                this.wallet.request({ method: 'eth_requestAccounts' })
+            let netVersion = this.wallet.chainId
+            if (!netVersion) netVersion = localStorage.getItem('chainId')
+            if (!netVersion || netVersion==='null') {
+                this.wallet.request({ method: 'eth_chainId' })
+                .then(netVersion => {
+                    if (netVersion === usedNet) {
+                        this.wallet.request({ method: 'eth_requestAccounts' })
+                        .then(account => resolve({
+                            address: account[0]
+                        }))
+                        .catch(_ => reject({ errorMsg: 'Not authorized' }))
+                    } else {
+                        reject({
+                            errorMsg: 'Please choose ' + net + ' network in metamask wallet'
+                        })
+                    }
+                })
+                .catch(_ => reject({ errorMsg: 'Not authorized' }))
+            } else {
+                if (netVersion === usedNet) {
+                    this.wallet.request({ method: 'eth_requestAccounts' })
                     .then(account => resolve({
                         address: account[0]
                     }))
                     .catch(_ => reject({ errorMsg: 'Not authorized' }))
-            } else {
-                reject({
-                    errorMsg: 'Please choose ' + net + ' network in metamask wallet.'
-                })
+                } else {
+                    reject({
+                        errorMsg: 'Please choose ' + net + ' network in metamask wallet.'
+                    })
+                }
             }
-
         })
     }
 

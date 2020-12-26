@@ -22,11 +22,11 @@ function App() {
 
   React.useEffect(() => {
     let counter = 0;
-    const metamask = new MetamaskService()
 
     const interval = setInterval(() => {
       counter += 10;
       if (window.ethereum) {
+        const metamask = new MetamaskService()
         const contractService = new ContractService(metamask)
 
         setContractService(contractService)
@@ -36,11 +36,10 @@ function App() {
           dispatch(userActions.setUserData(res))
           dispatch(modalActions.toggleModal(false))
         }).catch(err => {
-
           dispatch(userActions.setUserData(err))
           dispatch(modalActions.toggleModal(true))
         })
-      } else if (counter > 3000) {
+      } else if (counter > 4000) {
         dispatch(userActions.setUserData({
           errorCode: 1,
           errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
