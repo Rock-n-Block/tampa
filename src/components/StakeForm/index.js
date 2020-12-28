@@ -11,8 +11,12 @@ import './StakeForm.scss';
 import tampaImg from '../../assets/img/tampa.svg';
 import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 import Spiner from '../../assets/img/oval.svg';
+import {modalActions, userActions} from "../../redux/actions";
+import {useDispatch} from "react-redux";
 
 const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTokenApproving, handleApproveToken, handleStake, calcLBP, calcBPB, shareRate }) => {
+    const dispatch = useDispatch()
+
     const [amount, setAmount] = React.useState('')
     const [days, setDays] = React.useState('')
 
@@ -28,7 +32,16 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
     }
 
     const handleChangeDays = (days) => {
-        setDays(days)
+        if (days>181) {
+            dispatch(userActions.setUserData({
+                errorCode: 1,
+                errorMsg: 'Please, enter less than 181 days',
+                errorLogo: null,
+            }))
+            dispatch(modalActions.toggleModal(true))
+        } else {
+            setDays(days)
+        }
     }
 
     const onStake = () => {

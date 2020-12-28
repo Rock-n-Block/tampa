@@ -1,5 +1,5 @@
 const initialState = {
-    isOpen: false
+    isOpen: false,
 }
 
 export default (state = initialState, { type, payload }) => {
