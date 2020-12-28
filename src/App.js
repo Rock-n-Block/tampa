@@ -10,6 +10,7 @@ import ContractService from './utils/contractService';
 import { userActions, modalActions } from './redux/actions';
 
 import './styles/main.scss'
+import {isEqual} from "lodash/lang";
 
 function App() {
   const [contractService, setContractService] = React.useState(null)
@@ -23,7 +24,7 @@ function App() {
   const getData = () => {
     let counter = 0;
     const interval = setInterval(() => {
-      counter += 10;
+      counter += 1000;
       if (window.ethereum) {
         clearInterval(interval)
         const metamask = new MetamaskService()
@@ -37,14 +38,20 @@ function App() {
           dispatch(userActions.setUserData(err))
           dispatch(modalActions.toggleModal(true))
         })
-      } else if (counter > 3000) {
+      } else if (counter > 4000) {
+        const ethereum = JSON.parse(localStorage.getItem('ethereum'))
+        if (!ethereum || ethereum==='null') {
+          localStorage.setItem('ethereum','reloaded')
+          window.location.reload()
+        }
+        localStorage.setItem('ethereum',null)
         dispatch(userActions.setUserData({
           errorCode: 1,
           errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
         }))
         dispatch(modalActions.toggleModal(true))
       }
-    }, 10)
+    }, 1000)
   }
 
 

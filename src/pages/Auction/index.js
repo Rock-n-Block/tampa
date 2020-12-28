@@ -128,6 +128,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
         setIsSummaryBetsLoading(true)
         contractService.currentDay()
             .then(days => {
+                days = days<=365 ? days : 365
                 setCurrentDays(days)
 
                 contractService.getEthBalance(userAddress)
