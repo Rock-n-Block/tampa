@@ -336,6 +336,7 @@ Auction lobbies are another way to buy J tokens that might be more profitable th
                     isLoading={isSummaryBetsLoading}
                 />
                 <AuctionLobby
+                    currentDays={currentDays}
                     isDarkTheme={isDarkTheme}
                     handleChangePage={handleChangePage}
                     pageCount={pageCount}
