@@ -95,7 +95,9 @@ export default class AuctionLobby extends React.PureComponent {
                                             <div className="a-lobby__popover-text">Your balance: {this.props.ethBalance} <span onClick={() => this.setState({ auctionValue: this.props.ethBalance })}>MAX</span></div>
                                         </div>
                         } >
+                        {this.props.currentDays < 365 &&
                         <button className="a-lobby__btn btn btn--md">ENTER</button>
+                        }
                     </Popover>}
                     {!item.state && item.status && <button className="a-lobby__btn a-lobby__btn--collect btn btn--md" onClick={() => this.props.handleExitAuction(item.countDay)}>COLLECT</button>}
                     {!item.state && !item.status && <button className="a-lobby__btn btn btn--md" disabled>ENDED</button>}
