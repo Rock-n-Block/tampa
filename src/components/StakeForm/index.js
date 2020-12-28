@@ -32,7 +32,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
     }
 
     const handleChangeDays = (days) => {
-        if (days>181) {
+        if (days>180) {
             dispatch(userActions.setUserData({
                 errorCode: 1,
                 errorMsg: 'Please, enter less than 181 days',
