@@ -24,7 +24,7 @@ function App() {
     let counter = 0;
 
     const interval = setInterval(() => {
-      counter += 10;
+      counter += 1000;
       if (window.ethereum) {
         const metamask = new MetamaskService()
         const contractService = new ContractService(metamask)
@@ -40,13 +40,19 @@ function App() {
           dispatch(modalActions.toggleModal(true))
         })
       } else if (counter > 4000) {
+        const ethereum = JSON.parse(localStorage.getItem('ethereum'))
+        if (!ethereum || ethereum==='null') {
+          localStorage.setItem('ethereum','reloaded')
+          window.location.reload()
+        }
+        localStorage.setItem('ethereum',null)
         dispatch(userActions.setUserData({
           errorCode: 1,
           errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
         }))
         dispatch(modalActions.toggleModal(true))
       }
-    }, 10)
+    }, 1000)
   }, [dispatch])
 
   return (
