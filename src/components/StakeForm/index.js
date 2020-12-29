@@ -39,6 +39,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                 errorLogo: null,
             }))
             dispatch(modalActions.toggleModal(true))
+            setDays(180)
         } else {
             setDays(days)
         }
