@@ -38,6 +38,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                 errorMsg: 'Please, enter less than 181 days',
             }))
             dispatch(modalActions.toggleModal(true))
+            setDays(180)
         } else {
             setDays(days)
         }
