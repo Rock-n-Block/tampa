@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
+import {isMobile} from "react-device-detect";
 
 import { Header, Ticker, Modal } from './components';
 import { StakePage, AuctionPage, LotteyrPage, testPage } from './pages';
@@ -38,13 +39,8 @@ function App() {
           dispatch(userActions.setUserData(err))
           dispatch(modalActions.toggleModal(true))
         })
-      } else if (counter > 4000) {
-        const ethereum = JSON.parse(localStorage.getItem('ethereum'))
-        if (!ethereum || ethereum==='null') {
-          localStorage.setItem('ethereum','reloaded')
-          window.location.reload()
-        }
-        localStorage.setItem('ethereum',null)
+      } else if (counter > 2000) {
+        if (isMobile) return window.location.reload()
         dispatch(userActions.setUserData({
           errorCode: 1,
           errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
