@@ -55,24 +55,9 @@ class MetamaskService {
             const net = IS_PRODUCTION ? 'binance smart chain' : 'binance smart chain test'
             const usedNet = IS_PRODUCTION ? '0x38' : '0x61'
             let netVersion = this.wallet.chainId
-            if (!netVersion) netVersion = localStorage.getItem('chainId')
-            if (!netVersion || netVersion==='null') {
-                this.wallet.request({ method: 'eth_chainId' })
-                .then(netVersion => {
-                    if (netVersion === usedNet) {
-                        this.wallet.request({ method: 'eth_requestAccounts' })
-                        .then(account => resolve({
-                            address: account[0]
-                        }))
-                        .catch(_ => reject({ errorMsg: 'Not authorized' }))
-                    } else {
-                        reject({
-                            errorMsg: 'Please choose ' + net + ' network in metamask wallet'
-                        })
-                    }
-                })
-                .catch(_ => reject({ errorMsg: 'Not authorized' }))
-            } else {
+            this.wallet.request({ method: 'eth_chainId' })
+            .then(newNetVersion => {
+                if (!netVersion) netVersion = newNetVersion;
                 if (netVersion === usedNet) {
                     this.wallet.request({ method: 'eth_requestAccounts' })
                     .then(account => resolve({
@@ -81,10 +66,11 @@ class MetamaskService {
                     .catch(_ => reject({ errorMsg: 'Not authorized' }))
                 } else {
                     reject({
-                        errorMsg: 'Please choose ' + net + ' network in metamask wallet.'
+                        errorMsg: 'Please choose ' + net + ' network in metamask wallet'
                     })
                 }
-            }
+            })
+            .catch(_ => reject({ errorMsg: 'Not authorized' }))
         })
     }
 

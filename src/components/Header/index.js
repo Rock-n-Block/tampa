@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 
-import { themeActions } from '../../redux/actions';
+import { themeActions, userActions, modalActions } from '../../redux/actions';
 
 import './Header.scss'
 
@@ -34,6 +34,11 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
     const copyTokenAddress = () => {
         const address = contractService.getContractAddress()
         navigator.clipboard.writeText(address)
+        dispatch(userActions.setUserData({
+          errorCode: 0,
+          errorMsg: 'Contract address copied to buffer'
+        }))
+        dispatch(modalActions.toggleModal(true))
     }
 
     const timeCounter = (seconds) => {

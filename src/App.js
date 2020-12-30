@@ -19,12 +19,11 @@ function App() {
     userAddress: user.address
   }))
 
-
-  React.useEffect(() => {
+  const getData = () => {
     let counter = 0;
-
+    let timeout = 1000
     const interval = setInterval(() => {
-      counter += 1000;
+      counter += timeout;
       if (window.ethereum) {
         const metamask = new MetamaskService()
         const contractService = new ContractService(metamask)
@@ -39,21 +38,21 @@ function App() {
           dispatch(userActions.setUserData(err))
           dispatch(modalActions.toggleModal(true))
         })
-      } else if (counter > 4000) {
-        const ethereum = JSON.parse(localStorage.getItem('ethereum'))
-        if (!ethereum || ethereum==='null') {
-          localStorage.setItem('ethereum','reloaded')
-          window.location.reload()
-        }
-        localStorage.setItem('ethereum',null)
-        dispatch(userActions.setUserData({
-          errorCode: 1,
-          errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
-        }))
-        dispatch(modalActions.toggleModal(true))
+      } else if (counter > 2000) {
+        window.location.reload()
+        return;
+        // dispatch(userActions.setUserData({
+        //   errorCode: 1,
+        //   errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
+        // }))
+        // dispatch(modalActions.toggleModal(true))
       }
-    }, 1000)
-  }, [dispatch])
+    }, timeout)
+  }
+
+  React.useEffect(() => {
+    getData();
+  }, [])
 
   return (
     <div className={classNames('tampa', {
