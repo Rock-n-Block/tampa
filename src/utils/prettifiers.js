@@ -11,6 +11,7 @@ export const formatNumberWithCommas = (x) => {
     if (!x) return null
     let parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    if (parts[1]) parts[1] = parts[1].slice(0,2);
+    const n = x > 1 ? 2 : 4;
+    if (parts[1]) parts[1] = parts[1].slice(0,n);
     return parts.join(".");
 }

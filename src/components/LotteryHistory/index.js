@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import './LotteryHistory.scss'
 import { dateFormat, formatNumberWithCommas } from "../../utils/prettifiers";
 import { Pagination } from "antd";
+import {RowItemTooltip} from "../index";
 
 const LotteryHistory = ({ data, handleLotteryWithdraw, userAddress, pageCount, currentPage, handleChangePage }) => {
 
@@ -22,7 +23,7 @@ const LotteryHistory = ({ data, handleLotteryWithdraw, userAddress, pageCount, c
                     <div className="l-history__list">
                         {data &&
                             data.map((item, index) => {
-                                return <div key={index} className={classNames('container l-history__row l-history__row-content', {
+                                return <div key={index} id="l-history" className={classNames('container l-history__row l-history__row-content', {
                                   'active': item.winner.toLowerCase() === userAddress.toLowerCase()
                                 })}>
                                     <div className="l-history__row-item" data-name="data">{dateFormat(+item.date)}</div>
@@ -30,7 +31,9 @@ const LotteryHistory = ({ data, handleLotteryWithdraw, userAddress, pageCount, c
                                     className="l-history__row-item"
                                     data-name="amount"
                                     >
-                                        {formatNumberWithCommas(item.amount)}
+                                        <RowItemTooltip tooltipText={formatNumberWithCommas(item.amount)} parent="l-history">
+                                            {formatNumberWithCommas(item.amount)}
+                                        </RowItemTooltip>
                                     </div>
                                     <div className="l-history__row-item" data-name={item.winner.toLowerCase() === userAddress.toLowerCase() ? '' : 'winner'}>
                                         {
