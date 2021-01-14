@@ -128,7 +128,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
         setIsSummaryBetsLoading(true)
         contractService.currentDay()
             .then(days => {
-                days = days<=365 ? Number(days) + 1 : 365; // days counting begins from 0
+                days = days<=365 ? days : 365; // days counting begins from 0
                 setCurrentDays(days)
 
                 contractService.getEthBalance(userAddress)
@@ -328,7 +328,7 @@ Auction lobbies are another way to buy J tokens that might be more profitable th
                 <Graph dividentsPool={dividentsPool} isDarkTheme={isDarkTheme} data={graphData} />
                 <SummaryBets
                     isDarkTheme={isDarkTheme}
-                    currentDays={currentDays}
+                    currentDays={+currentDays + 1}
                     participation={participation}
                     totalReceive={totalReceive}
                     averageRate={averageRate}
