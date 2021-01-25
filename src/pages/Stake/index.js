@@ -54,13 +54,11 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         const currentDayUnix = await contractService.getDayUnixTime(currentDay)
 
         const stakeDays = moment.utc(+end * 1000).diff(moment.utc(+start * 1000), 'days')
-        let pastDays = moment.utc(+end * 1000).diff(moment.utc(+currentDayUnix * 1000), 'days') - 1
+        let pastDays = moment.utc(+end * 1000).diff(moment.utc(+currentDayUnix * 1000), 'days');
 
         pastDays = pastDays >= 0 ? pastDays : 0;
-
         const percent = (100 - (100 * pastDays / stakeDays)).toFixed(0)
-
-        return percent > 100 ? 100 : percent
+        return percent > 100 ? 100 : percent < 0 ? 0 : percent
     }
 
     const getStakes = (isActive = true, currentDay = startDay) => {
