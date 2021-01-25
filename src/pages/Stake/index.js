@@ -348,6 +348,8 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                     handleRefreshActiveStakes={getData}
                     isRefreshingStates={activeStakesRefreshing}
                     handleWithdraw={handleWithdraw}
+                    startDay={startDay}
+                    contractService={contractService}
                 />
             </div>
         </div>
