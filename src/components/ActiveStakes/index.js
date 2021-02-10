@@ -12,7 +12,7 @@ import './ActiveStakes.scss'
 import refreshImg from '../../assets/img/refresh.svg';
 import refreshDarkImg from '../../assets/img/refresh-dark.svg';
 
-export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isRefreshingStates, handleWithdraw }) => {
+export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isRefreshingStates, handleWithdraw, startDay, contractService }) => {
     const navItems = ['My Active Stakes', 'My Ended Stakes']
 
     const [activeTab, setActiveTab] = React.useState(0)
@@ -30,10 +30,11 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
         if (!isRefreshingStates) handleRefreshActiveStakes(!!!index)
     }
 
-    const onWithdrawClick = (stake, index, stakeId, end) => {
+    const onWithdrawClick = async (stake, index, stakeId, end) => {
+        const currentDayUnix = await contractService.getDayUnixTime(startDay)
         const endDay = moment.utc(end * 1000)
 
-        const diffDays = moment.utc().diff(endDay, 'days')
+        const diffDays = moment.utc(+currentDayUnix * 1000).diff(endDay, 'days');
         // const diffDays = moment.utc().diff(endDay, 'minutes')
 
         console.log(diffDays, 'diffDays')
@@ -51,7 +52,7 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
             stakeId
         })
 
-        const seconds = moment.utc(stake.start * 1000).diff(moment.utc(), 'seconds')
+        const seconds = moment.utc(stake.start * 1000).diff(moment.utc(+currentDayUnix * 1000), 'seconds')
 
         console.log(seconds, 'seconds')
         if ((diffDays < 0 || diffDays >= 14) && seconds <= 0) {
@@ -106,8 +107,8 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                                 <div className="stakes__row-item" data-name="Start">{dateFormat(+item.start)}</div>
                                 <div className="stakes__row-item" data-name="End">{dateFormat(+item.end)}</div>
                                 {!item.isEnded &&
-                                <div className="stakes__row-item" data-name="Progress">
-                                    {item.progress}%
+                                    <div className="stakes__row-item" data-name="Progress">
+                                        {item.progress}%
                                 </div>
                                 }
                                 <div className="stakes__row-item" data-name="Staked">
@@ -133,16 +134,16 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                                 </div>
                                 <div className="stakes__row-item" data-name={!activeTab ? 'Current Value' : 'paid amount'}>
                                     <RowItemTooltip
-                                    tooltipText={
-                                        !activeTab ?
-                                        formatNumberWithCommas(item.currentValue) :
-                                        formatNumberWithCommas(item.paidAmount)
-                                    }
-                                    parent="stakes"
+                                        tooltipText={
+                                            !activeTab ?
+                                                formatNumberWithCommas(item.currentValue) :
+                                                formatNumberWithCommas(item.paidAmount)
+                                        }
+                                        parent="stakes"
                                     >
                                         {!activeTab ?
-                                        formatNumberWithCommas(item.currentValue) :
-                                        formatNumberWithCommas(item.paidAmount)
+                                            formatNumberWithCommas(item.currentValue) :
+                                            formatNumberWithCommas(item.paidAmount)
                                         }
                                     </RowItemTooltip>
                                 </div>

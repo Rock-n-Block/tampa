@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
-import { eachDayOfInterval } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 
 import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes, Graph } from '../../components';
 import decimals from '../../utils/web3/decimals';
@@ -48,30 +48,17 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         // amountToStake * (min{7 * 10^14; amountToStake} / 7 * 10^15)
     }
 
-    const calcStakeProgress = (start, end) => {
+    const calcStakeProgress = async (start, end, currentDay) => {
 
-        const stakeDays = eachDayOfInterval({
-            start: new Date(+start * 1000),
-            end: new Date(+end * 1000)
-        })
+        const currentDayUnix = await contractService.getDayUnixTime(currentDay)
 
-        try {
+        const stakeDays = moment.utc(+end * 1000).diff(moment.utc(+start * 1000), 'days')
+        let pastDays = moment.utc(+end * 1000).diff(moment.utc(+currentDayUnix * 1000), 'days');
 
-            const pastDays = eachDayOfInterval({
-                start: new Date(+start * 1000),
-                end: new Date()
-            })
+        pastDays = pastDays >= 0 ? pastDays : 0;
+        const percent = (100 - (100 * pastDays / stakeDays)).toFixed(0)
 
-            return ((pastDays.length - 1) / (stakeDays.length - 1) * 100).toFixed(0)
-        } catch (err) {
-
-            const pastDays = eachDayOfInterval({
-                end: new Date(+start * 1000),
-                start: new Date()
-            })
-
-            return ((pastDays.length - 2) / (stakeDays.length - 1) * 100).toFixed(0)
-        }
+        return percent > 100 ? 100 : percent < 0 ? 0 : percent
     }
 
     const getStakes = (isActive = true, currentDay = startDay) => {
@@ -139,7 +126,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
 
                         activeStakesItem.end = await contractService.getDayUnixTime(+stake.lockedDay + +stake.stakedDays)
 
-                        activeStakesItem.progress = calcStakeProgress(activeStakesItem.start, activeStakesItem.end)
+                        activeStakesItem.progress = await calcStakeProgress(activeStakesItem.start, activeStakesItem.end, currentDay)
                         activeStakesItem.bonusday = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewardsBonusDays')
 
                         activeStakesItem.bonusday = new BigNumber(activeStakesItem.bonusday).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
@@ -361,6 +348,8 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                     handleRefreshActiveStakes={getData}
                     isRefreshingStates={activeStakesRefreshing}
                     handleWithdraw={handleWithdraw}
+                    startDay={startDay}
+                    contractService={contractService}
                 />
             </div>
         </div>
