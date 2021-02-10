@@ -21,13 +21,13 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
                 <span>{isParticipant ? 'You are a lottery participant' : 'You are not a participant in the lottery'}</span>
             </div>
             <div className="lottery__list">
-                <div className="lottery__list-head">WHAT YOU NEED TO DO TO BECOME A PARTICIPANT IN THE LOTTERY:</div>
-                <div className="lottery__list-item">enter the auction for the current day at the first hour</div>
+                <div className="lottery__list-head">What you need to do to become a participant in the lottery:</div>
+                <div className="lottery__list-item">Enter the auction in the first hour</div>
                 <div className="lottery__list-subitem">
-                    - Tuesday, Thursday, Saturday, for each 1 ETH you put in during the 1st hour of the auction lobby you get 1 chance to win the JACKPOT.
+                    - Tuesday, Thursday, Saturday - for every 1 ETH you enter in the auction lobby, you get 1 chance to win the jackpot.
                 </div>
                 <div className="lottery__list-subitem">
-                    - Monday, Wednesday, Friday, Sunday: everyone who buys in the first hour of the auction lobby gets a chance to win the JACKPOT.
+                    - Monday, Wednesday, Friday, Sunday - the same jackpot chance for everyone, regardless of the amount you enter the auction with.
                 </div>
             </div>
             <div className="container lottery__content">

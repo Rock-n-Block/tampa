@@ -63,7 +63,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                 <div className="s-form__box s-form__head">
                     <div className="s-form__title">
                         <h1>Stake</h1>
-                        <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="You can stake your Jackpot token for a fixed number of days to earn interest on them. Make sure to stake more than 5 days to be eligible to get bonus days reward and participation in the lucky draw.
+                        <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="You can stake your Jackpot token for a fixed number of days to earn interest. Make sure to stake more than 5 days to be eligible to get bonus days reward.
 <br><br>At the end of every day, a daily stake pool of Jackpot tokens will be calculated and it will be shared and allocate to all the open stakes between all the open stakes based on their staked tokens amount which will be available for users to withdraw when the stake ends." />
                     </div>
                     <div className="s-form__balance">

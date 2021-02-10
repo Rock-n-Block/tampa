@@ -57,7 +57,7 @@ const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, i
                     </div>
                     <div className="s-info__item-subhead">{isActiveStakes ? 'Total interest' : 'total bonus shares'}
                         {isActiveStakes &&
-                            <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-info__content" tooltipText="[J supply * 50000 / 5.42% inflation per year ], this daily pool will be distributed between all the Stakers as their stake interest." />
+                            <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-info__content" tooltipText="[J supply * 4% inflation per year/ 364], this daily pool will be distributed between all the Stakers as their stake interest." />
                         }
                     </div>
                 </div>
