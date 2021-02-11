@@ -171,7 +171,7 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                             {isEarlyUnstake ? 'Early unstake!' : 'Late unstake!'}
                             {` You will get ${activeStake.stake.stakeReturn} J, ${activeStake.stake.penalti} j will be penalized!`}
                             <br></br>
-                            {`Your dividends in eth ${activeStake.stake.penaltiDividents}.`}
+                            {`Your dividends in BNB ${activeStake.stake.penaltiDividents}.`}
                         </div>
                     }
                     <div className="stakes__modal-btns">
