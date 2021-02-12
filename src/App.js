@@ -39,13 +39,12 @@ function App() {
           dispatch(modalActions.toggleModal(true))
         })
       } else if (counter > 2000) {
-        window.location.reload()
-        return;
-        // dispatch(userActions.setUserData({
-        //   errorCode: 1,
-        //   errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
-        // }))
-        // dispatch(modalActions.toggleModal(true))
+        clearInterval(interval);
+        dispatch(userActions.setUserData({
+          errorCode: 1,
+          errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
+        }))
+        dispatch(modalActions.toggleModal(true))
       }
     }, timeout)
   }
