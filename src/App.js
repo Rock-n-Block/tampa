@@ -40,7 +40,7 @@ function App() {
           dispatch(modalActions.toggleModal(true))
         })
       } else if (counter > 2000) {
-        if (isMobile) return window.location.reload()
+        clearInterval(interval)
         dispatch(userActions.setUserData({
           errorCode: 1,
           errorMsg: 'Metamask extension is not found. You can install it from <a href="https://metamask.io" target="_blank">metamask.io</a>'
