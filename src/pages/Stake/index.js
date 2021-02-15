@@ -126,7 +126,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
 
                         activeStakesItem.end = await contractService.getDayUnixTime(+stake.lockedDay + +stake.stakedDays)
 
-                        activeStakesItem.progress = calcStakeProgress(activeStakesItem.start, activeStakesItem.end, currentDay)
+                        activeStakesItem.progress = await calcStakeProgress(activeStakesItem.start, activeStakesItem.end, currentDay)
                         activeStakesItem.bonusday = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewardsBonusDays')
 
                         activeStakesItem.bonusday = new BigNumber(activeStakesItem.bonusday).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
