@@ -27,13 +27,14 @@ class MetamaskService {
             }
         }
         this.wallet.on('chainChanged', (newChain) => {
-            const chainId = localStorage.getItem('chainId')
+            // const chainId = localStorage.getItem('chainId')
             // console.log('chainChanged')
-            if (!chainId || String(chainId) !== String(newChain)) {
-                // console.log('chains not equal',String(chainId),String(newChain))
-                localStorage.setItem('chainId',newChain)
-                window.location.reload()
-            }
+            // if (String(chainId) !== String(newChain)) {
+            //     // console.log('chains not equal',String(chainId),String(newChain))
+            //     localStorage.setItem('chainId',newChain)
+            //     window.location.reload()
+            // }
+            window.location.reload()
         });
         this.wallet.on('accountsChanged', (newAccounts) => {
             // console.log('accountsChanged')
