@@ -14,8 +14,8 @@ const ReferrerLink = ({ userAddress, isDarkTheme }) => {
             <img src={leftImg} alt="" className="r-link__img r-link__img--left" />
             <img src={rightImg} alt="" className="r-link__img r-link__img--right" />
             <div className="r-link__box">
-                <div className="r-link__title">Your Referrer Link
-                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="r-link" tooltipText="Your referrals will earn an extra 5% minted J tokens on their Auction Lobby Purchase. As a referrer, you will earn an extra 10%. There are no limits on the number or the amount of referrals that you can get." />
+                <div className="r-link__title">Your Referral Link
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="r-link" tooltipText="Your referrals will earn an extra 5% minted Jackpot tokens on their Auction Lobby Purchase. As a referrer, you will earn a 10% bonus from what they purchase. They do not get fewer tokens because you referred them. The person being referred, AND the person who referred them BOTH get more tokens when using a referral link. There are no limits on the number or the amount of referrals that you can accumulate." />
                 </div>
                 <div className="r-link__link">{`${window.location.origin}/auction/?ref=${userAddress}`}</div>
             </div>

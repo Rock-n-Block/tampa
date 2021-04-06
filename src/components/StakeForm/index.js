@@ -64,8 +64,20 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                 <div className="s-form__box s-form__head">
                     <div className="s-form__title">
                         <h1>Stake</h1>
-                        <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="You can stake your Jackpot token for a fixed number of days to earn interest. Make sure to stake more than 5 days to be eligible to get bonus days reward.
-<br><br>At the end of every day, a daily stake pool of Jackpot tokens will be calculated and it will be shared and allocate to all the open stakes between all the open stakes based on their staked tokens amount which will be available for users to withdraw when the stake ends." />
+                        <QuestionTooltip
+                        isDarkTheme={isDarkTheme}
+                        parent="s-form"
+                        tooltipText={`
+                            <div>
+                                <p>
+                                    You can stake your Jackpot tokens for a fixed number of days to earn interest.  If you stake more than 5 days to be eligible to get bonus days reward.  Bonus days give double rewards on day 5, 10, 15, 20 etc of the auction calendar.
+                                </p><br />
+                                <p>
+                                At the end of every day, a daily stake pool of Jackpot tokens will be calculated and it will be shared and allocated to all the open stakes based on the amount of staked tokens and the amount which will be available for users to withdraw when the stake ends. Formulas for staking calculations are on the whitepaper at <a href="https://www.jackpotstaking.com/" target="_blank">www.jackpotstaking.com</a>, and analysis tools/dashboards will also be posted there as well as the project develops.
+                                </p>
+                            </div>
+                        `}
+                        />
                     </div>
                     <div className="s-form__balance">
                         Your balance: {formatNumberWithCommas(walletBalance)} <span onClick={handleSendMax}>MAX</span>
@@ -158,7 +170,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                     <div className="s-form__info-item">
                         <span>{Math.floor(days / 5)}</span>
                         <span>bonus day
-                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="Every stake will get a bonus day every 5 days that it has been active, stakes get 2X interest on bonus days. <br><br>Example: creating a stake at day 4 for 15 days gives this stake 3 bonus at days 10,15, and day 20 etc." />
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-form" tooltipText="Every stake will get a bonus day every 5 days that it has been active. Stakes get 2X interest on bonus days. <br><br>Example: creating a stake on day 4 (there are 365 auction days total) for 15 days gives this stake 3 bonus at days 10,15, and day 20 etc.  We anticipate you being able to sell your Jackpot on DEX and CEX very quickly but we also predict you will be able sell or use your tokens with our use case partners beginning around the 180th day of the auctions at a much higher premium than exchanges.  This is not financial advice! This is for entertainment purposes only. Do not play with funds you need to pay your bills with." />
                         </span>
                     </div>
                 </div>

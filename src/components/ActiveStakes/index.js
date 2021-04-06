@@ -83,7 +83,7 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
                             })
                         }
                     </div>
-                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="stakes" tooltipText="You are subject up to a 100% penalty depending on your stake terms." />
+                    <QuestionTooltip isDarkTheme={isDarkTheme} parent="stakes" tooltipText={`There are penalties for withdrawing stakes early.  If your stake has not begun yet you may withdraw with no penalty.  A stake done today will start at 01:00 UTC tomorrow.  At that point early withdrawal penalties will occur, the penalties lesson over time, and the penalties are distributed to other stakers who do not withdraw early.  Formulas for penalties can be found on the whitepaper at <a href="https://www.jackpotstaking.com/" target="_blank">www.jackpotstaking.com</a> (cut and paste into your browser if hyperlink does not work)`} />
                 </div>
                 <div className={classNames("stakes__row t-row t-row__head", {
                     'stakes__row--ended': activeStakes[0] && activeStakes[0].isEnded

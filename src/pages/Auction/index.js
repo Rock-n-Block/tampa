@@ -314,14 +314,11 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
             <div className="row row--lg">
                 <h1 className="auction__title">Auction
                     <QuestionTooltip isDarkTheme={isDarkTheme} parent="auction"
-                        tooltipText="Auction lobbies are Daily Auctions that offer J tokens for BNB based on the J and BNB pool at the end of the day.<br>
+                        tooltipText="Auction lobbies are Daily Auctions that offer Jackpot tokens to those who make BNB deposits. The Jackpot token pool in the lobby will start at 2.5 million Jackpot per day and decrease to 1 million over the next 365 days. Starting from day 366 there will be no further auctions and Jackpot tokens will have to be purchased from current holders are earned from staking from that point forward. There will be no other way to receive more Jackpot tokens which is designed to increase the price.<br><br>
 
-The J token pool in the lobby will start at 5 million TMP per day and decrease to 1 million over the next 365 days. Starting from day 366, the auction pool will be equal to 1 million J tokens per day.<br><br>
+Lobbies are daily and restart every day at 01:00 UTC. Enter the auction in the first hour to participate in the Jackpot lottery. Refresh the page to see if the current day is a day that you get one chance per full BNB deposited, or one chance regardless of how much BNB you deposit in the first hour.  Keep in mind, 95% of the BNB deposited into the smart contract is returned to stakers/those who purchased Jackpot tokens.  <br><br>
 
-Lobbies are daily and restart every day at 01:00 UTC.<br>
-Enter the auction in the first hour to participate in the lottery.<br><br>
-
-Auction lobbies are another way to buy J tokens that might be more profitable than purchasing on exchanges. Plus the BNB spent is rewarded back to Stakers."
+Systems that pay out more are often unsustainable, as there is no fuel for marketing or improvement of the project.  This project is designed to be profitable for years to come."
 
                     />
                 </h1>
