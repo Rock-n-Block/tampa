@@ -1,16 +1,68 @@
 import React, { useState, useEffect } from 'react';
+import {Checkbox, Modal} from 'antd';
 import { BigNumber } from 'bignumber.js';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
 import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes, Graph } from '../../components';
 import decimals from '../../utils/web3/decimals';
-import { graphActions } from '../../redux/actions';
+import {graphActions, modalActions, dialogActions} from '../../redux/actions';
 
 import './Stake.scss'
 
+const DialogApproveToken = ({ approveToken }) => {
+    const [iUnderstand, setIUnderstand] = useState(false)
+
+    const handleIUnderstand = (e) => {
+        setIUnderstand(e.target.checked)
+    }
+
+    return (
+    <div className="dialog">
+        <div className="dialog-h1">
+            Staking information
+        </div>
+        <div className="dialog-text">
+            Text
+        </div>
+        <div className="dialog-h2">
+            Warning
+        </div>
+        <div className="dialog-text">
+            Text
+        </div>
+        <div className="dialog-buttons">
+            <div>
+                <input
+                id="iUnderstand"
+                name="iUnderstand"
+                type="checkbox"
+                className="checkbox"
+                checked={iUnderstand}
+                onChange={handleIUnderstand}
+                />
+                <label htmlFor="iUnderstand">
+                    I understand
+                </label>
+            </div>
+            <button
+            key="submit"
+            type="primary"
+            className="btn dialog-button"
+            disabled={!iUnderstand}
+            onClick={approveToken}
+            >
+                Contnue
+            </button>
+        </div>
+    </div>
+    )
+}
+
 const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     const dispatch = useDispatch()
+
+    const toggleDialog = (props) => dispatch(dialogActions.toggleDialog(props))
 
     const [walletBalance, setWalletBalance] = useState(0)
     const [startDay, setStartDay] = useState(0)
@@ -264,6 +316,17 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     }
 
     const handleApproveToken = () => {
+        toggleDialog({
+            open: true,
+            content: <DialogApproveToken approveToken={approveToken}/>,
+        })
+    }
+
+    const approveToken = () => {
+        toggleDialog({
+            open: false,
+            content: null,
+        })
         setIsTokenApproving(true)
         contractService.approveToken(userAddress, (res) => {
             setIsTokenApproving(false)

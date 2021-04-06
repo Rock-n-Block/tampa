@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import {isMobile} from "react-device-detect";
 
-import { Header, Ticker, Modal } from './components';
+import { Header, Ticker, Modal, ModalDialog } from './components';
 import { StakePage, AuctionPage, LotteyrPage, testPage } from './pages';
 import MetamaskService from './utils/web3';
 import ContractService from './utils/contractService';
@@ -75,6 +75,7 @@ function App() {
         <Route path="/testpage" component={testPage} />
       </div>
       <Modal />
+      <ModalDialog />
     </div>
   );
 }
