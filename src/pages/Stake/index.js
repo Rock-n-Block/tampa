@@ -2,16 +2,87 @@ import React, { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { eachDayOfInterval } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
+import {Checkbox, Modal} from 'antd';
 import moment from 'moment';
 
 import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes, Graph } from '../../components';
 import decimals from '../../utils/web3/decimals';
-import { graphActions } from '../../redux/actions';
+import { graphActions, modalActions, dialogActions } from '../../redux/actions';
 
 import './Stake.scss'
 
+const DialogApproveToken = ({ approveToken }) => {
+    const dispatch = useDispatch()
+    const [iUnderstand, setIUnderstand] = useState(false)
+
+    const toggleDialog = (props) => dispatch(dialogActions.toggleDialog(props))
+
+    const handleIUnderstand = (e) => {
+        setIUnderstand(e.target.checked)
+    }
+
+    const handleApproveToken = (e) => {
+        localStorage.setItem('iUnderstand', 'true');
+        approveToken()
+        toggleDialog({open: false})
+    }
+
+    return (
+    <div className="dialog">
+        <div className="dialog-h1">
+            Staking information
+        </div>
+        <div className="dialog-text">
+            <p></p>
+            <p>
+                You will earn 20% APY or more on your staked Jackpot tokens, plus any bonuses for referral, stake length, and amount staked.
+            </p>
+            <p>
+                You will ALSO receive ETH dividends at the end of your stake.
+            </p>
+            <p>
+                Do not forget to collect your funds when the collect button appears and turns green.
+            </p>
+            <p>
+                Un-staking early will cause a penalty.
+            </p>
+            <p>
+                For more information, audit results, mathematical formulas, and all other social and information links visit{' '}
+                <a href="https://jackpotstaking.com" target="_blank">https://jackpotstaking.com</a>
+            </p>
+        </div>
+        <div className="dialog-buttons">
+            <div>
+                <input
+                id="iUnderstand"
+                name="iUnderstand"
+                type="checkbox"
+                className="checkbox"
+                checked={iUnderstand}
+                onChange={handleIUnderstand}
+                />
+                <label htmlFor="iUnderstand">
+                    I understand
+                </label>
+            </div>
+            <button
+            key="submit"
+            type="primary"
+            className="btn dialog-button"
+            disabled={!iUnderstand}
+            onClick={handleApproveToken}
+            >
+                Contnue
+            </button>
+        </div>
+    </div>
+    )
+}
+
 const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     const dispatch = useDispatch()
+
+    const toggleDialog = (props) => dispatch(dialogActions.toggleDialog(props))
 
     const [walletBalance, setWalletBalance] = useState(0)
     const [startDay, setStartDay] = useState(0)
@@ -264,6 +335,15 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     }
 
     const handleApproveToken = () => {
+        const iUnderstand = localStorage.getItem('iUnderstand');
+        if (iUnderstand === 'true') return approveToken();
+        toggleDialog({
+            open: true,
+            content: <DialogApproveToken approveToken={approveToken}/>,
+        })
+    }
+
+    const approveToken = () => {
         setIsTokenApproving(true)
         contractService.approveToken(userAddress, (res) => {
             setIsTokenApproving(false)
