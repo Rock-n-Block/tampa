@@ -17,19 +17,34 @@ const DialogApproveToken = ({ approveToken }) => {
         setIUnderstand(e.target.checked)
     }
 
+    const handleApproveToken = (e) => {
+        localStorage.setItem('iUnderstand', 'true');
+        approveToken()
+    }
+
     return (
     <div className="dialog">
         <div className="dialog-h1">
             Staking information
         </div>
         <div className="dialog-text">
-            Text
-        </div>
-        <div className="dialog-h2">
-            Warning
-        </div>
-        <div className="dialog-text">
-            Text
+            <p></p>
+            <p>
+                You will earn 20% APY or more on your staked Jackpot tokens, plus any bonuses for referral, stake length, and amount staked.
+            </p>
+            <p>
+                You will ALSO receive ETH dividends at the end of your stake.
+            </p>
+            <p>
+                Do not forget to collect your funds when the collect button appears and turns green.
+            </p>
+            <p>
+                Un-staking early will cause a penalty.
+            </p>
+            <p>
+                For more information, audit results, mathematical formulas, and all other social and information links visit{' '}
+                <a href="https://jackpotstaking.com" target="_blank">https://jackpotstaking.com</a>
+            </p>
         </div>
         <div className="dialog-buttons">
             <div>
@@ -50,7 +65,7 @@ const DialogApproveToken = ({ approveToken }) => {
             type="primary"
             className="btn dialog-button"
             disabled={!iUnderstand}
-            onClick={approveToken}
+            onClick={handleApproveToken}
             >
                 Contnue
             </button>
@@ -316,6 +331,8 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     }
 
     const handleApproveToken = () => {
+        const iUnderstand = localStorage.getItem('iUnderstand');
+        if (iUnderstand === 'true') return approveToken();
         toggleDialog({
             open: true,
             content: <DialogApproveToken approveToken={approveToken}/>,
