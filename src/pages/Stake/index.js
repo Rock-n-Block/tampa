@@ -38,7 +38,7 @@ const DialogApproveToken = ({ approveToken }) => {
                 You will earn 20% APY or more on your staked Jackpot tokens, plus any bonuses for referral, stake length, and amount staked.
             </p>
             <p>
-                You will ALSO receive ETH dividends at the end of your stake.
+                You will ALSO receive BNB dividends at the end of your stake.
             </p>
             <p>
                 Do not forget to collect your funds when the collect button appears and turns green.
