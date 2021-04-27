@@ -35,8 +35,8 @@ const Header = ({ isDarkTheme, userAddress, contractService, walletService }) =>
         const sec = seconds - (minutes * 60) - (hours * 3600)
 
         setTimeUntil(`${hours < 10 ?
-                hours < 0 ? '-0' + -hours : '0' + hours :
-                hours
+            hours < 0 ? '-0' + -hours : '0' + hours :
+            hours
             }:${minutes < 10 ? '0' + minutes : minutes}:${sec < 10 ? '0' + sec : sec}`)
     }
 
@@ -55,7 +55,7 @@ const Header = ({ isDarkTheme, userAddress, contractService, walletService }) =>
                     .then(date => {
                         const interval = setInterval(() => {
                             let lotteryDateStart = moment.utc(date * 1000).add(1, 'days')
-                            // let lotteryDateStart = moment.utc(date * 1000).add(10, 'minutes')
+                            // let lotteryDateStart = moment.utc(date * 1000).add(5, 'minutes')
                             let dateNow = moment.utc()
 
                             const seconds = lotteryDateStart.diff(dateNow, 'seconds')
