@@ -12,6 +12,24 @@
     flex-direction: column;
     padding: 30px 80px 25px;
   }
+  &__alert {
+    font-size: 18px;
+    line-height: 22px;
+    .anticon {
+      display: none !important;
+    }
+    &-dark {
+      color: white;
+      .ant-message-notice-content {
+        background: linear-gradient(
+          210.96deg,
+          #282458 0.01%,
+          #262353 42.05%,
+          rgba(62, 59, 115, 0) 104.81%
+        ) !important;
+      }
+    }
+  }
   &__img {
     position: absolute;
     bottom: 0;

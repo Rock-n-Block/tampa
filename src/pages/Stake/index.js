@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { eachDayOfInterval } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
-import {Checkbox, Modal} from 'antd';
+import { Checkbox, Modal } from 'antd';
 import moment from 'moment';
 
 import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes, Graph } from '../../components';
@@ -24,58 +24,56 @@ const DialogApproveToken = ({ approveToken }) => {
     const handleApproveToken = (e) => {
         localStorage.setItem('iUnderstand', 'true');
         approveToken()
-        toggleDialog({open: false})
+        toggleDialog({ open: false })
     }
 
     return (
-    <div className="dialog">
-        <div className="dialog-h1">
-            Staking information
+        <div className="dialog">
+            <div className="dialog-h1">
+                Staking information
         </div>
-        <div className="dialog-text">
-            <p></p>
-            <p>
-                You will earn 20% APY or more on your staked Jackpot tokens, plus any bonuses for referral, stake length, and amount staked.
+            <div className="dialog-text">
+                <p></p>
+                <p>
+                    You will earn 20% APY or more on your staked Jackpot tokens, plus any bonuses for referral, stake length, and amount staked.  You will ALSO receive ETH/BNB/TRX/ or Matic dividends at the end of your stake.  Do not forget to collect your funds when the collect button appears and turns green.  Un-staking early will cause a penalty.  For more information, audit results, mathematical formulas, and all other social and information links visit <a href="https://jackpotstaking.com" target="_blank">https://jackpotstaking.com</a>
+                </p>
+                <p>
+                    For the ETH and BSC versions of Jackpot:
+                    You will do two transactions, the first to allow Metamask to "spend" your Jackpot.  This simply means you will be able to send your Jackpot tokens to the smart contract to stake, or to your friends or to an exchange. Wait for this transaction to complete. Do not start another transaction while it is pending.  Once you have approved Jackpot, you will then be asked to confirm the transaction that puts your Jackpot tokens into the staking platform.
+
             </p>
-            <p>
-                You will ALSO receive BNB dividends at the end of your stake.
+                <p>
+                    When this transaction occurs it may say 0 on the Jackpot interface, but the amount of tokens you are staking will show in your Metamask screen when you approve the transaction.  You can withdraw your stake anytime up until the next day rolls over at 0100 UTC and your tokens are officially staked.  Once you see your tokens active in the staking page you will have a penalty for withdrawing early.  Most issues with the interface are cleared up by patience, and refreshing the page.
             </p>
-            <p>
-                Do not forget to collect your funds when the collect button appears and turns green.
+                <p>
+                    If you are using the Jackpot ETH version, and ETH has not reduced their fees yet, make sure you stake a lot of Jackpot, otherwise the gas fees could eat into your gains.  This is not an issue if you stake for 180 days and you think ETH will have resolved high gas fees by then.
             </p>
-            <p>
-                Un-staking early will cause a penalty.
-            </p>
-            <p>
-                For more information, audit results, mathematical formulas, and all other social and information links visit{' '}
-                <a href="https://jackpotstaking.com" target="_blank">https://jackpotstaking.com</a>
-            </p>
-        </div>
-        <div className="dialog-buttons">
-            <div>
-                <input
-                id="iUnderstand"
-                name="iUnderstand"
-                type="checkbox"
-                className="checkbox"
-                checked={iUnderstand}
-                onChange={handleIUnderstand}
-                />
-                <label htmlFor="iUnderstand">
-                    I understand
-                </label>
             </div>
-            <button
-            key="submit"
-            type="primary"
-            className="btn dialog-button"
-            disabled={!iUnderstand}
-            onClick={handleApproveToken}
-            >
-                Contnue
+            <div className="dialog-buttons">
+                <div>
+                    <input
+                        id="iUnderstand"
+                        name="iUnderstand"
+                        type="checkbox"
+                        className="checkbox"
+                        checked={iUnderstand}
+                        onChange={handleIUnderstand}
+                    />
+                    <label htmlFor="iUnderstand">
+                        I understand
+                </label>
+                </div>
+                <button
+                    key="submit"
+                    type="primary"
+                    className="btn dialog-button"
+                    disabled={!iUnderstand}
+                    onClick={handleApproveToken}
+                >
+                    Contnue
             </button>
+            </div>
         </div>
-    </div>
     )
 }
 
@@ -339,7 +337,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         if (iUnderstand === 'true') return approveToken();
         toggleDialog({
             open: true,
-            content: <DialogApproveToken approveToken={approveToken}/>,
+            content: <DialogApproveToken approveToken={approveToken} />,
         })
     }
 
