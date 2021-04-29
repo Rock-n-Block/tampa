@@ -51,11 +51,12 @@ const Header = ({ isDarkTheme, userAddress, contractService, walletService }) =>
     const getDate = () => {
         contractService.currentDay()
             .then(day => {
+                console.log(day, 'current day')
                 contractService.getDayUnixTime(day)
                     .then(date => {
                         const interval = setInterval(() => {
-                            let lotteryDateStart = moment.utc(date * 1000).add(1, 'days')
-                            // let lotteryDateStart = moment.utc(date * 1000).add(5, 'minutes')
+                            // let lotteryDateStart = moment.utc(date * 1000).add(1, 'days')
+                            let lotteryDateStart = moment.utc(date * 1000).add(10, 'minutes')
                             let dateNow = moment.utc()
 
                             const seconds = lotteryDateStart.diff(dateNow, 'seconds')
