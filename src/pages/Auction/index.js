@@ -48,7 +48,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
         const defaultReferrerAddr = await contractService.defaultReferrerAddr()
 
         if (memberEntry.referrerAddr && memberEntry.referrerAddr !== 0 && memberEntry.referrerAddr.toUpperCase() !== userAddress.toUpperCase() && memberEntry.referrerAddr.toUpperCase() !== defaultReferrerAddr.toUpperCase()) {
-            calcTotalReceive = calcTotalReceive.multipliedBy(1.05)
+            calcTotalReceive = calcTotalReceive.multipliedBy(1.1)
         }
 
         return calcTotalReceive.toFixed()
@@ -128,7 +128,7 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService }) => {
         setIsSummaryBetsLoading(true)
         contractService.currentDay()
             .then(days => {
-                days = days<=365 ? days : 365; // days counting begins from 0
+                days = days <= 365 ? days : 365; // days counting begins from 0
                 setCurrentDays(days)
 
                 contractService.getEthBalance(userAddress)
