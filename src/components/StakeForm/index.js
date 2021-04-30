@@ -11,8 +11,8 @@ import './StakeForm.scss';
 import tampaImg from '../../assets/img/tampa.svg';
 import tampaDarkImg from '../../assets/img/tampa-dark.svg';
 import Spiner from '../../assets/img/oval.svg';
-import {modalActions, userActions} from "../../redux/actions";
-import {useDispatch} from "react-redux";
+import { modalActions, userActions } from "../../redux/actions";
+import { useDispatch } from "react-redux";
 
 const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTokenApproving, handleApproveToken, handleStake, calcLBP, calcBPB, shareRate }) => {
     const dispatch = useDispatch()
@@ -32,7 +32,7 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
     }
 
     const handleChangeDays = (days) => {
-        if (days>180) {
+        if (days > 180) {
             dispatch(userActions.setUserData({
                 errorCode: 1,
                 errorMsg: 'Please, enter less than 181 days',
@@ -64,15 +64,15 @@ const StakeForm = ({ isDarkTheme, walletBalance, startDay, isTokenApproved, isTo
                     <div className="s-form__title">
                         <h1>Stake</h1>
                         <QuestionTooltip
-                        isDarkTheme={isDarkTheme}
-                        parent="s-form"
-                        tooltipText={`
+                            isDarkTheme={isDarkTheme}
+                            parent="s-form"
+                            tooltipText={`
                             <div>
                                 <p>
                                     You can stake your Jackpot tokens for a fixed number of days to earn interest.  If you stake more than 5 days to be eligible to get bonus days reward.  Bonus days give double rewards on day 5, 10, 15, 20 etc of the auction calendar.
                                 </p><br />
                                 <p>
-                                At the end of every day, a daily stake pool of Jackpot tokens will be calculated and it will be shared and allocated to all the open stakes based on the amount of staked tokens and the amount which will be available for users to withdraw when the stake ends. Formulas for staking calculations are on the whitepaper at <a href="https://www.jackpotstaking.com/" target="_blank">www.jackpotstaking.com</a>, and analysis tools/dashboards will also be posted there as well as the project develops.
+                                At the end of every day, a daily stake pool of Jackpot tokens will be calculated and it will be shared and allocated to all the open stakes based on the amount of staked tokens and the amount which will be available for users to withdraw when the stake ends. Formulas for staking calculations are on the whitepaper at <a href="https://jackpotstaking.com/" target="_blank">jackpotstaking.com</a>, and analysis tools/dashboards will also be posted there as well as the project develops.
                                 </p>
                             </div>
                         `}

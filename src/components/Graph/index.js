@@ -29,7 +29,7 @@ const Graph = ({ dividentsPool, isDarkTheme, data, to }) => {
                             {dividentsPool}
                             {isDarkTheme ? <img src={ethImgDark} alt="" /> : <img src={ethImg} alt="" />}
                             <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-graph" tooltipText={`- 90% of all ETH that enters the daily Auction Lobby is pooled and distributed back to Jackpot stakers in addition to Jackpot tokens.
-                            <br>- 5% of the ETH is allocated to the lottery "Jackpot" pool. 2.5% is automatically delivered daily to the winner by the smart contract. The other 2.5% is either accumulated, or claimed by the day's winner when they send a video of them winning the lottery to one of the social media accounts on <a href="mailto:https://www.jackpotstaking.com">https://www.jackpotstaking.com</a> <br>
+                            <br>- 5% of the ETH is allocated to the lottery "Jackpot" pool. 2.5% is automatically delivered daily to the winner by the smart contract. The other 2.5% is either accumulated, or claimed by the day's winner when they send a video of them winning the lottery to one of the social media accounts on <a href="mailto:https://jackpotstaking.com">https://jackpotstaking.com</a> <br>
 
 More details will be provided as the project progresses so make sure to check for new info because there will also be times this 2.5% is allowed to accumulate for days or weeks in order to have Maga Jackpots. Keep in mind, the lottery is based off of yesterday's pool. So the larger the pool from the day before, the higher amount of ETH will be won the next day by a winner who is randomly chosen by the smart contract.
 
