@@ -32,6 +32,7 @@ const DialogApproveToken = ({ approveToken }) => {
                     You will earn 20% APY or more on your staked Jackpot tokens, plus any bonuses for referral, stake length, and amount staked.  You will ALSO receive ETH/BNB/TRX/ or Matic dividends at the end of your stake.  Do not forget to collect your funds when the collect button appears and turns green.  Un-staking early will cause a penalty.  For more information, audit results, mathematical formulas, and all other social and information links visit <a href="https://jackpotstaking.com" target="_blank">https://jackpotstaking.com</a>
                 </p>
                 <p>
+                    For the ETH and BSC versions of Jackpot:  <br></br>
                     You will do two transactions, the first to allow Metamask to "spend" your Jackpot.  This simply means you will be able to send your Jackpot tokens to the smart contract to stake, or to your friends or to an exchange. Wait for this transaction to complete. Do not start another transaction while it is pending.  Once you have approved Jackpot, you will then be asked to confirm the transaction that puts your Jackpot tokens into the staking platform.
             </p>
                 <p>
