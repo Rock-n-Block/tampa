@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
-import { eachDayOfInterval } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, Modal } from 'antd';
 import moment from 'moment';
 
 import { StakeForm, ReferrerLink, StakeInfo, ActiveStakes, Graph } from '../../components';
 import decimals from '../../utils/web3/decimals';
-import { graphActions, modalActions, dialogActions } from '../../redux/actions';
+import { graphActions, dialogActions } from '../../redux/actions';
 
 import './Stake.scss'
 
@@ -35,10 +33,10 @@ const DialogApproveToken = ({ approveToken }) => {
             <div className="dialog-text">
                 <p></p>
                 <p>
-                    You will earn 20% APY or more on your staked Jackpot tokens, plus any bonuses for referral, stake length, and amount staked.  You will ALSO receive ETH/BNB/TRX/ or Matic dividends at the end of your stake.  Do not forget to collect your funds when the collect button appears and turns green.  Un-staking early will cause a penalty.  For more information, audit results, mathematical formulas, and all other social and information links visit <a href="https://jackpotstaking.com" target="_blank">https://jackpotstaking.com</a>
+                    You will earn 20% APY or more on your staked Jackpot tokens, plus any bonuses for referral, stake length, and amount staked.  You will ALSO receive BNB/BNB/TRX/ or Matic dividends at the end of your stake.  Do not forget to collect your funds when the collect button appears and turns green.  Un-staking early will cause a penalty.  For more information, audit results, mathematical formulas, and all other social and information links visit <a href="https://jackpotstaking.com" target="_blank">https://jackpotstaking.com</a>
                 </p>
                 <p>
-                    For the ETH and BSC versions of Jackpot:
+                    For the BNB and BSC versions of Jackpot:
                     You will do two transactions, the first to allow Metamask to "spend" your Jackpot.  This simply means you will be able to send your Jackpot tokens to the smart contract to stake, or to your friends or to an exchange. Wait for this transaction to complete. Do not start another transaction while it is pending.  Once you have approved Jackpot, you will then be asked to confirm the transaction that puts your Jackpot tokens into the staking platform.
 
             </p>
@@ -46,7 +44,7 @@ const DialogApproveToken = ({ approveToken }) => {
                     When this transaction occurs it may say 0 on the Jackpot interface, but the amount of tokens you are staking will show in your Metamask screen when you approve the transaction.  You can withdraw your stake anytime up until the next day rolls over at 0100 UTC and your tokens are officially staked.  Once you see your tokens active in the staking page you will have a penalty for withdrawing early.  Most issues with the interface are cleared up by patience, and refreshing the page.
             </p>
                 <p>
-                    If you are using the Jackpot ETH version, and ETH has not reduced their fees yet, make sure you stake a lot of Jackpot, otherwise the gas fees could eat into your gains.  This is not an issue if you stake for 180 days and you think ETH will have resolved high gas fees by then.
+                    If you are using the Jackpot BNB version, and BNB has not reduced their fees yet, make sure you stake a lot of Jackpot, otherwise the gas fees could eat into your gains.  This is not an issue if you stake for 180 days and you think BNB will have resolved high gas fees by then.
             </p>
             </div>
             <div className="dialog-buttons">

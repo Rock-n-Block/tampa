@@ -50,60 +50,60 @@ export default class AuctionLobby extends React.PureComponent {
                     <div className="a-lobby__row t-row t-row__head">
                         <div className="a-lobby__row-head-item">Day</div>
                         <div className="a-lobby__row-head-item">Jackpot Pool</div>
-                        <div className="a-lobby__row-head-item">BNB \ Jackpot</div>
+                        <div className="a-lobby__row-head-item">Jackpot / BNB</div>
                         <div className="a-lobby__row-head-item">Jackpot Received</div>
                         <div className="a-lobby__row-head-item">Your Entry</div>
                         <div className="a-lobby__row-head-item">Daily Entry</div>
                     </div>
                     <div className="a-lobby__list">
                         {this.props.rows.length ?
-                        this.props.rows.map((item, index) => {
-                            return <div key={index} className={classNames('container a-lobby__row t-row t-row__content', {
-                                'active': index === this.state.activeRow
-                            })}>
-                                <div className="a-lobby__row-item" data-name="Day">{dateFormat(+item.day)}</div>
-                                <div className="a-lobby__row-item" data-name="Jackpot Pool">
-                                    <RowItemTooltip tooltipText={formatNumberWithCommas(item.pool)} parent="a-lobby">{formatNumberWithCommas(item.pool)}</RowItemTooltip>
+                            this.props.rows.map((item, index) => {
+                                return <div key={index} className={classNames('container a-lobby__row t-row t-row__content', {
+                                    'active': index === this.state.activeRow
+                                })}>
+                                    <div className="a-lobby__row-item" data-name="Day">{dateFormat(+item.day)}</div>
+                                    <div className="a-lobby__row-item" data-name="Jackpot Pool">
+                                        <RowItemTooltip tooltipText={formatNumberWithCommas(item.pool)} parent="a-lobby">{formatNumberWithCommas(item.pool)}</RowItemTooltip>
+                                    </div>
+                                    <div className="a-lobby__row-item" data-name="eth \ Jackpot">
+                                        <RowItemTooltip tooltipText={item.eth} parent="a-lobby">{item.eth}</RowItemTooltip>
+                                    </div>
+                                    <div className="a-lobby__row-item" data-name="Jackpot Received">
+                                        <RowItemTooltip tooltipText={item.received} parent="a-lobby">{item.received}</RowItemTooltip>
+                                    </div>
+                                    <div className="a-lobby__row-item" data-name="Your Entry">
+                                        <RowItemTooltip tooltipText={item.yourEntry} parent="a-lobby">{item.yourEntry}</RowItemTooltip>
+                                    </div>
+                                    <div className="a-lobby__row-item" data-name="Daily Entry">
+                                        <RowItemTooltip tooltipText={item.dailyEntry} parent="a-lobby">{item.dailyEntry}</RowItemTooltip>
+                                    </div>
+                                    <div className="a-lobby__row-item">
+                                        {item.state && <Popover
+                                            getPopupContainer={() => document.getElementById(`a-lobby`)}
+                                            onVisibleChange={(value) => this.handlePopoverVisibleChange(value, index)}
+                                            placement="top"
+                                            trigger="click"
+                                            content={
+                                                <div className="a-lobby__popover">
+                                                    <div className="a-lobby__popover-text">enter the auction:</div>
+                                                    <InputNumber value={this.state.auctionValue} onChange={value => this.setState({ auctionValue: value })} placeholder="0.0" type="number" className="a-lobby__popover-input" />
+                                                    <div className="a-lobby__popover-eth">
+                                                        <img src={ethImg} alt="" />
+                                                        <span>BNB</span>
+                                                    </div>
+                                                    <button onClick={() => { this.props.handleEnterAuction(this.state.auctionValue); this.setState({ auctionValue: '' }) }} className="a-lobby__popover-btn btn" disabled={!this.state.auctionValue || this.state.auctionValue <= 0}>send</button>
+                                                    <div className="a-lobby__popover-text">Your balance: {this.props.ethBalance} <span onClick={() => this.setState({ auctionValue: this.props.ethBalance })}>MAX</span></div>
+                                                </div>
+                                            } >
+                                            {this.props.currentDays < 365 &&
+                                                <button className="a-lobby__btn btn btn--md">ENTER</button>
+                                            }
+                                        </Popover>}
+                                        {!item.state && item.status && <button className="a-lobby__btn a-lobby__btn--collect btn btn--md" onClick={() => this.props.handleExitAuction(item.countDay)}>COLLECT</button>}
+                                        {!item.state && !item.status && <button className="a-lobby__btn btn btn--md" disabled>ENDED</button>}
+                                    </div>
                                 </div>
-                                <div className="a-lobby__row-item" data-name="eth \ Jackpot">
-                                    <RowItemTooltip tooltipText={item.eth} parent="a-lobby">{item.eth}</RowItemTooltip>
-                                </div>
-                                <div className="a-lobby__row-item" data-name="Jackpot Received">
-                                    <RowItemTooltip tooltipText={item.received} parent="a-lobby">{item.received}</RowItemTooltip>
-                                </div>
-                                <div className="a-lobby__row-item" data-name="Your Entry">
-                                    <RowItemTooltip tooltipText={item.yourEntry} parent="a-lobby">{item.yourEntry}</RowItemTooltip>
-                                </div>
-                                <div className="a-lobby__row-item" data-name="Daily Entry">
-                                    <RowItemTooltip tooltipText={item.dailyEntry} parent="a-lobby">{item.dailyEntry}</RowItemTooltip>
-                                </div>
-                                <div className="a-lobby__row-item">
-                                    {item.state && <Popover
-                                    getPopupContainer={() => document.getElementById(`a-lobby`)}
-                                    onVisibleChange={(value) => this.handlePopoverVisibleChange(value, index)}
-                                    placement="top"
-                                    trigger="click"
-                                    content={
-                                        <div className="a-lobby__popover">
-                                            <div className="a-lobby__popover-text">enter the auction:</div>
-                                            <InputNumber value={this.state.auctionValue} onChange={value => this.setState({ auctionValue: value })} placeholder="0.0" type="number" className="a-lobby__popover-input" />
-                                            <div className="a-lobby__popover-eth">
-                                                <img src={ethImg} alt="" />
-                                                <span>BNB</span>
-                                            </div>
-                                            <button onClick={() => { this.props.handleEnterAuction(this.state.auctionValue); this.setState({ auctionValue: '' }) }} className="a-lobby__popover-btn btn" disabled={!this.state.auctionValue || this.state.auctionValue <= 0}>send</button>
-                                            <div className="a-lobby__popover-text">Your balance: {this.props.ethBalance} <span onClick={() => this.setState({ auctionValue: this.props.ethBalance })}>MAX</span></div>
-                                        </div>
-                        } >
-                        {this.props.currentDays < 365 &&
-                        <button className="a-lobby__btn btn btn--md">ENTER</button>
-                        }
-                    </Popover>}
-                    {!item.state && item.status && <button className="a-lobby__btn a-lobby__btn--collect btn btn--md" onClick={() => this.props.handleExitAuction(item.countDay)}>COLLECT</button>}
-                    {!item.state && !item.status && <button className="a-lobby__btn btn btn--md" disabled>ENDED</button>}
-                </div>
-            </div>
-                        }) : ''
+                            }) : ''
                         }
                     </div>
                     {this.props.isRefreshing && <AuctionRowLoading />}

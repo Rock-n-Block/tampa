@@ -1,7 +1,8 @@
 import React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { message } from "antd";
+import { useDispatch } from 'react-redux';
 
+import { userActions, modalActions } from '../../redux/actions';
 import { QuestionTooltip } from '../../components';
 
 import './ReferrerLink.scss'
@@ -10,15 +11,14 @@ import leftImg from '../../assets/img/referrer-1.svg';
 import rightImg from '../../assets/img/referrer-2.svg';
 
 const ReferrerLink = ({ userAddress, isDarkTheme }) => {
-    const success = () => {
-        message.info({
-            content: 'Copied to Buffer',
-            className: `r-link__alert ${isDarkTheme ? 'r-link__alert-dark' : ''}`,
+    const dispatch = useDispatch();
 
-            style: {
-                marginTop: '10vh',
-            },
-        });
+    const copyTokenAddress = () => {
+        dispatch(userActions.setUserData({
+            errorCode: 0,
+            errorMsg: 'Jackpot Contract address is now Copied to your Clipboard'
+        }))
+        dispatch(modalActions.toggleModal(true))
     }
     return (
         <div className="container r-link" id="r-link">
@@ -31,7 +31,7 @@ const ReferrerLink = ({ userAddress, isDarkTheme }) => {
                 <div className="r-link__link">{`${window.location.origin}/auction/?ref=${userAddress}`}</div>
             </div>
             <CopyToClipboard text={`${window.location.origin}/auction/?ref=${userAddress}`}>
-                <button onClick={success} className="r-link__btn btn btn--md">COPY</button>
+                <button onClick={copyTokenAddress} className="r-link__btn btn btn--md">COPY</button>
             </CopyToClipboard>
         </div>
 
