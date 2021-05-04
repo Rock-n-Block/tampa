@@ -325,8 +325,8 @@
       box-shadow: 20px 30px 85px rgba(119, 116, 159, 0.15);
     }
     &__metamask {
-      span {
-        color: $blue;
+      p {
+        color: rgba(255, 255, 255, 0.8);
       }
     }
     &__nav {
