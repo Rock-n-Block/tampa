@@ -35,8 +35,8 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
         const address = contractService.getContractAddress()
         navigator.clipboard.writeText(address)
         dispatch(userActions.setUserData({
-          errorCode: 0,
-          errorMsg: 'Contract address copied to buffer'
+            errorCode: 0,
+            errorMsg: 'Contract address copied to buffer'
         }))
         dispatch(modalActions.toggleModal(true))
     }
@@ -49,11 +49,10 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
 
         const sec = seconds - (minutes * 60) - (hours * 3600)
 
-        setTimeUntil(`${
-            hours < 10 ?
-            hours < 0 ? '-0' + -hours : '0' + hours : 
-            hours
-        }:${minutes < 10 ? '0' + minutes : minutes}:${sec < 10 ? '0' + sec : sec}`)
+        setTimeUntil(`${hours < 10 ?
+                hours < 0 ? '-0' + -hours : '0' + hours :
+                hours
+            }:${minutes < 10 ? '0' + minutes : minutes}:${sec < 10 ? '0' + sec : sec}`)
     }
 
     const getDate = () => {
@@ -132,7 +131,10 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                         </div>
                         {userAddress && <div className="header__metamask">
                             <img src={MetamaskImg} alt="" />
-                            <span>{userAddress}</span>
+                            <div className="header__metamask-box">
+                                <p>Your Connected Metamask Address</p>
+                                <p>{userAddress}</p>
+                            </div>
                         </div>
                         }
                     </div>
@@ -151,7 +153,10 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
 
                             {userAddress && <div className="header__metamask">
                                 <img src={MetamaskImg} alt="" />
-                                <span>{userAddress}</span>
+                                <div className="header__metamask-box">
+                                    <p>Your Connected Metamask Address</p>
+                                    <p>{userAddress}</p>
+                                </div>
                             </div>
                             }
                         </div>

@@ -51,7 +51,7 @@ export default class AuctionLobby extends React.PureComponent {
                         <div className="a-lobby__row-head-item">Day</div>
                         <div className="a-lobby__row-head-item">Jackpot Pool</div>
                         <div className="a-lobby__row-head-item">Jackpot / BNB</div>
-                        <div className="a-lobby__row-head-item">Jackpot Received</div>
+                        <div className="a-lobby__row-head-item">BNB Jackpot Received</div>
                         <div className="a-lobby__row-head-item">Your Entry</div>
                         <div className="a-lobby__row-head-item">Daily Entry</div>
                     </div>
