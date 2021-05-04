@@ -130,7 +130,10 @@ const Header = ({ isDarkTheme, userAddress, contractService, walletService }) =>
                         </div>
                         {userAddress && <div className="header__metamask">
                             <img src={MetamaskImg} alt="" />
-                            <span>{userAddress}</span>
+                            <div className="header__metamask-box">
+                                <p>Your Connected Metamask Address</p>
+                                <p>{userAddress}</p>
+                            </div>
                         </div>
                         }
                     </div>
@@ -149,7 +152,10 @@ const Header = ({ isDarkTheme, userAddress, contractService, walletService }) =>
 
                             {userAddress && <div className="header__metamask">
                                 <img src={MetamaskImg} alt="" />
-                                <span>{userAddress}</span>
+                                <div className="header__metamask-box">
+                                    <p>Your Connected Metamask Address</p>
+                                    <p>{userAddress}</p>
+                                </div>
                             </div>
                             }
                         </div>

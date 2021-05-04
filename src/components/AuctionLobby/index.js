@@ -50,8 +50,8 @@ export default class AuctionLobby extends React.PureComponent {
                     <div className="a-lobby__row t-row t-row__head">
                         <div className="a-lobby__row-head-item">Day</div>
                         <div className="a-lobby__row-head-item">Jackpot Pool</div>
-                        <div className="a-lobby__row-head-item">eth \ Jackpot</div>
-                        <div className="a-lobby__row-head-item">Jackpot Received</div>
+                        <div className="a-lobby__row-head-item">Jackpot \ eth</div>
+                        <div className="a-lobby__row-head-item">eth Jackpot Received</div>
                         <div className="a-lobby__row-head-item">Your Entry</div>
                         <div className="a-lobby__row-head-item">Daily Entry</div>
                     </div>
@@ -64,8 +64,8 @@ export default class AuctionLobby extends React.PureComponent {
                                     <div className="a-lobby__row-item" data-name="Day">{dateFormat(+item.day)}</div>
                                     <div className="a-lobby__row-item" data-name="Jackpot Pool">
                                         <RowItemTooltip
-                                        tooltipText={formatNumberWithCommas(item.pool)}
-                                        parent="a-lobby"
+                                            tooltipText={formatNumberWithCommas(item.pool)}
+                                            parent="a-lobby"
                                         >
                                             {formatNumberWithCommas(item.pool)}
                                         </RowItemTooltip>
@@ -101,7 +101,7 @@ export default class AuctionLobby extends React.PureComponent {
                                                 </div>
                                             } >
                                             {this.props.currentDays < 365 &&
-                                            <button className="a-lobby__btn btn btn--md">ENTER</button>
+                                                <button className="a-lobby__btn btn btn--md">ENTER</button>
                                             }
                                         </Popover>}
                                         {!item.state && item.status && <button className="a-lobby__btn a-lobby__btn--collect btn btn--md" onClick={() => this.props.handleExitAuction(item.countDay)}>COLLECT</button>}

@@ -16,8 +16,7 @@ const DialogApproveToken = ({ approveToken }) => {
         setIUnderstand(e.target.checked)
     }
 
-    const handleApproveToken = (e) => {
-        localStorage.setItem('iUnderstand', 'true');
+    const handleApproveToken = () => {
         approveToken()
     }
 
@@ -327,8 +326,6 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     }
 
     const handleApproveToken = () => {
-        const iUnderstand = localStorage.getItem('iUnderstand');
-        if (iUnderstand === 'true') return approveToken();
         toggleDialog({
             open: true,
             content: <DialogApproveToken approveToken={approveToken} />,
@@ -348,16 +345,20 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     }
 
     const handleStake = (amount, days) => {
-        contractService.createTokenTransaction({
-            data: {
-                amount,
-                other: [days]
-            },
-            address: userAddress,
-            swapMethod: 'stakeStart',
-            contractName: 'TAMPA',
-            stake: true,
-            callback: () => getData()
+        toggleDialog({
+            open: true,
+            content: <DialogApproveToken approveToken={() =>
+                contractService.createTokenTransaction({
+                    data: {
+                        amount,
+                        other: [days]
+                    },
+                    address: userAddress,
+                    swapMethod: 'stakeStart',
+                    contractName: 'TAMPA',
+                    stake: true,
+                    callback: () => getData()
+                })} />,
         })
     }
 
