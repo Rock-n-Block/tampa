@@ -43,7 +43,7 @@ class MetamaskService {
 
     getAccounts() {
         return new Promise((resolve, reject) => {
-            const net = IS_PRODUCTION ? 'mainnet' : 'kovan';
+            const net = IS_PRODUCTION ? 'Mainnet' : 'Kovan';
             const usedNet = IS_PRODUCTION ? '0x1' : '0x2a';
             let netVersion = this.wallet.chainId
             this.wallet.request({ method: 'eth_chainId' })
@@ -57,7 +57,7 @@ class MetamaskService {
                             .catch(_ => reject({ errorMsg: 'Not authorized' }))
                     } else {
                         reject({
-                            errorMsg: 'Please choose ' + net + ' network in metamask wallet.'
+                            errorMsg: `Please Choose Ethereum ${net} in metamask wallet.`
                         })
                     }
                 })

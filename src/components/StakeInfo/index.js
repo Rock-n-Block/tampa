@@ -16,8 +16,8 @@ const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, i
                 <div className="s-info__item">
                     <div className="s-info__item-head">
                         <RowItemTooltip
-                        tooltipText={formatNumberWithCommas(totalStaked)}
-                        parent="s-info__content"
+                            tooltipText={formatNumberWithCommas(totalStaked)}
+                            parent="s-info__content"
                         >
                             {formatNumberWithCommas(totalStaked)}
                         </RowItemTooltip>
@@ -27,17 +27,17 @@ const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, i
                 <div className="s-info__item">
                     <div className="s-info__item-head">
                         <RowItemTooltip
-                        tooltipText={
-                            isActiveStakes ?
-                            formatNumberWithCommas(totalShares) :
-                            formatNumberWithCommas(totalPaidAmount)
-                        }
-                        parent="s-info__content"
+                            tooltipText={
+                                isActiveStakes ?
+                                    formatNumberWithCommas(totalShares) :
+                                    formatNumberWithCommas(totalPaidAmount)
+                            }
+                            parent="s-info__content"
                         >
                             {
                                 isActiveStakes ?
-                                formatNumberWithCommas(totalShares) :
-                                formatNumberWithCommas(totalPaidAmount)
+                                    formatNumberWithCommas(totalShares) :
+                                    formatNumberWithCommas(totalPaidAmount)
                             }
                         </RowItemTooltip>
                     </div>
@@ -57,7 +57,7 @@ const StakeInfo = ({ totalStaked, totalShares, totalInterests, totalDividents, i
                     </div>
                     <div className="s-info__item-subhead">{isActiveStakes ? 'Total interest' : 'total bonus shares'}
                         {isActiveStakes &&
-                            <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-info__content" tooltipText={`Please note that in addition to your ETH dividends, Jackpot supply has a 12% inflation per year. This daily pool will be distributed between all the Stakers as their stake interest in Jackpot. Although Jackpot has this "inflation", it is possible that Jackpot tokens overall have a deflationary outcome because there are various deflationary aspects that will be put in place in regards to the exchange of the Jackpot tokens and the use cases.  The goal is that there will be fewer and fewer Jackpot tokens every year, while Jackpot stakers continue to earn more Jackpot tokens over time.  This design is meant to keep the price of Jackpot going up, and the overall supply going down.`} />
+                            <QuestionTooltip isDarkTheme={isDarkTheme} parent="s-info__content" tooltipText={`Please note that in addition to your ETH dividends, Jackpot supply has a 20% inflation per year. This daily pool will be distributed between all the Stakers as their stake interest in Jackpot. Although Jackpot has this "inflation", it is possible that Jackpot tokens overall have a deflationary outcome because there are various deflationary aspects that will be put in place in regards to the exchange of the Jackpot tokens and the use cases.  The goal is that there will be fewer and fewer Jackpot tokens every year, while Jackpot stakers continue to earn more Jackpot tokens over time.  This design is meant to keep the price of Jackpot going up, and the overall supply going down.`} />
                         }
                     </div>
                 </div>
