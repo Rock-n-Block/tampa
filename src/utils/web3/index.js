@@ -2,10 +2,10 @@ import Web3 from 'web3';
 import ContractDetails from './contract-details';
 import tokensDecimal from './decimals';
 import BigNumber from "bignumber.js";
-import {isEqual} from 'lodash/lang';
+import { isEqual } from 'lodash/lang';
 
 
-const IS_PRODUCTION = false;
+const IS_PRODUCTION = true;
 
 
 class MetamaskService {
@@ -23,15 +23,15 @@ class MetamaskService {
         this.wallet.on('chainChanged', (newChain) => {
             const chainId = localStorage.getItem('chainId')
             if (String(chainId) !== String(newChain)) {
-                localStorage.setItem('chainId',newChain)
+                localStorage.setItem('chainId', newChain)
                 window.location.reload()
             }
         });
         this.wallet.on('accountsChanged', (newAccounts) => {
             const accounts = JSON.parse(localStorage.getItem('accounts'))
-            console.log('accountsChanged',accounts)
-            if (!accounts || !isEqual(accounts.accounts,newAccounts)) {
-                localStorage.setItem('accounts',JSON.stringify({accounts:newAccounts}))
+            console.log('accountsChanged', accounts)
+            if (!accounts || !isEqual(accounts.accounts, newAccounts)) {
+                localStorage.setItem('accounts', JSON.stringify({ accounts: newAccounts }))
                 window.location.reload()
             }
         });
@@ -47,20 +47,20 @@ class MetamaskService {
             const usedNet = IS_PRODUCTION ? '0x1' : '0x2a';
             let netVersion = this.wallet.chainId
             this.wallet.request({ method: 'eth_chainId' })
-            .then(newNetVersion => {
-                if (!netVersion) netVersion = newNetVersion;
-                if (netVersion === usedNet) {
-                    this.wallet.request({ method: 'eth_requestAccounts' })
-                    .then(account => resolve({
-                        address: account[0]
-                    }))
-                    .catch(_ => reject({ errorMsg: 'Not authorized' }))
-                } else {
-                    reject({
-                        errorMsg: 'Please choose ' + net + ' network in metamask wallet.'
-                    })
-                }
-            })
+                .then(newNetVersion => {
+                    if (!netVersion) netVersion = newNetVersion;
+                    if (netVersion === usedNet) {
+                        this.wallet.request({ method: 'eth_requestAccounts' })
+                            .then(account => resolve({
+                                address: account[0]
+                            }))
+                            .catch(_ => reject({ errorMsg: 'Not authorized' }))
+                    } else {
+                        reject({
+                            errorMsg: 'Please choose ' + net + ' network in metamask wallet.'
+                        })
+                    }
+                })
         })
     }
 
