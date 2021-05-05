@@ -36,7 +36,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
         navigator.clipboard.writeText(address)
         dispatch(userActions.setUserData({
             errorCode: 0,
-            errorMsg: 'Contract address copied to buffer'
+            errorMsg: 'Jackpot Contract address is now Copied to your Clipboard'
         }))
         dispatch(modalActions.toggleModal(true))
     }
@@ -50,8 +50,8 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
         const sec = seconds - (minutes * 60) - (hours * 3600)
 
         setTimeUntil(`${hours < 10 ?
-                hours < 0 ? '-0' + -hours : '0' + hours :
-                hours
+            hours < 0 ? '-0' + -hours : '0' + hours :
+            hours
             }:${minutes < 10 ? '0' + minutes : minutes}:${sec < 10 ? '0' + sec : sec}`)
     }
 
@@ -118,7 +118,7 @@ const Header = ({ isDarkTheme, userAddress, contractService }) => {
                         </div>
                     </div>
                     <div className="header__right m-h">
-                        <div className="header__token" onClick={copyTokenAddress}>Copy address</div>
+                        <div className="header__token" onClick={copyTokenAddress}>COPY JBNB ADDRESS</div>
                         <div className="header__time">
                             auction ends in: <span>{timeUntil}</span>
                         </div>

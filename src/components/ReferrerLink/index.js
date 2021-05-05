@@ -16,7 +16,7 @@ const ReferrerLink = ({ userAddress, isDarkTheme }) => {
     const copyTokenAddress = () => {
         dispatch(userActions.setUserData({
             errorCode: 0,
-            errorMsg: 'Jackpot Contract address is now Copied to your Clipboard'
+            errorMsg: 'Address is now Copied to your Clipboard'
         }))
         dispatch(modalActions.toggleModal(true))
     }

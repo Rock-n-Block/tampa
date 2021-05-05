@@ -53,7 +53,7 @@ class MetamaskService {
 
     getAccounts() {
         return new Promise((resolve, reject) => {
-            const net = IS_PRODUCTION ? 'binance smart chain' : 'binance smart chain test'
+            const net = IS_PRODUCTION ? 'Smart Chain' : 'Smart Chain Test'
             const usedNet = IS_PRODUCTION ? '0x38' : '0x61'
             let netVersion = this.wallet.chainId
             this.wallet.request({ method: 'eth_chainId' })
@@ -67,7 +67,7 @@ class MetamaskService {
                             .catch(_ => reject({ errorMsg: 'Not authorized' }))
                     } else {
                         reject({
-                            errorMsg: 'Please choose ' + net + ' network in metamask wallet'
+                            errorMsg: 'Please Choose ' + net + ' in metamask wallet'
                         })
                     }
                 })
