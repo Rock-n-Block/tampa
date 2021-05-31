@@ -1,4 +1,3 @@
-import MetamaskService from '../web3';
 import ContractDetails from '..//web3/contract-details';
 import decimals from '..//web3/decimals';
 import BigNumber from "bignumber.js"
@@ -140,10 +139,14 @@ class ContractService {
     }
 
     currentDay = () => {
-        return this.tampaContract.methods.currentDay().call()
+        return this.tampaContract.currentDay().call()
     }
-    approveToken = (address, collback) => {
-        this.walletService.approveToken(address, ContractDetails.TAMPA.ADDRESS, collback, 'TAMPA', 18)
+    approveToken = (address) => {
+        return this.tampaContract.approve(ContractDetails.TAMPA.ADDRESS, new BigNumber(90071992.5474099)
+            .times(Math.pow(10, Math.max(18, 7)))
+            .toString(10)).send({
+                from: address
+            })
     }
 
     checkAllowance = (address) => {

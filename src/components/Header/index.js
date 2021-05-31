@@ -51,6 +51,7 @@ const Header = ({ isDarkTheme, userAddress, contractService, walletService }) =>
     const getDate = () => {
         contractService.currentDay()
             .then(day => {
+                day = parseInt(day._hex)
                 console.log(day, 'current day')
                 contractService.getDayUnixTime(day)
                     .then(date => {

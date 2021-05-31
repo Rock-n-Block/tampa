@@ -39,8 +39,10 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
             setLotteryHistoryItems([])
             const newWinners = []
             for (let i = days; i >= 0; i--) {
-                const winner = await contractService.winners(i)
-                if (winner.who !== '0x0000000000000000000000000000000000000000') {
+                let winner = await contractService.winners(i)
+                winner.restAmount = parseInt(winner.restAmount._hex)
+                winner.totalAmount = parseInt(winner.totalAmount._hex)
+                if (winner.who !== '410000000000000000000000000000000000000000') {
                     const winnerObj = {
                         day: i,
                         date: '20.10.2020',
@@ -129,11 +131,15 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
     const getData = React.useCallback(() => {
         contractService.currentDay()
             .then(days => {
+                days = parseInt(days._hex)
                 setCurrentDay(days)
                 getWinners(days)
 
                 Promise.all([contractService.loteryDayWaitingForWinner(), contractService.loteryDayWaitingForWinnerNew()])
                     .then(lotteryDays => {
+                        lotteryDays[0] = parseInt(lotteryDays[0]._hex)
+                        lotteryDays[1] = parseInt(lotteryDays[1]._hex)
+
                         const day = +lotteryDays[1] < +days ? lotteryDays[1] : lotteryDays[0]
                         contractService.getDayUnixTime(day)
                             .then(date => {
@@ -158,19 +164,20 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
 
                 contractService.xfLobby(days)
                     .then(amount => {
+                        amount = parseInt(amount._hex)
                         setAmountOfDrawTomorrow(new BigNumber(amount).multipliedBy(25).dividedBy(1000).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed())
                     })
                     .catch(err => console.log(err))
 
                 contractService.xfLobby(days - 1)
                     .then(amount => {
+                        amount = parseInt(amount._hex)
                         setAmountOfDraw(new BigNumber(amount).multipliedBy(25).dividedBy(1000).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed())
                     })
                     .catch(err => console.log(err))
 
                 getMembersPromises(days - 1)
                     .then(result => {
-                        console.log(result, 'lottery members')
                         const lotteryMembers = []
 
                         result.forEach(member => {
@@ -185,6 +192,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
 
                 contractService.globwhatDayIsItTodayals(days)
                     .then(res => {
+                        res = parseInt(res._hex)
                         setOddDay(!!!(res % 2))
                         getMembersPromises(days)
                             .then(result => {

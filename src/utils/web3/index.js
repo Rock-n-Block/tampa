@@ -2,8 +2,6 @@ import Web3 from 'web3';
 import ContractDetails from './contract-details';
 import tokensDecimal from './decimals';
 import BigNumber from "bignumber.js";
-import { isEqual } from 'lodash/lang';
-
 
 const IS_PRODUCTION = true;
 
@@ -13,55 +11,39 @@ class MetamaskService {
     wallet;
     providers;
     Web3Provider;
+    tronWebProvider;
+    testnet = 'https://event.nileex.io'
 
     constructor() {
+
+
         this.providers = {};
         this.providers.metamask = Web3.givenProvider;
-        this.wallet = window.ethereum;
-        this.Web3Provider = new Web3(this.providers.metamask);
-        window.web34 = this.Web3Provider
-        this.wallet.on('chainChanged', (newChain) => {
-            const chainId = localStorage.getItem('chainId')
-            if (String(chainId) !== String(newChain)) {
-                localStorage.setItem('chainId', newChain)
-                window.location.reload()
-            }
-        });
-        this.wallet.on('accountsChanged', (newAccounts) => {
-            const accounts = JSON.parse(localStorage.getItem('accounts'))
-            console.log('accountsChanged', accounts)
-            if (!accounts || !isEqual(accounts.accounts, newAccounts)) {
-                localStorage.setItem('accounts', JSON.stringify({ accounts: newAccounts }))
-                window.location.reload()
-            }
-        });
+        this.wallet = window.tronWeb;
+        this.Web3Provider = new Web3(window.tronWeb);
+        // this.wallet.on('chainChanged', (newChain) => {
+        //     const chainId = localStorage.getItem('chainId')
+        //     if (String(chainId) !== String(newChain)) {
+        //         localStorage.setItem('chainId', newChain)
+        //         window.location.reload()
+        //     }
+        // });
+        // this.wallet.on('accountsChanged', (newAccounts) => {
+        //     const accounts = JSON.parse(localStorage.getItem('accounts'))
+        //     console.log('accountsChanged', accounts)
+        //     if (!accounts || !isEqual(accounts.accounts, newAccounts)) {
+        //         localStorage.setItem('accounts', JSON.stringify({ accounts: newAccounts }))
+        //         window.location.reload()
+        //     }
+        // });
+    }
+
+    async getTronAccount() {
+        return this.wallet.defaultAddress.base58
     }
 
     getEthBalance = (address) => {
-        return this.Web3Provider.eth.getBalance(address)
-    }
-
-    getAccounts() {
-        return new Promise((resolve, reject) => {
-            const net = IS_PRODUCTION ? 'Mainnet' : 'Kovan';
-            const usedNet = IS_PRODUCTION ? '0x1' : '0x2a';
-            let netVersion = this.wallet.chainId
-            this.wallet.request({ method: 'eth_chainId' })
-                .then(newNetVersion => {
-                    if (!netVersion) netVersion = newNetVersion;
-                    if (netVersion === usedNet) {
-                        this.wallet.request({ method: 'eth_requestAccounts' })
-                            .then(account => resolve({
-                                address: account[0]
-                            }))
-                            .catch(_ => reject({ errorMsg: 'Not authorized' }))
-                    } else {
-                        reject({
-                            errorMsg: `Please Choose Ethereum ${net} in metamask wallet.`
-                        })
-                    }
-                })
-        })
+        return this.wallet.trx.getBalance(address)
     }
 
     checkAllowance = (walletAddress, tokenAddress, amount, contract) => {
@@ -71,7 +53,7 @@ class MetamaskService {
                 .call()
                 .then(
                     (result) => {
-                        result = result ? result.toString(10) : result;
+                        result = result._hex ? parseInt(result._hex) : result;
                         result = result === '0' ? null : result;
                         if (result && new BigNumber(result).minus(amount).isPositive()) {
                             resolve(true);
@@ -152,47 +134,8 @@ class MetamaskService {
         this.createTransactionObj(transaction, walletAddress)
     }
 
-    approveToken = (walletAddress, tokenAddress, callback, contractName, decemals) => {
-        const approveMethod = this.getMethodInterface('approve', ContractDetails[contractName].ABI);
-
-        const approveSignature = this.encodeFunctionCall(
-            approveMethod,
-            [
-                tokenAddress,
-                new BigNumber(90071992.5474099)
-                    .times(Math.pow(10, Math.max(decemals, 7)))
-                    .toString(10),
-            ]
-        );
-
-
-        const approveTransaction = () => {
-            return this.sendTransaction(
-                {
-                    from: walletAddress,
-                    to: ContractDetails[contractName].ADDRESS,
-                    data: approveSignature,
-                },
-                'metamask',
-                callback
-            );
-        };
-
-        const transaction = {
-            title:
-                'Authorise the contract for getting prize tokens',
-            to: ContractDetails[contractName].ADDRESS,
-            data: approveSignature,
-            action: approveTransaction,
-            onComplete: callback
-        };
-
-        this.createTransactionObj(transaction, walletAddress)
-    }
-
-
     getContract(abi, address) {
-        return new this.Web3Provider.eth.Contract(abi, address);
+        return this.wallet.contract(abi, address);
     }
 
 
@@ -222,12 +165,29 @@ class MetamaskService {
             .action(wallet)
     }
 
+    async sendTx({ method, params, walletAddr, options = {} }) {
+        try {
+            const txObj = await this.wallet.transactionBuilder.triggerSmartContract(
+                this.wallet.address.toHex(ContractDetails.TAMPA.ADDRESS),
+                method,
+                options,
+                params,
+                this.wallet.address.toHex(walletAddr),
+            )
+
+            const signedTransaction = await this.wallet.trx.sign(txObj.transaction);
+
+            const broadcast = await this.wallet.trx.sendRawTransaction(signedTransaction);
+            console.log(broadcast)
+        } catch (err) {
+            console.log(err, 'sendTx')
+            throw Error
+        }
+    }
+
 
 
     sendTransaction(transactionConfig, provider, callback, errCallback) {
-        if (provider) {
-            this.Web3Provider.eth.setProvider(this.providers[provider]);
-        }
         return new Promise((resolve, reject) => {
 
             this.Web3Provider.eth

@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import {isMobile} from "react-device-detect";
+import { isMobile } from "react-device-detect";
 
 import { Header, Ticker, Modal, ModalDialog } from './components';
 import { StakePage, AuctionPage, LotteyrPage, testPage } from './pages';
@@ -11,7 +11,7 @@ import ContractService from './utils/contractService';
 import { userActions, modalActions } from './redux/actions';
 
 import './styles/main.scss'
-import {isEqual} from "lodash/lang";
+import { isEqual } from "lodash/lang";
 
 function App() {
   const [contractService, setContractService] = React.useState(null)
@@ -24,21 +24,24 @@ function App() {
 
   const getData = () => {
     let counter = 0;
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       counter += 1000;
-      if (window.ethereum) {
+      if (window.tronWeb && window.tronWeb.ready) {
         clearInterval(interval)
-        const metamask = new MetamaskService()
-        const contractService = new ContractService(metamask)
-        setWalletService(metamask)
+        const tron = new MetamaskService()
+        const contractService = new ContractService(tron)
+        setWalletService(tron)
         setContractService(contractService)
-        metamask.getAccounts().then(res => {
-          dispatch(userActions.setUserData(res))
+        try {
+          const address = await tron.getTronAccount();
+          dispatch(userActions.setUserData({ address }))
           dispatch(modalActions.toggleModal(false))
-        }).catch(err => {
+        } catch (err) {
           dispatch(userActions.setUserData(err))
           dispatch(modalActions.toggleModal(true))
-        })
+
+          console.log(err, 'err')
+        }
       } else if (counter > 2000) {
         clearInterval(interval)
         dispatch(userActions.setUserData({
@@ -67,7 +70,7 @@ function App() {
         <Ticker contractService={contractService} />
 
         <Route exact path="/" render={() => <StakePage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />
-        <Route path="/auction" render={() => <AuctionPage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />
+        <Route path="/auction" render={() => <AuctionPage isDarkTheme={isDarkTheme} walletService={walletService} userAddress={userAddress} contractService={contractService} />} />
         <Route path="/lottery" render={() => <LotteyrPage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />
 
 

@@ -300,6 +300,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
 
         contractService.currentDay()
             .then(res => {
+                res = parseInt(res._hex)
                 setStartDay(+res)
                 return +res
             })
@@ -338,9 +339,19 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
             content: null,
         })
         setIsTokenApproving(true)
-        contractService.approveToken(userAddress, (res) => {
+        contractService.approveToken(userAddress).then(() => {
+            contractService.checkAllowance(userAddress)
+                .then(res => {
+                    setIsTokenApproved(res)
+                    setIsTokenApproving(false)
+                })
+                .catch(err => {
+                    setIsTokenApproved(err)
+                    setIsTokenApproving(false)
+                })
+        }).catch(() => {
+            setIsTokenApproved(false)
             setIsTokenApproving(false)
-            setIsTokenApproved(res)
         })
     }
 
@@ -384,11 +395,11 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         }
     }, [userAddress, contractService])
 
-    useEffect(() => {
-        if (contractService) {
-            getGraphDots()
-        }
-    }, [userAddress, startDay, contractService])
+    // useEffect(() => {
+    //     if (contractService) {
+    //         getGraphDots()
+    //     }
+    // }, [userAddress, startDay, contractService])
 
     return (
         <div className="stake">

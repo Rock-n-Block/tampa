@@ -13,7 +13,8 @@ const TickerComponent = ({ contractService }) => {
 
             contractService.currentDay()
                 .then(day => {
-                    if (day>365) return setOddDay(null);
+                    day = parseInt(day._hex)
+                    if (day > 365) return setOddDay(null);
                     contractService.globwhatDayIsItTodayals(day)
                         .then(res => {
                             setOddDay(!!(res % 2))
