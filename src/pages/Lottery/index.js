@@ -8,7 +8,7 @@ import decimals from '../../utils/web3/decimals';
 
 import './Lottery.scss'
 
-const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
+const LotteryPage = ({ isDarkTheme, userAddress, contractService, walletService }) => {
     const navItems = ["today's lottery", "tomorrow's lottery"]
 
     const [activeTab, setActiveTab] = useState(0)
@@ -46,8 +46,8 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                     const winnerObj = {
                         day: i,
                         date: '20.10.2020',
-                        amount: new BigNumber(winner.totalAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed(),
-                        winner: winner.who,
+                        amount: new BigNumber(winner.totalAmount).dividedBy(new BigNumber(10).pow(decimals.TRX)).toFixed(),
+                        winner: walletService.convertUserAddressFromHex(winner.who),
                         isWithdrawed: +winner.restAmount
                     }
                     winnerObj.date = await contractService.getDayUnixTime(i)
@@ -90,19 +90,25 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
         })
     }
 
-    const handleLotteryWithdraw = (day) => {
-        contractService.createTokenTransaction({
-            data: {
-                other: [
-                    day
-                ]
-            },
-            address: userAddress,
-            swapMethod: 'withdrawLotery',
-            contractName: 'TAMPA',
-            withdraw: true,
-            callback: () => getWinners(currentDay)
-        })
+    const handleLotteryWithdraw = async (day) => {
+        try {
+            await walletService.sendTx({
+                method: 'withdrawLotery(uint256)',
+                params: [
+                    {
+                        type: 'uint256',
+                        value: day
+                    }
+                ],
+                walletAddr: userAddress
+            })
+
+            setTimeout(() => {
+                getWinners(currentDay)
+            }, 1000)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     const getWinner = (day, interval, isSlow) => {
@@ -110,16 +116,16 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
             .then(res => {
                 console.log(res, 'winner', day)
 
-                if (res.who !== '0x0000000000000000000000000000000000000000') {
+                if (res.who !== '410000000000000000000000000000000000000000') {
 
                     if (interval) {
                         clearInterval(interval)
                         setSlowShow(true)
                     }
                     setLotteryWinner({
-                        who: res.who,
-                        isMe: res.who.toLowerCase() === userAddress.toLowerCase(),
-                        totalAmount: new BigNumber(res.totalAmount).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed(),
+                        who: walletService.convertUserAddressFromHex(res.who),
+                        isMe: walletService.convertUserAddressFromHex(res.who).toLowerCase() === walletService.convertUserAddressFromHex(userAddress).toLowerCase(),
+                        totalAmount: new BigNumber(res.totalAmount).dividedBy(new BigNumber(10).pow(decimals.TRX)).toFixed(),
                     })
 
                     getWinners(currentDay)
@@ -165,14 +171,14 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                 contractService.xfLobby(days)
                     .then(amount => {
                         amount = parseInt(amount._hex)
-                        setAmountOfDrawTomorrow(new BigNumber(amount).multipliedBy(25).dividedBy(1000).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed())
+                        setAmountOfDrawTomorrow(new BigNumber(amount).multipliedBy(25).dividedBy(1000).dividedBy(new BigNumber(10).pow(decimals.TRX)).toFixed())
                     })
                     .catch(err => console.log(err))
 
                 contractService.xfLobby(days - 1)
                     .then(amount => {
                         amount = parseInt(amount._hex)
-                        setAmountOfDraw(new BigNumber(amount).multipliedBy(25).dividedBy(1000).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed())
+                        setAmountOfDraw(new BigNumber(amount).multipliedBy(25).dividedBy(1000).dividedBy(new BigNumber(10).pow(decimals.TRX)).toFixed())
                     })
                     .catch(err => console.log(err))
 
@@ -181,7 +187,7 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                         const lotteryMembers = []
 
                         result.forEach(member => {
-                            lotteryMembers.push(member.who)
+                            lotteryMembers.push(walletService.convertUserAddressFromHex(member.who))
                         })
 
 
@@ -198,18 +204,18 @@ const LotteryPage = ({ isDarkTheme, userAddress, contractService }) => {
                             .then(result => {
                                 const members = {}
                                 let allChancesCount = 0;
-                                console.log(result, 'members')
+                                console.log(result, 'members', days)
 
                                 result.forEach(member => {
-                                    if (members[member.who]) {
-                                        members[member.who] += +member.chanceCount
+                                    if (members[walletService.convertUserAddressFromHex(member.who)]) {
+                                        members[walletService.convertUserAddressFromHex(member.who)] += +member.chanceCount
                                     } else {
-                                        members[member.who] = +member.chanceCount
+                                        members[walletService.convertUserAddressFromHex(member.who)] = +member.chanceCount
                                     }
 
                                     allChancesCount += +member.chanceCount
 
-                                    if (member.who.toLowerCase() === userAddress.toLowerCase()) {
+                                    if (walletService.convertUserAddressFromHex(member.who).toLowerCase() === walletService.convertUserAddressFromHex(userAddress).toLowerCase()) {
                                         setParticipant(true)
                                     }
                                 })

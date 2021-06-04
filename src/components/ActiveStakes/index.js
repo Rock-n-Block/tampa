@@ -34,8 +34,8 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
         const currentDayUnix = await contractService.getDayUnixTime(startDay)
         const endDay = moment.utc(end * 1000)
 
-        const diffDays = moment.utc(+currentDayUnix * 1000).diff(endDay, 'days');
-        // const diffDays = moment.utc().diff(endDay, 'minutes')
+        // const diffDays = moment.utc(+currentDayUnix * 1000).diff(endDay, 'days');
+        const diffDays = moment.utc().diff(endDay, 'minutes')
 
         console.log(diffDays, 'diffDays')
 
@@ -55,8 +55,8 @@ export default memo(({ isDarkTheme, activeStakes, handleRefreshActiveStakes, isR
         const seconds = moment.utc(stake.start * 1000).diff(moment.utc(+currentDayUnix * 1000), 'seconds')
 
         console.log(seconds, 'seconds')
-        if ((diffDays < 0 || diffDays >= 14) && seconds <= 0) {
-            // if ((diffDays < 0 || diffDays >= 10) && seconds <= 0) {
+        // if ((diffDays < 0 || diffDays >= 14) && seconds <= 0) {
+        if ((diffDays < 0 || diffDays >= 10)) {
             setVisibleModal(true)
         } else {
             handleWithdraw(index, stakeId)

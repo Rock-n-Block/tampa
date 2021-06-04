@@ -11,15 +11,15 @@ import ContractService from './utils/contractService';
 import { userActions, modalActions } from './redux/actions';
 
 import './styles/main.scss'
-import { isEqual } from "lodash/lang";
 
 function App() {
   const [contractService, setContractService] = React.useState(null)
   const [walletService, setWalletService] = React.useState(null)
   const dispatch = useDispatch()
-  const { isDarkTheme, userAddress } = useSelector(({ theme, user }) => ({
+  const { isDarkTheme, userAddress, userHexAddress } = useSelector(({ theme, user }) => ({
     isDarkTheme: theme.isDarkTheme,
-    userAddress: user.address
+    userAddress: user.address,
+    userHexAddress: user.hexAddress
   }))
 
   const getData = () => {
@@ -33,11 +33,16 @@ function App() {
         setWalletService(tron)
         setContractService(contractService)
         try {
-          const address = await tron.getTronAccount();
-          dispatch(userActions.setUserData({ address }))
+          const addresses = await tron.getTronAccount();
+          dispatch(userActions.setUserData({
+            address: addresses.base58,
+            hexAddress: addresses.hex
+          }))
           dispatch(modalActions.toggleModal(false))
         } catch (err) {
-          dispatch(userActions.setUserData(err))
+          dispatch(userActions.setUserData({
+            errorMsg: err.message
+          }))
           dispatch(modalActions.toggleModal(true))
 
           console.log(err, 'err')
@@ -69,9 +74,9 @@ function App() {
       <div className="row">
         <Ticker contractService={contractService} />
 
-        <Route exact path="/" render={() => <StakePage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />
+        <Route exact path="/" render={() => <StakePage isDarkTheme={isDarkTheme} walletService={walletService} userAddress={userAddress} contractService={contractService} />} />
         <Route path="/auction" render={() => <AuctionPage isDarkTheme={isDarkTheme} walletService={walletService} userAddress={userAddress} contractService={contractService} />} />
-        <Route path="/lottery" render={() => <LotteyrPage isDarkTheme={isDarkTheme} userAddress={userAddress} contractService={contractService} />} />
+        <Route path="/lottery" render={() => <LotteyrPage isDarkTheme={isDarkTheme} walletService={walletService} userHexAddress={userHexAddress} userAddress={userAddress} contractService={contractService} />} />
 
 
 

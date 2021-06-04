@@ -1,5 +1,6 @@
 const initialState = {
     address: '',
+    hexAddress: '',
     errorMsg: '',
     errorCode: 0,
     network: '',

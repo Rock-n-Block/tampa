@@ -297,18 +297,29 @@ const AuctionPage = ({ isDarkTheme, userAddress, contractService, walletService 
         }
     }
 
-    const handleExitAuction = (day) => {
-        contractService.createTokenTransaction({
-            data: {
-                other: [day, 0]
-            },
-            address: userAddress,
-            swapMethod: 'xfLobbyExit',
-            contractName: 'TAMPA',
-            stake: false,
-            widtdraw: true,
-            callback: () => getData()
-        })
+    const handleExitAuction = async (day) => {
+        try {
+            await walletService.sendTx({
+                method: 'xfLobbyExit(uint256,uint256)',
+                params: [
+                    {
+                        type: 'uint256',
+                        value: day
+                    },
+                    {
+                        type: 'uint256',
+                        value: 0
+                    }
+                ],
+                walletAddr: userAddress
+            })
+
+            setTimeout(() => {
+                getData();
+            }, 1000)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     React.useEffect(() => {

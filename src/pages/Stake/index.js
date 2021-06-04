@@ -69,7 +69,7 @@ const DialogApproveToken = ({ approveToken }) => {
     )
 }
 
-const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
+const StakePage = ({ isDarkTheme, userAddress, contractService, walletService }) => {
     const dispatch = useDispatch()
 
     const toggleDialog = (props) => dispatch(dialogActions.toggleDialog(props))
@@ -176,7 +176,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                             const unstakeParams = await contractService.getUnstakeParams(userAddress, i, stake.stakeId)
 
                             activeStakesItem.penalti = new BigNumber(unstakeParams.cappedPenalty).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
-                            activeStakesItem.penaltiDividents = new BigNumber(unstakeParams.dividends).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
+                            activeStakesItem.penaltiDividents = new BigNumber(unstakeParams.dividends).dividedBy(new BigNumber(10).pow(decimals.TRX)).toFixed()
                             activeStakesItem.stakeReturn = new BigNumber(unstakeParams.stakeReturn).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
                         }
 
@@ -190,16 +190,25 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
 
                         activeStakesItem.progress = await calcStakeProgress(activeStakesItem.start, activeStakesItem.end, currentDay)
                         activeStakesItem.bonusday = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewardsBonusDays')
+                        if (activeStakesItem.bonusday.payout && activeStakesItem.bonusday.payout._hex) {
+                            activeStakesItem.bonusday = parseInt(activeStakesItem.bonusday.payout._hex)
+                        }
 
                         activeStakesItem.bonusday = new BigNumber(activeStakesItem.bonusday).dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed()
 
                         activeStakesItem.dividents = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutDividendsReward')
+                        if (activeStakesItem.dividents.payout && activeStakesItem.dividents.payout._hex) {
+                            activeStakesItem.dividents = parseInt(activeStakesItem.dividents.payout._hex)
+                        }
 
                         newTotalDividents = newTotalDividents.plus(activeStakesItem.dividents)
 
-                        activeStakesItem.dividents = new BigNumber(activeStakesItem.dividents).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
+                        activeStakesItem.dividents = new BigNumber(activeStakesItem.dividents).dividedBy(new BigNumber(10).pow(decimals.TRX)).toFixed()
 
                         activeStakesItem.interest = await contractService.calcPayoutReward(stake.stakeShares, stake.lockedDay, stake.stakedDays, currentDay, 'calcPayoutRewards')
+                        if (activeStakesItem.interest.payout && activeStakesItem.interest.payout._hex) {
+                            activeStakesItem.interest = parseInt(activeStakesItem.interest.payout._hex)
+                        }
 
                         newTotalInterests = newTotalInterests.plus(activeStakesItem.interest)
 
@@ -220,7 +229,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                     }
                     setActiveStakesRefreshing(false)
                     setTotalShares(newTotalShares.toFixed())
-                    setTotalDividents(newTotalDividents.dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed())
+                    setTotalDividents(newTotalDividents.dividedBy(new BigNumber(10).pow(decimals.TRX)).toFixed())
                     setTotalInterests(newTotalInterests.dividedBy(new BigNumber(10).pow(decimals.TAMPA)).toFixed())
                     setTotalBonusShares(newTotalBonusShares.toFixed())
                     setTotalPaidAmount(newTotalPaidAmount.toFixed())
@@ -244,14 +253,16 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         if (!graphData.length && userAddress && startDay) {
             contractService.getFirstAuction()
                 .then(async auctionObj => {
+                    auctionObj[1] = parseInt(auctionObj[1]._hex)
                     let graphDots = []
                     let zeroDay = {
                         day: 0,
                         value: 0
                     }
-                    for (let i = auctionObj[1]; i <= startDay; i++) {
+                    for (let i = +auctionObj[1]; i <= +startDay; i++) {
                         let value = await contractService.xfLobby(i)
-                        value = new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.ETH)).toFixed()
+                        value = parseInt(value._hex)
+                        value = new BigNumber(value).multipliedBy(0.9).dividedBy(new BigNumber(10).pow(decimals.TRX)).toFixed()
 
                         const graphDot = {
                             day: i,
@@ -264,7 +275,7 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
                             graphDots.push(graphDot)
                         }
 
-                        if (i === startDay) {
+                        if (i === +startDay) {
                             dividentsPool = value
 
                             dispatch(graphActions.setDividentsPool(dividentsPool))
@@ -290,11 +301,11 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         setActiveStakes([])
         contractService.balanceOf(userAddress)
             .then(res => setWalletBalance(res))
-            .catch(err => console.log(err))
+            .catch(err => console.log(err, '1'))
 
         contractService.checkAllowance(userAddress)
             .then(res => setIsTokenApproved(res))
-            .catch(err => setIsTokenApproved(err))
+            .catch(err => setIsTokenApproved(err, '2'))
 
         contractService.globals().then(res => setShareRate(res[2])).catch(err => console.log(err))
 
@@ -358,35 +369,56 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
     const handleStake = (amount, days) => {
         toggleDialog({
             open: true,
-            content: <DialogApproveToken approveToken={() =>
-                contractService.createTokenTransaction({
-                    data: {
-                        amount,
-                        other: [days]
-                    },
-                    address: userAddress,
-                    swapMethod: 'stakeStart',
-                    contractName: 'TAMPA',
-                    stake: true,
-                    callback: () => getData()
-                })} />,
+            content: <DialogApproveToken approveToken={async () => {
+                try {
+                    await walletService.sendTx({
+                        method: 'stakeStart(uint256,uint256)',
+                        params: [
+                            {
+                                type: 'uint256',
+                                value: new BigNumber(amount).times(Math.pow(10, decimals.TAMPA)).toString(10)
+                            },
+                            {
+                                type: 'uint256',
+                                value: days
+                            }
+                        ],
+                        walletAddr: userAddress,
+                    })
+
+                    setTimeout(() => {
+                        getData();
+                    }, 1000)
+                } catch (err) {
+                    console.log(err)
+                }
+            }} />,
         })
     }
 
-    const handleWithdraw = (index, stakeId) => {
-        contractService.createTokenTransaction({
-            data: {
-                other: [
-                    index,
-                    stakeId
-                ]
-            },
-            address: userAddress,
-            swapMethod: 'stakeEnd',
-            contractName: 'TAMPA',
-            withdraw: true,
-            callback: () => getData()
-        })
+    const handleWithdraw = async (index, stakeId) => {
+        try {
+            await walletService.sendTx({
+                method: 'stakeEnd(uint256,uint40)',
+                params: [
+                    {
+                        type: 'uint256',
+                        value: index
+                    },
+                    {
+                        type: 'uint40',
+                        value: stakeId
+                    }
+                ],
+                walletAddr: userAddress,
+            })
+
+            setTimeout(() => {
+                getData();
+            }, 1000)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     useEffect(() => {
@@ -395,11 +427,11 @@ const StakePage = ({ isDarkTheme, userAddress, contractService }) => {
         }
     }, [userAddress, contractService])
 
-    // useEffect(() => {
-    //     if (contractService) {
-    //         getGraphDots()
-    //     }
-    // }, [userAddress, startDay, contractService])
+    useEffect(() => {
+        if (contractService) {
+            getGraphDots()
+        }
+    }, [userAddress, startDay, contractService])
 
     return (
         <div className="stake">

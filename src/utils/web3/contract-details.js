@@ -1,6 +1,6 @@
 export default {
     TAMPA: {
-        ADDRESS: 'TQepKpumo1LGDYZXA9DdTT5fy2ctCXEVCz',
+        ADDRESS: 'TJy3SEqZioC9tGsV6deMwrnGJQ4GiDuERx',
         SYMBOL: 'JETH',
         DECIMALS: 8,
         ABI: [

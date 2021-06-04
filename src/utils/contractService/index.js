@@ -164,23 +164,6 @@ class ContractService {
     getEthBalance = (address) => {
         return this.walletService.getEthBalance(address)
     }
-
-    createTokenTransaction = ({ data, address, swapMethod, contractName, callback, withdraw, stake, auction, isEth, errCallback }) => {
-        this.walletService.createTokenTransaction({
-            data,
-            tokenAddress: ContractDetails[contractName].ADDRESS,
-            walletAddress: address,
-            method: swapMethod,
-            contractName,
-            callback,
-            withdraw,
-            stake,
-            auction,
-            isEth,
-            errCallback
-        })
-    }
-
 }
 
 export default ContractService
