@@ -5,7 +5,7 @@ import BigNumber from "bignumber.js";
 import { isEqual } from 'lodash/lang';
 
 
-const IS_PRODUCTION = true;
+const IS_PRODUCTION = false;
 
 
 class MetamaskService {
@@ -43,8 +43,8 @@ class MetamaskService {
 
     getAccounts() {
         return new Promise((resolve, reject) => {
-            const net = IS_PRODUCTION ? 'Mainnet' : 'Kovan';
-            const usedNet = IS_PRODUCTION ? '0x1' : '0x2a';
+            const net = IS_PRODUCTION ? 'Matic Mainnet' : 'Matic Testnet';
+            const usedNet = IS_PRODUCTION ? '0x89' : '0x13881';
             let netVersion = this.wallet.chainId
             this.wallet.request({ method: 'eth_chainId' })
                 .then(newNetVersion => {
