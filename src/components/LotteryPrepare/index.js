@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 import { LotteryProgress } from '../../components';
-import {dateFormat} from '../../utils/prettifiers';
+import { dateFormat } from '../../utils/prettifiers';
 
 import './Lottery.scss'
 
@@ -24,7 +24,7 @@ const Lottery = ({ isDarkTheme, amountOfDraw, userAddress, lotteryPercents, isPa
                 <div className="lottery__list-head">What you need to do to become a participant in the lottery:</div>
                 <div className="lottery__list-item">Enter the auction in the first hour</div>
                 <div className="lottery__list-subitem">
-                    - Tuesday, Thursday, Saturday - for every 1 ETH you enter in the auction lobby, you get 1 chance to win the jackpot.
+                    - Tuesday, Thursday, Saturday - for every 1 TRX you enter in the auction lobby, you get 1 chance to win the jackpot.
                 </div>
                 <div className="lottery__list-subitem">
                     - Monday, Wednesday, Friday, Sunday - the same jackpot chance for everyone, regardless of the amount you enter the auction with.
